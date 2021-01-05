@@ -1,0 +1,5 @@
+// test add
+
+func main() : void {
+  ::printInt(1 + 1);
+}

@@ -1,0 +1,45 @@
+// print message character
+
+func garble(in : int, in2 : int) : int {
+   var tmp:int;
+   let tmp = 0;
+   var count:int;
+   let count = 0;
+   while((in != 0) or (in2 != 0)) {
+      var a:int;
+      var b:int;
+      let a = in - ((in /2) * 2);
+      let b = in2 - ((in2 /2) * 2);
+      if ((a == 1) and (b == 0)) {
+         let tmp = tmp * 2 + 1;
+      } else {
+        if ((a == 0) and (b == 1)) {
+         let tmp = tmp * 2 + 1;
+        } else {
+         let tmp = tmp * 2;
+        }
+      }
+      let in = in / 2;
+      let in2 = in2 / 2;
+      let count = count + 1;
+   }
+   var out:int;
+   let out = 0;
+   while(count != 0) {
+     let out = (out * 2) + (tmp - (tmp /2) * 2);
+     let tmp = tmp/2;
+     let count = count - 1;
+   }
+   return out;
+}
+
+func main() : void {
+  var i:int;
+  let i=0;
+  while(i<40) {
+    var tmp:int;
+    let tmp = ::readChar();
+    ::printChar(::garble(tmp, 7+i));
+    let i=i+1;
+  }
+}

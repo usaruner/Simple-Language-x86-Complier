@@ -1,0 +1,23 @@
+// test nested if-else and while-loop statements
+
+func main() : void {
+  var a:int;
+  let a = 0;
+  var b:int;
+  let b = 0;
+  while (a < 3) {
+    if (true) {
+      if (true) {
+        while (b < 3) {
+          ::printInt(5);
+          let b = b + 1;
+        }
+      } else {
+        ::printInt(5);
+      }
+    }
+    ::printInt(5);
+    let a = a + 1;
+  }
+  ::printInt(5);
+}

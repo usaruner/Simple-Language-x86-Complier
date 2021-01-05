@@ -1,0 +1,19 @@
+ast.DeclarationList(4)
+  ast.VariableDeclaration(4)[Symbol(num)]
+  ast.FunctionDefinition(6)[Symbol(main), []]
+    ast.StatementList(7)
+      ast.VariableDeclaration(7)[Symbol(five)]
+      ast.VariableDeclaration(8)[Symbol(sum)]
+      ast.Assignment(10)
+        ast.Name(10)[num]
+        ast.LiteralInt(10)[2]
+      ast.Assignment(11)
+        ast.Name(11)[five]
+        ast.LiteralInt(11)[5]
+      ast.Assignment(12)
+        ast.Name(12)[sum]
+        ast.OpExpr(12)[ADD]
+          ast.Dereference(12)
+            ast.Name(12)[num]
+          ast.Dereference(12)
+            ast.Name(12)[five]

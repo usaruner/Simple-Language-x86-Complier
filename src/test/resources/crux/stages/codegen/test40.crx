@@ -1,0 +1,30 @@
+// test comparisons
+
+func test(a:int, b:int) : void {
+  ::printBool(a >= b);
+  ::println();
+  ::printBool(a <= b);
+  ::println();
+  ::printBool(a != b);
+  ::println();
+  ::printBool(a == b);
+  ::println();
+  ::printBool(a < b);
+  ::println();
+  ::printBool(a > b);
+  ::println();
+}
+
+func main() : void {
+  var i:int;
+  var j:int;
+  let i = 0;
+  while(i <= 4) {
+    let j = 0;
+    while(j <= 4) {
+       ::test(i, j);
+       let j = j + 1;
+    }
+    let i = i + 1;
+  }
+}

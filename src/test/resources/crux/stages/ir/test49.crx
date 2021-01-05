@@ -1,0 +1,40 @@
+// bubblesort
+array a: int[14];
+
+func bubblesort() : void {
+  var swapped : bool;
+  let swapped = true;
+  while(swapped) {
+    let swapped = false;
+    var i:int;
+    let i = 0;
+    while (i < 13) {
+      if (a[i] > a[i+1]) {
+        var tmp:int;
+	let tmp = a[i];
+	let a[i] = a[i+1];
+	let a[i+1] = tmp;
+        let swapped = true;
+      }
+      let i = i + 1;
+    }
+  }
+}
+
+func main() : void {
+  var i:int;
+  let i = 0;
+  while (i < 14) {
+    let a[i] = 14-i;
+    let i = i + 1;
+  }
+
+  ::bubblesort();
+
+  let i = 0;
+  while (i < 14) {
+    ::printInt(a[i]);
+    ::println();
+    let i = i + 1;
+  }
+}

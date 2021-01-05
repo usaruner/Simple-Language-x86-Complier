@@ -1,0 +1,28 @@
+// scoping test
+var a:int;
+
+func main() : void {
+  let a = 1;
+  if (true) {
+    var a:int;
+    let a = 2;
+    if (true) {
+      let a = a * 10;
+      var a:int;
+      let a = 3;
+      if(true) {
+        var a:bool;
+	let a = true;
+	::printBool(a);
+	::println();
+      }
+      ::printInt(a);
+      ::println();
+    }
+    ::printInt(a);
+    ::println();
+  }
+  ::printInt(a);
+  ::println();
+}
+  

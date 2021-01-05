@@ -1,0 +1,21 @@
+// test functions with value must have return
+
+func validReturn1(a:int) : int {
+  if (true) {
+    if (false) {
+      let a = 3;
+    } else {
+      while(true) {
+        return a;
+      }
+    }
+    return 4;
+  } else {
+    return a;
+  }
+}
+
+func main() : void {
+  ::printInt(3);
+  ::printInt(::validReturn1(6));
+}

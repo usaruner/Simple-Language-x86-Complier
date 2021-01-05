@@ -1,0 +1,11 @@
+// test assignments (including simple array assigments)
+
+var a: int;
+var b: bool;
+array c:int[1];
+
+func main() : void {
+  let a = 0;
+  let b = false;
+  let c[0] = 0;
+}

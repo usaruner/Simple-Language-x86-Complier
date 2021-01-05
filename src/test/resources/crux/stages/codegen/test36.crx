@@ -1,0 +1,10 @@
+// test print character
+
+func main() : void {
+  var i:int;
+  let i=0;
+  while(i<11) {
+    ::printChar(::readChar());
+    let i=i+1;
+  }
+}

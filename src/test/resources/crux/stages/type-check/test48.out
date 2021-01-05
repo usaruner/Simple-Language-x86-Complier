@@ -1,0 +1,48 @@
+Crux Program has no type errors.
+ast.DeclarationList(3)
+  ast.FunctionDefinition(3)[Symbol(main:func(TypeList()):void), []]
+    ast.StatementList(4)
+      ast.VariableDeclaration(4)[Symbol(i:int)]
+      void: ast.Assignment(5)
+        Address(int): ast.Name(5)[i]
+        int: ast.LiteralInt(5)[0]
+      ast.VariableDeclaration(6)[Symbol(a:int)]
+      ast.VariableDeclaration(7)[Symbol(b:int)]
+      void: ast.Assignment(8)
+        Address(int): ast.Name(8)[a]
+        int: ast.LiteralInt(8)[0]
+      void: ast.Assignment(9)
+        Address(int): ast.Name(9)[b]
+        int: ast.LiteralInt(9)[1]
+      ast.WhileLoop(10)
+        bool: ast.OpExpr(10)[LT]
+          int: ast.Dereference(10)
+            Address(int): ast.Name(10)[i]
+          int: ast.LiteralInt(10)[10]
+        ast.StatementList(11)
+          void: ast.Call(11)[Symbol(printInt)]
+            int: ast.Dereference(11)
+              Address(int): ast.Name(11)[b]
+          void: ast.Call(12)[Symbol(println)]
+          ast.VariableDeclaration(13)[Symbol(c:int)]
+          void: ast.Assignment(14)
+            Address(int): ast.Name(14)[c]
+            int: ast.OpExpr(14)[ADD]
+              int: ast.Dereference(14)
+                Address(int): ast.Name(14)[a]
+              int: ast.Dereference(14)
+                Address(int): ast.Name(14)[b]
+          void: ast.Assignment(15)
+            Address(int): ast.Name(15)[a]
+            int: ast.Dereference(15)
+              Address(int): ast.Name(15)[b]
+          void: ast.Assignment(16)
+            Address(int): ast.Name(16)[b]
+            int: ast.Dereference(16)
+              Address(int): ast.Name(16)[c]
+          void: ast.Assignment(17)
+            Address(int): ast.Name(17)[i]
+            int: ast.OpExpr(17)[ADD]
+              int: ast.Dereference(17)
+                Address(int): ast.Name(17)[i]
+              int: ast.LiteralInt(17)[1]

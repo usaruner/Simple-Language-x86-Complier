@@ -1,0 +1,21 @@
+// test nested (boolean) expression
+
+var a : int;
+array b : int[1];
+
+
+func foo() : bool {
+
+  return false;
+}
+
+
+func main() : void {
+
+  let a = 0;
+  let b[0] = 1;
+  var c : bool;
+  if (((((true))))) {
+    let c = (1 > (b[0] - a)) or (::foo() or (((true))));
+  }
+}

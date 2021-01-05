@@ -1,0 +1,22 @@
+// test evaluation order
+
+array a:int[3];
+
+func test() : int {
+     let a[1] = 0;
+     return 2;
+}
+
+func main() : void {
+  let a[0] = 1;
+  let a[1] = 2;
+  let a[2] = 3;
+  let a[a[1]] = a[1] + ::test();
+  ::printInt(a[0]);
+  ::println();
+  ::printInt(a[1]);
+  ::println();
+  ::printInt(a[2]);
+  ::println();
+}
+

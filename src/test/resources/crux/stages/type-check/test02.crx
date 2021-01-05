@@ -1,0 +1,5 @@
+// test built in
+
+func main() : void {
+  ::printInt(42);
+}

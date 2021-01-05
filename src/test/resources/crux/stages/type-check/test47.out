@@ -1,0 +1,54 @@
+Crux Program has no type errors.
+ast.DeclarationList(2)
+  ast.VariableDeclaration(2)[Symbol(a:int)]
+  ast.FunctionDefinition(4)[Symbol(main:func(TypeList()):void), []]
+    ast.StatementList(5)
+      void: ast.Assignment(5)
+        Address(int): ast.Name(5)[a]
+        int: ast.LiteralInt(5)[1]
+      ast.IfElseBranch(6)
+        bool: ast.LiteralBool(6)[TRUE]
+        ast.StatementList(7)
+          ast.VariableDeclaration(7)[Symbol(a:int)]
+          void: ast.Assignment(8)
+            Address(int): ast.Name(8)[a]
+            int: ast.LiteralInt(8)[2]
+          ast.IfElseBranch(9)
+            bool: ast.LiteralBool(9)[TRUE]
+            ast.StatementList(10)
+              void: ast.Assignment(10)
+                Address(int): ast.Name(10)[a]
+                int: ast.OpExpr(10)[MULT]
+                  int: ast.Dereference(10)
+                    Address(int): ast.Name(10)[a]
+                  int: ast.LiteralInt(10)[10]
+              ast.VariableDeclaration(11)[Symbol(a:int)]
+              void: ast.Assignment(12)
+                Address(int): ast.Name(12)[a]
+                int: ast.LiteralInt(12)[3]
+              ast.IfElseBranch(13)
+                bool: ast.LiteralBool(13)[TRUE]
+                ast.StatementList(14)
+                  ast.VariableDeclaration(14)[Symbol(a:bool)]
+                  void: ast.Assignment(15)
+                    Address(bool): ast.Name(15)[a]
+                    bool: ast.LiteralBool(15)[TRUE]
+                  void: ast.Call(16)[Symbol(printBool)]
+                    bool: ast.Dereference(16)
+                      Address(bool): ast.Name(16)[a]
+                  void: ast.Call(17)[Symbol(println)]
+                ast.StatementList(13)
+              void: ast.Call(19)[Symbol(printInt)]
+                int: ast.Dereference(19)
+                  Address(int): ast.Name(19)[a]
+              void: ast.Call(20)[Symbol(println)]
+            ast.StatementList(9)
+          void: ast.Call(22)[Symbol(printInt)]
+            int: ast.Dereference(22)
+              Address(int): ast.Name(22)[a]
+          void: ast.Call(23)[Symbol(println)]
+        ast.StatementList(6)
+      void: ast.Call(25)[Symbol(printInt)]
+        int: ast.Dereference(25)
+          Address(int): ast.Name(25)[a]
+      void: ast.Call(26)[Symbol(println)]

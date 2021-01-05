@@ -1,0 +1,110 @@
+Crux Program has no type errors.
+ast.DeclarationList(3)
+  ast.ArrayDeclaration(3)[Symbol(x:array[5,int])]
+  ast.FunctionDefinition(5)[Symbol(main:func(TypeList()):void), []]
+    ast.StatementList(6)
+      ast.VariableDeclaration(6)[Symbol(canary_begin:int)]
+      ast.VariableDeclaration(7)[Symbol(canary_end:int)]
+      ast.VariableDeclaration(8)[Symbol(outer:int)]
+      ast.VariableDeclaration(9)[Symbol(inner:int)]
+      void: ast.Assignment(10)
+        Address(int): ast.Name(10)[canary_begin]
+        int: ast.LiteralInt(10)[0]
+      void: ast.Assignment(11)
+        Address(int): ast.Name(11)[canary_end]
+        int: ast.LiteralInt(11)[0]
+      void: ast.Assignment(13)
+        Address(int): ast.Name(13)[outer]
+        int: ast.LiteralInt(13)[4]
+      void: ast.Assignment(14)
+        Address(int): ast.Name(14)[inner]
+        int: ast.LiteralInt(14)[2]
+      ast.WhileLoop(15)
+        bool: ast.OpExpr(15)[GE]
+          int: ast.Dereference(15)
+            Address(int): ast.Name(15)[outer]
+          int: ast.LiteralInt(15)[0]
+        ast.StatementList(16)
+          ast.WhileLoop(16)
+            bool: ast.OpExpr(16)[GE]
+              int: ast.Dereference(16)
+                Address(int): ast.Name(16)[inner]
+              int: ast.LiteralInt(16)[0]
+            ast.StatementList(17)
+              void: ast.Assignment(17)
+                Address(int): ast.ArrayAccess(17)
+                  Address(array[5,int]): ast.Name(17)[x]
+                  int: ast.Dereference(17)
+                    Address(int): ast.Name(17)[outer]
+                int: ast.OpExpr(17)[ADD]
+                  int: ast.OpExpr(17)[ADD]
+                    int: ast.OpExpr(17)[MULT]
+                      int: ast.Dereference(17)
+                        Address(int): ast.Name(17)[inner]
+                      int: ast.LiteralInt(17)[1000]
+                    int: ast.OpExpr(17)[MULT]
+                      int: ast.Dereference(17)
+                        Address(int): ast.Name(17)[outer]
+                      int: ast.LiteralInt(17)[100]
+                  int: ast.LiteralInt(17)[99]
+              void: ast.Assignment(18)
+                Address(int): ast.Name(18)[inner]
+                int: ast.OpExpr(18)[SUB]
+                  int: ast.Dereference(18)
+                    Address(int): ast.Name(18)[inner]
+                  int: ast.LiteralInt(18)[1]
+          void: ast.Assignment(20)
+            Address(int): ast.Name(20)[inner]
+            int: ast.LiteralInt(20)[2]
+          void: ast.Assignment(21)
+            Address(int): ast.Name(21)[outer]
+            int: ast.OpExpr(21)[SUB]
+              int: ast.Dereference(21)
+                Address(int): ast.Name(21)[outer]
+              int: ast.LiteralInt(21)[1]
+      void: ast.Assignment(24)
+        Address(int): ast.Name(24)[inner]
+        int: ast.LiteralInt(24)[0]
+      void: ast.Assignment(25)
+        Address(int): ast.Name(25)[outer]
+        int: ast.LiteralInt(25)[0]
+      ast.WhileLoop(26)
+        bool: ast.OpExpr(26)[LT]
+          int: ast.Dereference(26)
+            Address(int): ast.Name(26)[outer]
+          int: ast.LiteralInt(26)[5]
+        ast.StatementList(27)
+          ast.WhileLoop(27)
+            bool: ast.OpExpr(27)[LT]
+              int: ast.Dereference(27)
+                Address(int): ast.Name(27)[inner]
+              int: ast.LiteralInt(27)[3]
+            ast.StatementList(28)
+              void: ast.Call(28)[Symbol(printInt)]
+                int: ast.Dereference(28)
+                  Address(int): ast.ArrayAccess(28)
+                    Address(array[5,int]): ast.Name(28)[x]
+                    int: ast.Dereference(28)
+                      Address(int): ast.Name(28)[outer]
+              void: ast.Assignment(29)
+                Address(int): ast.Name(29)[inner]
+                int: ast.OpExpr(29)[ADD]
+                  int: ast.Dereference(29)
+                    Address(int): ast.Name(29)[inner]
+                  int: ast.LiteralInt(29)[1]
+          void: ast.Call(31)[Symbol(println)]
+          void: ast.Assignment(32)
+            Address(int): ast.Name(32)[inner]
+            int: ast.LiteralInt(32)[0]
+          void: ast.Assignment(33)
+            Address(int): ast.Name(33)[outer]
+            int: ast.OpExpr(33)[ADD]
+              int: ast.Dereference(33)
+                Address(int): ast.Name(33)[outer]
+              int: ast.LiteralInt(33)[1]
+      void: ast.Call(35)[Symbol(printInt)]
+        int: ast.Dereference(35)
+          Address(int): ast.Name(35)[canary_begin]
+      void: ast.Call(36)[Symbol(printInt)]
+        int: ast.Dereference(36)
+          Address(int): ast.Name(36)[canary_end]

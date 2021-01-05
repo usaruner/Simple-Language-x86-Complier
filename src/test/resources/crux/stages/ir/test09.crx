@@ -1,0 +1,9 @@
+// test parameter passing
+
+func rec(a:int) : void {
+  ::printInt(a);
+}
+
+func main() : void {
+  ::rec(41);
+}

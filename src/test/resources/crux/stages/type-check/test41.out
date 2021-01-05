@@ -1,0 +1,38 @@
+Crux Program has no type errors.
+ast.DeclarationList(3)
+  ast.VariableDeclaration(3)[Symbol(a:int)]
+  ast.ArrayDeclaration(4)[Symbol(b:array[1,int])]
+  ast.FunctionDefinition(7)[Symbol(foo:func(TypeList()):bool), []]
+    ast.StatementList(9)
+      ast.Return(9)
+        bool: ast.LiteralBool(9)[FALSE]
+  ast.FunctionDefinition(13)[Symbol(main:func(TypeList()):void), []]
+    ast.StatementList(15)
+      void: ast.Assignment(15)
+        Address(int): ast.Name(15)[a]
+        int: ast.LiteralInt(15)[0]
+      void: ast.Assignment(16)
+        Address(int): ast.ArrayAccess(16)
+          Address(array[1,int]): ast.Name(16)[b]
+          int: ast.LiteralInt(16)[0]
+        int: ast.LiteralInt(16)[1]
+      ast.VariableDeclaration(17)[Symbol(c:bool)]
+      ast.IfElseBranch(18)
+        bool: ast.LiteralBool(18)[TRUE]
+        ast.StatementList(19)
+          void: ast.Assignment(19)
+            Address(bool): ast.Name(19)[c]
+            bool: ast.OpExpr(19)[LOGIC_OR]
+              bool: ast.OpExpr(19)[GT]
+                int: ast.LiteralInt(19)[1]
+                int: ast.OpExpr(19)[SUB]
+                  int: ast.Dereference(19)
+                    Address(int): ast.ArrayAccess(19)
+                      Address(array[1,int]): ast.Name(19)[b]
+                      int: ast.LiteralInt(19)[0]
+                  int: ast.Dereference(19)
+                    Address(int): ast.Name(19)[a]
+              bool: ast.OpExpr(19)[LOGIC_OR]
+                bool: ast.Call(19)[Symbol(foo)]
+                bool: ast.LiteralBool(19)[TRUE]
+        ast.StatementList(18)

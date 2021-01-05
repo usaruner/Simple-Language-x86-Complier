@@ -1,0 +1,13 @@
+
+// test statementBlock
+
+var num:int;
+
+func main() : void {
+  var five:int;
+  var sum:int;
+
+  let num = 2;
+  let five = 5;
+  let sum = num + five;
+}

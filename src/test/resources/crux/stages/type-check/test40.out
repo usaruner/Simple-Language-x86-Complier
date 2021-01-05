@@ -1,0 +1,85 @@
+Crux Program has no type errors.
+ast.DeclarationList(3)
+  ast.FunctionDefinition(3)[Symbol(test:func(TypeList(int, int)):void), [Symbol(a:int), Symbol(b:int)]]
+    ast.StatementList(4)
+      void: ast.Call(4)[Symbol(printBool)]
+        bool: ast.OpExpr(4)[GE]
+          int: ast.Dereference(4)
+            Address(int): ast.Name(4)[a]
+          int: ast.Dereference(4)
+            Address(int): ast.Name(4)[b]
+      void: ast.Call(5)[Symbol(println)]
+      void: ast.Call(6)[Symbol(printBool)]
+        bool: ast.OpExpr(6)[LE]
+          int: ast.Dereference(6)
+            Address(int): ast.Name(6)[a]
+          int: ast.Dereference(6)
+            Address(int): ast.Name(6)[b]
+      void: ast.Call(7)[Symbol(println)]
+      void: ast.Call(8)[Symbol(printBool)]
+        bool: ast.OpExpr(8)[NE]
+          int: ast.Dereference(8)
+            Address(int): ast.Name(8)[a]
+          int: ast.Dereference(8)
+            Address(int): ast.Name(8)[b]
+      void: ast.Call(9)[Symbol(println)]
+      void: ast.Call(10)[Symbol(printBool)]
+        bool: ast.OpExpr(10)[EQ]
+          int: ast.Dereference(10)
+            Address(int): ast.Name(10)[a]
+          int: ast.Dereference(10)
+            Address(int): ast.Name(10)[b]
+      void: ast.Call(11)[Symbol(println)]
+      void: ast.Call(12)[Symbol(printBool)]
+        bool: ast.OpExpr(12)[LT]
+          int: ast.Dereference(12)
+            Address(int): ast.Name(12)[a]
+          int: ast.Dereference(12)
+            Address(int): ast.Name(12)[b]
+      void: ast.Call(13)[Symbol(println)]
+      void: ast.Call(14)[Symbol(printBool)]
+        bool: ast.OpExpr(14)[GT]
+          int: ast.Dereference(14)
+            Address(int): ast.Name(14)[a]
+          int: ast.Dereference(14)
+            Address(int): ast.Name(14)[b]
+      void: ast.Call(15)[Symbol(println)]
+  ast.FunctionDefinition(18)[Symbol(main:func(TypeList()):void), []]
+    ast.StatementList(19)
+      ast.VariableDeclaration(19)[Symbol(i:int)]
+      ast.VariableDeclaration(20)[Symbol(j:int)]
+      void: ast.Assignment(21)
+        Address(int): ast.Name(21)[i]
+        int: ast.LiteralInt(21)[0]
+      ast.WhileLoop(22)
+        bool: ast.OpExpr(22)[LE]
+          int: ast.Dereference(22)
+            Address(int): ast.Name(22)[i]
+          int: ast.LiteralInt(22)[4]
+        ast.StatementList(23)
+          void: ast.Assignment(23)
+            Address(int): ast.Name(23)[j]
+            int: ast.LiteralInt(23)[0]
+          ast.WhileLoop(24)
+            bool: ast.OpExpr(24)[LE]
+              int: ast.Dereference(24)
+                Address(int): ast.Name(24)[j]
+              int: ast.LiteralInt(24)[4]
+            ast.StatementList(25)
+              void: ast.Call(25)[Symbol(test)]
+                int: ast.Dereference(25)
+                  Address(int): ast.Name(25)[i]
+                int: ast.Dereference(25)
+                  Address(int): ast.Name(25)[j]
+              void: ast.Assignment(26)
+                Address(int): ast.Name(26)[j]
+                int: ast.OpExpr(26)[ADD]
+                  int: ast.Dereference(26)
+                    Address(int): ast.Name(26)[j]
+                  int: ast.LiteralInt(26)[1]
+          void: ast.Assignment(28)
+            Address(int): ast.Name(28)[i]
+            int: ast.OpExpr(28)[ADD]
+              int: ast.Dereference(28)
+                Address(int): ast.Name(28)[i]
+              int: ast.LiteralInt(28)[1]

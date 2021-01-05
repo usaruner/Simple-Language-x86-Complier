@@ -1,0 +1,37 @@
+ast.DeclarationList(3)
+  ast.VariableDeclaration(3)[Symbol(a)]
+  ast.ArrayDeclaration(4)[Symbol(b)]
+  ast.FunctionDefinition(7)[Symbol(foo), []]
+    ast.StatementList(9)
+      ast.Return(9)
+        ast.LiteralBool(9)[FALSE]
+  ast.FunctionDefinition(13)[Symbol(main), []]
+    ast.StatementList(15)
+      ast.Assignment(15)
+        ast.Name(15)[a]
+        ast.LiteralInt(15)[0]
+      ast.Assignment(16)
+        ast.ArrayAccess(16)
+          ast.Name(16)[b]
+          ast.LiteralInt(16)[0]
+        ast.LiteralInt(16)[1]
+      ast.VariableDeclaration(17)[Symbol(c)]
+      ast.IfElseBranch(18)
+        ast.LiteralBool(18)[TRUE]
+        ast.StatementList(19)
+          ast.Assignment(19)
+            ast.Name(19)[c]
+            ast.OpExpr(19)[LOGIC_OR]
+              ast.OpExpr(19)[GT]
+                ast.LiteralInt(19)[1]
+                ast.OpExpr(19)[SUB]
+                  ast.Dereference(19)
+                    ast.ArrayAccess(19)
+                      ast.Name(19)[b]
+                      ast.LiteralInt(19)[0]
+                  ast.Dereference(19)
+                    ast.Name(19)[a]
+              ast.OpExpr(19)[LOGIC_OR]
+                ast.Call(19)[Symbol(foo)]
+                ast.LiteralBool(19)[TRUE]
+        ast.StatementList(18)

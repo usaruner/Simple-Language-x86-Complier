@@ -1,0 +1,52 @@
+Crux Program has no type errors.
+ast.DeclarationList(3)
+  ast.FunctionDefinition(3)[Symbol(main:func(TypeList()):void), []]
+    ast.StatementList(4)
+      ast.VariableDeclaration(4)[Symbol(a:int)]
+      void: ast.Assignment(5)
+        Address(int): ast.Name(5)[a]
+        int: ast.LiteralInt(5)[0]
+      ast.VariableDeclaration(6)[Symbol(b:int)]
+      void: ast.Assignment(7)
+        Address(int): ast.Name(7)[b]
+        int: ast.LiteralInt(7)[0]
+      ast.WhileLoop(8)
+        bool: ast.OpExpr(8)[LT]
+          int: ast.Dereference(8)
+            Address(int): ast.Name(8)[a]
+          int: ast.LiteralInt(8)[3]
+        ast.StatementList(9)
+          ast.IfElseBranch(9)
+            bool: ast.LiteralBool(9)[TRUE]
+            ast.StatementList(10)
+              ast.IfElseBranch(10)
+                bool: ast.LiteralBool(10)[TRUE]
+                ast.StatementList(11)
+                  ast.WhileLoop(11)
+                    bool: ast.OpExpr(11)[LT]
+                      int: ast.Dereference(11)
+                        Address(int): ast.Name(11)[b]
+                      int: ast.LiteralInt(11)[3]
+                    ast.StatementList(12)
+                      void: ast.Call(12)[Symbol(printInt)]
+                        int: ast.LiteralInt(12)[5]
+                      void: ast.Assignment(13)
+                        Address(int): ast.Name(13)[b]
+                        int: ast.OpExpr(13)[ADD]
+                          int: ast.Dereference(13)
+                            Address(int): ast.Name(13)[b]
+                          int: ast.LiteralInt(13)[1]
+                ast.StatementList(16)
+                  void: ast.Call(16)[Symbol(printInt)]
+                    int: ast.LiteralInt(16)[5]
+            ast.StatementList(9)
+          void: ast.Call(19)[Symbol(printInt)]
+            int: ast.LiteralInt(19)[5]
+          void: ast.Assignment(20)
+            Address(int): ast.Name(20)[a]
+            int: ast.OpExpr(20)[ADD]
+              int: ast.Dereference(20)
+                Address(int): ast.Name(20)[a]
+              int: ast.LiteralInt(20)[1]
+      void: ast.Call(22)[Symbol(printInt)]
+        int: ast.LiteralInt(22)[5]

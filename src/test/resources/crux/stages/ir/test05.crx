@@ -1,0 +1,9 @@
+
+// test declaration
+
+var global:int;
+array a:bool[5];
+
+func main() : void {
+
+}

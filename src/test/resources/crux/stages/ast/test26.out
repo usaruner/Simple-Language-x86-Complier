@@ -1,0 +1,30 @@
+ast.DeclarationList(3)
+  ast.VariableDeclaration(3)[Symbol(a)]
+  ast.FunctionDefinition(5)[Symbol(main), []]
+    ast.StatementList(6)
+      ast.Assignment(6)
+        ast.Name(6)[a]
+        ast.LiteralInt(6)[9]
+      ast.WhileLoop(7)
+        ast.OpExpr(7)[GT]
+          ast.Dereference(7)
+            ast.Name(7)[a]
+          ast.LiteralInt(7)[0]
+        ast.StatementList(8)
+          ast.Call(8)[Symbol(printInt)]
+            ast.Dereference(8)
+              ast.Name(8)[a]
+          ast.Call(9)[Symbol(println)]
+          ast.Assignment(10)
+            ast.Name(10)[a]
+            ast.OpExpr(10)[SUB]
+              ast.Dereference(10)
+                ast.Name(10)[a]
+              ast.LiteralInt(10)[1]
+      ast.Call(12)[Symbol(printInt)]
+        ast.OpExpr(12)[SUB]
+          ast.LiteralInt(12)[0]
+          ast.LiteralInt(12)[5]
+      ast.Call(13)[Symbol(printInt)]
+        ast.Dereference(13)
+          ast.Name(13)[a]

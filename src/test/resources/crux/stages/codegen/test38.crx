@@ -1,0 +1,44 @@
+// logical tests
+
+
+func main() : void {
+  ::printBool((3<5) and (4>2));
+  ::println();
+  ::printBool((3<5) and (2<1) or (1<2));
+  ::println();
+  ::printBool((1+2<4) and (2>1));
+  ::println();
+  ::printBool(false and false or false);
+  ::println();
+  ::printBool(false and false or true);
+  ::println();
+  ::printBool(false and true or false);
+  ::println();
+  ::printBool(false and true or true);
+  ::println();
+  ::printBool(true and false or false);
+  ::println();
+  ::printBool(true and false or true);
+  ::println();
+  ::printBool(true and true or false);
+  ::println();
+  ::printBool(true and true or true);
+  ::println();
+  ::printBool(false or false and false);
+  ::println();
+  ::printBool(false or false and true);
+  ::println();
+  ::printBool(false or true and false);
+  ::println();
+  ::printBool(false or true and true);
+  ::println();
+  ::printBool(true or false and false);
+  ::println();
+  ::printBool(true or false and true);
+  ::println();
+  ::printBool(true or true and false);
+  ::println();
+  ::printBool(true or true and true);
+  ::println();
+
+}
