@@ -1,6 +1,6 @@
 grammar Crux;
 program
- : declaration_list EOF
+ : declarationList EOF
  ;
 
 WhiteSpaces
@@ -48,44 +48,53 @@ SEMICOLON 		:	';';
 COLON 			:	':';
 CALL			:	'::';
 
+VOID	:	'void' ;
+BOOL 	:	TRUE | FALSE;
 INTEGER 		: '0' | [1-9] [0-9]*;
-IDENTIFIER 	: [a-zA-Z] [a-zA-Z0-9_]* ;
+IDENTIFIER 		: [a-zA-Z] [a-zA-Z0-9_]* ;
 
 
-
+/*
+READINT		:	'readInt';
+READCHAR	:	'readChar';
+PRINTBOOL	:	'printBool';
+PRINTINT	:	'printInt';
+PRINTCHAR	:	'printChar';
+PRINTLN		:	'println';
+*/
 
 //ERROR
 
  literal 		:	INTEGER | TRUE | FALSE;
  designator 	:	IDENTIFIER ( OPEN_BRACKET expression0 CLOSE_BRACKET );
- type 			: 	IDENTIFIER;
+ type 			: 	 VOID | BOOL | INTEGER;
 
  op0 : GREATER_EQUAL | LESSER_EQUAL | NOT_EQUAL | EQUAL | GREATER_THAN | LESS_THAN ;
  op1 : ADD | SUB | OR ;
  op2 : MUL | DIV | AND ;
 
- expression0 	: 	expression1 (op0 expression1) ;
+ expression0 	: 	expression1 (op0 expression1)* ;
  expression1	:	expression2 	(op1 expression2)*;
  expression2 	:	expression3 	(op2 expression3)*;
  expression3 	:	NOT expression3 | OPEN_PAREN expression0 CLOSE_PAREN | designator | call_expression | literal;
 
- call_expression : CALL IDENTIFIER OPEN_PAREN expression_list CLOSE_PAREN;
- expression_list :  ( expression0 OPEN_BRACE COMMA expression0 CLOSE_BRACE );
+ call_expression : CALL IDENTIFIER OPEN_PAREN expression_list CLOSE_PAREN ; // | CALL ( READINT | READCHAR | PRINTBOOL | PRINTINT | PRINTCHAR | PRINTLN)
+ expression_list : expression0?  (COMMA expression0)* ;
 
  parameter 		: IDENTIFIER COLON type;
- parameter_list : ( parameter ( COMMA parameter )*  );
+ parameterList : ( parameter? ( COMMA parameter )*  );
 
  variable_declaration 	: VAR IDENTIFIER COLON type SEMICOLON;
  array_declaration		: ARRAY IDENTIFIER COLON type OPEN_BRACKET INTEGER CLOSE_BRACKET SEMICOLON;
- function_declaration	: FUNC IDENTIFIER OPEN_PAREN parameter_list CLOSE_PAREN ':' type statement_block;
+ functionDefinition	: FUNC IDENTIFIER OPEN_PAREN parameterList CLOSE_PAREN COLON type statementBlock;
 
- declaration 			: variable_declaration | array_declaration | function_declaration;
+ declaration 			: variable_declaration | array_declaration | functionDefinition;
 
- declaration_list 		: declaration* ;
+ declarationList 		: declaration* ;
  assignment_statement 	: LET designator ASSIGN expression0 SEMICOLON;
  call_statement 		: call_expression SEMICOLON;
- if_statement			: IF expression0 statement_block ( ELSE statement_block) ;
- while_statement 		: WHILE expression0 statement_block;
+ if_statement			: IF expression0  statementBlock ( ELSE  statementBlock) ;
+ while_statement 		: WHILE expression0  statementBlock;
  return_statement 		: RETURN expression0 SEMICOLON;
 
  statement 			 	
@@ -97,8 +106,8 @@ IDENTIFIER 	: [a-zA-Z] [a-zA-Z0-9_]* ;
  	| return_statement
  ;
 
- statement_list 		: statement* ;
- statement_block 		: OPEN_BRACE statement_list CLOSE_BRACE ; 
+ statementList 		: statement* ;
+ statementBlock 		: OPEN_BRACE statementList CLOSE_BRACE ; 
 
 
 
