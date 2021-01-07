@@ -73,10 +73,10 @@ IDENTIFIER 	: [a-zA-Z] [a-zA-Z0-9_]* ;
  expression_list :  ( expression0 OPEN_BRACE COMMA expression0 CLOSE_BRACE );
 
  parameter 		: IDENTIFIER COLON type;
- parameter_list : (OPEN_BRACKET parameter ( COMMA parameter )* CLOSE_BRACKET );
+ parameter_list : ( parameter ( COMMA parameter )*  );
 
  variable_declaration 	: VAR IDENTIFIER COLON type SEMICOLON;
- array_declaration		: ARRAY IDENTIFIER COLON type OPEN_BRACKET INTEGER CLOSE_BRECKET SEMICOLON;
+ array_declaration		: ARRAY IDENTIFIER COLON type OPEN_BRACKET INTEGER CLOSE_BRACKET SEMICOLON;
  function_declaration	: FUNC IDENTIFIER OPEN_PAREN parameter_list CLOSE_PAREN ':' type statement_block;
 
  declaration 			: variable_declaration | array_declaration | function_declaration;
@@ -88,7 +88,14 @@ IDENTIFIER 	: [a-zA-Z] [a-zA-Z0-9_]* ;
  while_statement 		: WHILE expression0 statement_block;
  return_statement 		: RETURN expression0 SEMICOLON;
 
- statement 			 	:  variable_declaration | array_declaration | function_declaration | declaration | declaration_list | assignment_statement | call_statement | if_statement | while_statement | return_statement;
+ statement 			 	
+ 	:  variable_declaration 
+ 	| call_statement 
+ 	| assignment_statement 
+ 	| if_statement 
+ 	| while_statement 
+ 	| return_statement
+ ;
 
  statement_list 		: statement* ;
  statement_block 		: OPEN_BRACE statement_list CLOSE_BRACE ; 
