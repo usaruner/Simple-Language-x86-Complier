@@ -66,8 +66,8 @@ PRINTLN		:	'println';
 //ERROR
 
  literal 		:	INTEGER | TRUE | FALSE;
- designator 	:	IDENTIFIER ( OPEN_BRACKET expression0 CLOSE_BRACKET );
- type 			: 	 VOID | BOOL | INTEGER;
+ designator 	:	IDENTIFIER ( OPEN_BRACKET expression0 CLOSE_BRACKET )*;
+ type 			: 	 'void' | 'bool' | 'int';
 
  op0 : GREATER_EQUAL | LESSER_EQUAL | NOT_EQUAL | EQUAL | GREATER_THAN | LESS_THAN ;
  op1 : ADD | SUB | OR ;
@@ -76,10 +76,10 @@ PRINTLN		:	'println';
  expression0 	: 	expression1 (op0 expression1)* ;
  expression1	:	expression2 	(op1 expression2)*;
  expression2 	:	expression3 	(op2 expression3)*;
- expression3 	:	NOT expression3 | OPEN_PAREN expression0 CLOSE_PAREN | designator | call_expression | literal;
+ expression3 	:	NOT expression3 | OPEN_PAREN expression0 CLOSE_PAREN | designator | callExpression | literal;
 
- call_expression : CALL IDENTIFIER OPEN_PAREN expression_list CLOSE_PAREN ; // | CALL ( READINT | READCHAR | PRINTBOOL | PRINTINT | PRINTCHAR | PRINTLN)
- expression_list : expression0?  (COMMA expression0)* ;
+ callExpression : CALL IDENTIFIER OPEN_PAREN expressionList CLOSE_PAREN ; // | CALL ( READINT | READCHAR | PRINTBOOL | PRINTINT | PRINTCHAR | PRINTLN)
+ expressionList : expression0?  (COMMA expression0)* ;
 
  parameter 		: IDENTIFIER COLON type;
  parameterList : ( parameter? ( COMMA parameter )*  );
@@ -91,16 +91,16 @@ PRINTLN		:	'println';
  declaration 			: variable_declaration | array_declaration | functionDefinition;
 
  declarationList 		: declaration* ;
- assignment_statement 	: LET designator ASSIGN expression0 SEMICOLON;
- call_statement 		: call_expression SEMICOLON;
+ assignmentStatement 	: LET designator ASSIGN expression0 SEMICOLON;
+ callStatement 		: callExpression SEMICOLON;
  if_statement			: IF expression0  statementBlock ( ELSE  statementBlock) ;
  while_statement 		: WHILE expression0  statementBlock;
  return_statement 		: RETURN expression0 SEMICOLON;
 
  statement 			 	
  	:  variable_declaration 
- 	| call_statement 
- 	| assignment_statement 
+ 	| callStatement 
+ 	| assignmentStatement 
  	| if_statement 
  	| while_statement 
  	| return_statement
