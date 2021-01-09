@@ -84,26 +84,26 @@ PRINTLN		:	'println';
  parameter 		: IDENTIFIER COLON type;
  parameterList : ( parameter? ( COMMA parameter )*  );
 
- variable_declaration 	: VAR IDENTIFIER COLON type SEMICOLON;
- array_declaration		: ARRAY IDENTIFIER COLON type OPEN_BRACKET INTEGER CLOSE_BRACKET SEMICOLON;
+ variableDeclaration 	: VAR IDENTIFIER COLON type SEMICOLON;
+ arrayDeclaration		: ARRAY IDENTIFIER COLON type OPEN_BRACKET INTEGER CLOSE_BRACKET SEMICOLON;
  functionDefinition	: FUNC IDENTIFIER OPEN_PAREN parameterList CLOSE_PAREN COLON type statementBlock;
 
- declaration 			: variable_declaration | array_declaration | functionDefinition;
+ declaration 			: variableDeclaration | arrayDeclaration | functionDefinition;
 
  declarationList 		: declaration* ;
  assignmentStatement 	: LET designator ASSIGN expression0 SEMICOLON;
  callStatement 		: callExpression SEMICOLON;
  ifStatement			: IF expression0  statementBlock ( ELSE  statementBlock)* ;
- while_statement 		: WHILE expression0  statementBlock;
- return_statement 		: RETURN expression0 SEMICOLON;
+ whileStatement 		: WHILE expression0  statementBlock;
+ returnStatement 		: RETURN expression0 SEMICOLON;
 
  statement 			 	
- 	:  variable_declaration 
+ 	:  variableDeclaration 
  	| callStatement 
  	| assignmentStatement 
  	| ifStatement 
- 	| while_statement 
- 	| return_statement
+ 	| whileStatement 
+ 	| returnStatement
  ;
 
  statementList 		: statement* ;
