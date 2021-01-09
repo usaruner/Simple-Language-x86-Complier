@@ -93,7 +93,7 @@ PRINTLN		:	'println';
  declarationList 		: declaration* ;
  assignmentStatement 	: LET designator ASSIGN expression0 SEMICOLON;
  callStatement 		: callExpression SEMICOLON;
- if_statement			: IF expression0  statementBlock ( ELSE  statementBlock) ;
+ ifStatement			: IF expression0  statementBlock ( ELSE  statementBlock)* ;
  while_statement 		: WHILE expression0  statementBlock;
  return_statement 		: RETURN expression0 SEMICOLON;
 

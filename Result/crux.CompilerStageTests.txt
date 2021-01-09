@@ -1,8 +1,8 @@
 -------------------------------------------------------------------------------
 Test set: crux.CompilerStageTests
 -------------------------------------------------------------------------------
-Tests run: 50, Failures: 50, Errors: 0, Skipped: 0, Time elapsed: 0.712 s <<< FAILURE! - in crux.CompilerStageTests
-crux.CompilerStageTests.parseTree  Time elapsed: 0.138 s  <<< FAILURE!
+Tests run: 50, Failures: 50, Errors: 0, Skipped: 0, Time elapsed: 0.667 s <<< FAILURE! - in crux.CompilerStageTests
+crux.CompilerStageTests.parseTree  Time elapsed: 0.146 s  <<< FAILURE!
 org.opentest4j.AssertionFailedError: 
 Parse tree for program crux/stages/parse-tree/test01.crx differs from expected output. ==> expected: <program
   declarationList
@@ -62,7 +62,7 @@ Parse tree for program crux/stages/parse-tree/test02.crx differs from expected o
 >
 	at crux.CompilerStageTests.lambda$parseTree$1(CompilerStageTests.java:48)
 
-crux.CompilerStageTests.parseTree  Time elapsed: 0.009 s  <<< FAILURE!
+crux.CompilerStageTests.parseTree  Time elapsed: 0.01 s  <<< FAILURE!
 org.opentest4j.AssertionFailedError: 
 Parse tree for program crux/stages/parse-tree/test03.crx differs from expected output. ==> expected: <program
   declarationList
@@ -166,7 +166,7 @@ Parse tree for program crux/stages/parse-tree/test04.crx differs from expected o
 >
 	at crux.CompilerStageTests.lambda$parseTree$1(CompilerStageTests.java:48)
 
-crux.CompilerStageTests.parseTree  Time elapsed: 0.007 s  <<< FAILURE!
+crux.CompilerStageTests.parseTree  Time elapsed: 0.006 s  <<< FAILURE!
 org.opentest4j.AssertionFailedError: 
 Parse tree for program crux/stages/parse-tree/test05.crx differs from expected output. ==> expected: <program
   declarationList
@@ -199,7 +199,7 @@ Parse tree for program crux/stages/parse-tree/test05.crx differs from expected o
 >
 	at crux.CompilerStageTests.lambda$parseTree$1(CompilerStageTests.java:48)
 
-crux.CompilerStageTests.parseTree  Time elapsed: 0.009 s  <<< FAILURE!
+crux.CompilerStageTests.parseTree  Time elapsed: 0.006 s  <<< FAILURE!
 org.opentest4j.AssertionFailedError: 
 Parse tree for program crux/stages/parse-tree/test06.crx differs from expected output. ==> expected: <program
   declarationList
@@ -229,8 +229,34 @@ Parse tree for program crux/stages/parse-tree/test06.crx differs from expected o
                         expression2
                           expression3
                             designator
-> but was: <line 6:8 mismatched input '=' expecting '['
-line 7:14 mismatched input ')' expecting '['
+> but was: <program
+  declarationList
+    declaration
+      variable_declaration
+        type
+    declaration
+      functionDefinition
+        parameterList
+        type
+        statementBlock
+          statementList
+            statement
+              assignmentStatement
+                designator
+                expression0
+                  expression1
+                    expression2
+                      expression3
+                        literal
+            statement
+              callStatement
+                callExpression
+                  expressionList
+                    expression0
+                      expression1
+                        expression2
+                          expression3
+                            designator
 >
 	at crux.CompilerStageTests.lambda$parseTree$1(CompilerStageTests.java:48)
 
@@ -264,8 +290,34 @@ Parse tree for program crux/stages/parse-tree/test07.crx differs from expected o
                         expression2
                           expression3
                             designator
-> but was: <line 5:8 mismatched input '=' expecting '['
-line 6:14 mismatched input ')' expecting '['
+> but was: <program
+  declarationList
+    declaration
+      functionDefinition
+        parameterList
+        type
+        statementBlock
+          statementList
+            statement
+              variable_declaration
+                type
+            statement
+              assignmentStatement
+                designator
+                expression0
+                  expression1
+                    expression2
+                      expression3
+                        literal
+            statement
+              callStatement
+                callExpression
+                  expressionList
+                    expression0
+                      expression1
+                        expression2
+                          expression3
+                            designator
 >
 	at crux.CompilerStageTests.lambda$parseTree$1(CompilerStageTests.java:48)
 
@@ -364,11 +416,44 @@ Parse tree for program crux/stages/parse-tree/test09.crx differs from expected o
                         expression2
                           expression3
                             literal
-> but was: <line 4:14 mismatched input ')' expecting '['
+> but was: <program
+  declarationList
+    declaration
+      functionDefinition
+        parameterList
+          parameter
+            type
+        type
+        statementBlock
+          statementList
+            statement
+              callStatement
+                callExpression
+                  expressionList
+                    expression0
+                      expression1
+                        expression2
+                          expression3
+                            designator
+    declaration
+      functionDefinition
+        parameterList
+        type
+        statementBlock
+          statementList
+            statement
+              callStatement
+                callExpression
+                  expressionList
+                    expression0
+                      expression1
+                        expression2
+                          expression3
+                            literal
 >
 	at crux.CompilerStageTests.lambda$parseTree$1(CompilerStageTests.java:48)
 
-crux.CompilerStageTests.parseTree  Time elapsed: 0.006 s  <<< FAILURE!
+crux.CompilerStageTests.parseTree  Time elapsed: 0.005 s  <<< FAILURE!
 org.opentest4j.AssertionFailedError: 
 Parse tree for program crux/stages/parse-tree/test10.crx differs from expected output. ==> expected: <program
   declarationList
@@ -420,7 +505,7 @@ Parse tree for program crux/stages/parse-tree/test10.crx differs from expected o
         statementBlock
           statementList
             statement
-              assignment_statement
+              assignmentStatement
                 designator
                   expression0
                     expression1
@@ -449,7 +534,7 @@ Parse tree for program crux/stages/parse-tree/test10.crx differs from expected o
 >
 	at crux.CompilerStageTests.lambda$parseTree$1(CompilerStageTests.java:48)
 
-crux.CompilerStageTests.parseTree  Time elapsed: 0.006 s  <<< FAILURE!
+crux.CompilerStageTests.parseTree  Time elapsed: 0.005 s  <<< FAILURE!
 org.opentest4j.AssertionFailedError: 
 Parse tree for program crux/stages/parse-tree/test11.crx differs from expected output. ==> expected: <program
   declarationList
@@ -522,7 +607,7 @@ Parse tree for program crux/stages/parse-tree/test11.crx differs from expected o
 >
 	at crux.CompilerStageTests.lambda$parseTree$1(CompilerStageTests.java:48)
 
-crux.CompilerStageTests.parseTree  Time elapsed: 0.005 s  <<< FAILURE!
+crux.CompilerStageTests.parseTree  Time elapsed: 0.007 s  <<< FAILURE!
 org.opentest4j.AssertionFailedError: 
 Parse tree for program crux/stages/parse-tree/test12.crx differs from expected output. ==> expected: <program
   declarationList
@@ -640,7 +725,7 @@ Parse tree for program crux/stages/parse-tree/test13.crx differs from expected o
 >
 	at crux.CompilerStageTests.lambda$parseTree$1(CompilerStageTests.java:48)
 
-crux.CompilerStageTests.parseTree  Time elapsed: 0.005 s  <<< FAILURE!
+crux.CompilerStageTests.parseTree  Time elapsed: 0.004 s  <<< FAILURE!
 org.opentest4j.AssertionFailedError: 
 Parse tree for program crux/stages/parse-tree/test14.crx differs from expected output. ==> expected: <program
   declarationList
@@ -671,8 +756,35 @@ Parse tree for program crux/stages/parse-tree/test14.crx differs from expected o
                         expression2
                           expression3
                             designator
-> but was: <line 4:11 mismatched input '=' expecting '['
-line 5:17 mismatched input ')' expecting '['
+> but was: <program
+  declarationList
+    declaration
+      variable_declaration
+        type
+    declaration
+      functionDefinition
+        parameterList
+        type
+        statementBlock
+          statementList
+            statement
+              assignmentStatement
+                designator
+                expression0
+                  expression1
+                    expression2
+                      expression3
+                        callExpression
+                          expressionList
+            statement
+              callStatement
+                callExpression
+                  expressionList
+                    expression0
+                      expression1
+                        expression2
+                          expression3
+                            designator
 >
 	at crux.CompilerStageTests.lambda$parseTree$1(CompilerStageTests.java:48)
 
@@ -725,7 +837,7 @@ Parse tree for program crux/stages/parse-tree/test15.crx differs from expected o
 >
 	at crux.CompilerStageTests.lambda$parseTree$1(CompilerStageTests.java:48)
 
-crux.CompilerStageTests.parseTree  Time elapsed: 0.004 s  <<< FAILURE!
+crux.CompilerStageTests.parseTree  Time elapsed: 0.005 s  <<< FAILURE!
 org.opentest4j.AssertionFailedError: 
 Parse tree for program crux/stages/parse-tree/test16.crx differs from expected output. ==> expected: <program
   declarationList
@@ -766,9 +878,45 @@ Parse tree for program crux/stages/parse-tree/test16.crx differs from expected o
                         expression2
                           expression3
                             designator
-> but was: <line 6:8 mismatched input '=' expecting '['
-line 9:8 mismatched input '=' expecting '['
-line 10:14 mismatched input ')' expecting '['
+> but was: <program
+  declarationList
+    declaration
+      variable_declaration
+        type
+    declaration
+      functionDefinition
+        parameterList
+        type
+        statementBlock
+          statementList
+            statement
+              assignmentStatement
+                designator
+                expression0
+                  expression1
+                    expression2
+                      expression3
+                        literal
+            statement
+              variable_declaration
+                type
+            statement
+              assignmentStatement
+                designator
+                expression0
+                  expression1
+                    expression2
+                      expression3
+                        literal
+            statement
+              callStatement
+                callExpression
+                  expressionList
+                    expression0
+                      expression1
+                        expression2
+                          expression3
+                            designator
 >
 	at crux.CompilerStageTests.lambda$parseTree$1(CompilerStageTests.java:48)
 
@@ -832,8 +980,7 @@ Parse tree for program crux/stages/parse-tree/test17.crx differs from expected o
                                             expression2
                                               expression3
                                                 literal
-> but was: <line 8:14 mismatched input '=' expecting '['
-line 11:2 mismatched input '}' expecting {'and', 'or', '+', '-', '*', '/', '>=', '<=', '!=', '==', '>', '<', ';'}
+> but was: <line 11:2 mismatched input '}' expecting {'and', 'or', '+', '-', '*', '/', '>=', '<=', '!=', '==', '>', '<', ';'}
 line 12:0 mismatched input '}' expecting {'and', 'or', '+', '-', '*', '/', '>=', '<=', '!=', '==', '>', '<', ';'}
 >
 	at crux.CompilerStageTests.lambda$parseTree$1(CompilerStageTests.java:48)
@@ -902,15 +1049,72 @@ Parse tree for program crux/stages/parse-tree/test18.crx differs from expected o
                             expression2
                               expression3
                                 literal
-> but was: <line 5:8 mismatched input '=' expecting '['
-line 6:11 mismatched input '<' expecting '['
-line 7:16 mismatched input ')' expecting '['
-line 9:10 mismatched input '=' expecting '['
-line 9:14 mismatched input '+' expecting '['
+> but was: <program
+  declarationList
+    declaration
+      functionDefinition
+        parameterList
+        type
+        statementBlock
+          statementList
+            statement
+              variable_declaration
+                type
+            statement
+              assignmentStatement
+                designator
+                expression0
+                  expression1
+                    expression2
+                      expression3
+                        literal
+            statement
+              while_statement
+                expression0
+                  expression1
+                    expression2
+                      expression3
+                        expression0
+                          expression1
+                            expression2
+                              expression3
+                                designator
+                          op0
+                          expression1
+                            expression2
+                              expression3
+                                literal
+                statementBlock
+                  statementList
+                    statement
+                      callStatement
+                        callExpression
+                          expressionList
+                            expression0
+                              expression1
+                                expression2
+                                  expression3
+                                    designator
+                    statement
+                      callStatement
+                        callExpression
+                          expressionList
+                    statement
+                      assignmentStatement
+                        designator
+                        expression0
+                          expression1
+                            expression2
+                              expression3
+                                designator
+                            op1
+                            expression2
+                              expression3
+                                literal
 >
 	at crux.CompilerStageTests.lambda$parseTree$1(CompilerStageTests.java:48)
 
-crux.CompilerStageTests.parseTree  Time elapsed: 0.005 s  <<< FAILURE!
+crux.CompilerStageTests.parseTree  Time elapsed: 0.004 s  <<< FAILURE!
 org.opentest4j.AssertionFailedError: 
 Parse tree for program crux/stages/parse-tree/test19.crx differs from expected output. ==> expected: <program
   declarationList
@@ -981,14 +1185,11 @@ Parse tree for program crux/stages/parse-tree/test19.crx differs from expected o
                         expression2
                           expression3
                             literal
-> but was: <line 4:8 mismatched input '>' expecting '['
-line 5:11 mismatched input '-' expecting '['
-line 7:2 mismatched input '::' expecting {'and', 'or', ')', '+', '-', '*', '/', '>=', '<=', '!=', '==', '>', '<', ','}
-line 7:14 mismatched input ')' expecting '['
+> but was: <line 7:2 mismatched input '::' expecting {'and', 'or', ')', '+', '-', '*', '/', '>=', '<=', '!=', '==', '>', '<', ','}
 >
 	at crux.CompilerStageTests.lambda$parseTree$1(CompilerStageTests.java:48)
 
-crux.CompilerStageTests.parseTree  Time elapsed: 0.006 s  <<< FAILURE!
+crux.CompilerStageTests.parseTree  Time elapsed: 0.004 s  <<< FAILURE!
 org.opentest4j.AssertionFailedError: 
 Parse tree for program crux/stages/parse-tree/test20.crx differs from expected output. ==> expected: <program
   declarationList
@@ -1035,15 +1236,55 @@ Parse tree for program crux/stages/parse-tree/test20.crx differs from expected o
                     expression2
                       expression3
                         designator
-> but was: <line 10:10 mismatched input '=' expecting '['
-line 11:11 mismatched input '=' expecting '['
-line 12:10 mismatched input '=' expecting '['
-line 12:16 mismatched input '+' expecting '['
-line 12:22 mismatched input ';' expecting '['
+> but was: <program
+  declarationList
+    declaration
+      variable_declaration
+        type
+    declaration
+      functionDefinition
+        parameterList
+        type
+        statementBlock
+          statementList
+            statement
+              variable_declaration
+                type
+            statement
+              variable_declaration
+                type
+            statement
+              assignmentStatement
+                designator
+                expression0
+                  expression1
+                    expression2
+                      expression3
+                        literal
+            statement
+              assignmentStatement
+                designator
+                expression0
+                  expression1
+                    expression2
+                      expression3
+                        literal
+            statement
+              assignmentStatement
+                designator
+                expression0
+                  expression1
+                    expression2
+                      expression3
+                        designator
+                    op1
+                    expression2
+                      expression3
+                        designator
 >
 	at crux.CompilerStageTests.lambda$parseTree$1(CompilerStageTests.java:48)
 
-crux.CompilerStageTests.parseTree  Time elapsed: 0.005 s  <<< FAILURE!
+crux.CompilerStageTests.parseTree  Time elapsed: 0.004 s  <<< FAILURE!
 org.opentest4j.AssertionFailedError: 
 Parse tree for program crux/stages/parse-tree/test21.crx differs from expected output. ==> expected: <program
   declarationList
@@ -1162,7 +1403,7 @@ Parse tree for program crux/stages/parse-tree/test21.crx differs from expected o
 >
 	at crux.CompilerStageTests.lambda$parseTree$1(CompilerStageTests.java:48)
 
-crux.CompilerStageTests.parseTree  Time elapsed: 0.005 s  <<< FAILURE!
+crux.CompilerStageTests.parseTree  Time elapsed: 0.004 s  <<< FAILURE!
 org.opentest4j.AssertionFailedError: 
 Parse tree for program crux/stages/parse-tree/test22.crx differs from expected output. ==> expected: <program
   declarationList
@@ -1237,7 +1478,7 @@ Parse tree for program crux/stages/parse-tree/test22.crx differs from expected o
         statementBlock
           statementList
             statement
-              assignment_statement
+              assignmentStatement
                 designator
                   expression0
                     expression1
@@ -1250,7 +1491,7 @@ Parse tree for program crux/stages/parse-tree/test22.crx differs from expected o
                       expression3
                         literal
             statement
-              assignment_statement
+              assignmentStatement
                 designator
                   expression0
                     expression1
@@ -1283,7 +1524,7 @@ Parse tree for program crux/stages/parse-tree/test22.crx differs from expected o
 >
 	at crux.CompilerStageTests.lambda$parseTree$1(CompilerStageTests.java:48)
 
-crux.CompilerStageTests.parseTree  Time elapsed: 0.003 s  <<< FAILURE!
+crux.CompilerStageTests.parseTree  Time elapsed: 0.004 s  <<< FAILURE!
 org.opentest4j.AssertionFailedError: 
 Parse tree for program crux/stages/parse-tree/test23.crx differs from expected output. ==> expected: <program
   declarationList
@@ -1331,8 +1572,52 @@ Parse tree for program crux/stages/parse-tree/test23.crx differs from expected o
                     expression2
                       expression3
                         literal
-> but was: <line 8:8 mismatched input '=' expecting '['
-line 9:8 mismatched input '=' expecting '['
+> but was: <program
+  declarationList
+    declaration
+      variable_declaration
+        type
+    declaration
+      variable_declaration
+        type
+    declaration
+      array_declaration
+        type
+    declaration
+      functionDefinition
+        parameterList
+        type
+        statementBlock
+          statementList
+            statement
+              assignmentStatement
+                designator
+                expression0
+                  expression1
+                    expression2
+                      expression3
+                        literal
+            statement
+              assignmentStatement
+                designator
+                expression0
+                  expression1
+                    expression2
+                      expression3
+                        literal
+            statement
+              assignmentStatement
+                designator
+                  expression0
+                    expression1
+                      expression2
+                        expression3
+                          literal
+                expression0
+                  expression1
+                    expression2
+                      expression3
+                        literal
 >
 	at crux.CompilerStageTests.lambda$parseTree$1(CompilerStageTests.java:48)
 
@@ -1412,7 +1697,7 @@ Parse tree for program crux/stages/parse-tree/test24.crx differs from expected o
         statementBlock
           statementList
             statement
-              assignment_statement
+              assignmentStatement
                 designator
                   expression0
                     expression1
@@ -1425,7 +1710,7 @@ Parse tree for program crux/stages/parse-tree/test24.crx differs from expected o
                       expression3
                         literal
             statement
-              assignment_statement
+              assignmentStatement
                 designator
                   expression0
                     expression1
@@ -1459,7 +1744,7 @@ Parse tree for program crux/stages/parse-tree/test24.crx differs from expected o
 >
 	at crux.CompilerStageTests.lambda$parseTree$1(CompilerStageTests.java:48)
 
-crux.CompilerStageTests.parseTree  Time elapsed: 0.005 s  <<< FAILURE!
+crux.CompilerStageTests.parseTree  Time elapsed: 0.004 s  <<< FAILURE!
 org.opentest4j.AssertionFailedError: 
 Parse tree for program crux/stages/parse-tree/test25.crx differs from expected output. ==> expected: <program
   declarationList
@@ -1572,7 +1857,7 @@ Parse tree for program crux/stages/parse-tree/test25.crx differs from expected o
 >
 	at crux.CompilerStageTests.lambda$parseTree$1(CompilerStageTests.java:48)
 
-crux.CompilerStageTests.parseTree  Time elapsed: 0.005 s  <<< FAILURE!
+crux.CompilerStageTests.parseTree  Time elapsed: 0.004 s  <<< FAILURE!
 org.opentest4j.AssertionFailedError: 
 Parse tree for program crux/stages/parse-tree/test26.crx differs from expected output. ==> expected: <program
   declarationList
@@ -1658,16 +1943,94 @@ Parse tree for program crux/stages/parse-tree/test26.crx differs from expected o
                         expression2
                           expression3
                             designator
-> but was: <line 6:8 mismatched input '=' expecting '['
-line 7:11 mismatched input '>' expecting '['
-line 8:16 mismatched input ')' expecting '['
-line 10:10 mismatched input '=' expecting '['
-line 10:13 mismatched input '-' expecting '['
-line 13:14 mismatched input ')' expecting '['
+> but was: <program
+  declarationList
+    declaration
+      variable_declaration
+        type
+    declaration
+      functionDefinition
+        parameterList
+        type
+        statementBlock
+          statementList
+            statement
+              assignmentStatement
+                designator
+                expression0
+                  expression1
+                    expression2
+                      expression3
+                        literal
+            statement
+              while_statement
+                expression0
+                  expression1
+                    expression2
+                      expression3
+                        expression0
+                          expression1
+                            expression2
+                              expression3
+                                designator
+                          op0
+                          expression1
+                            expression2
+                              expression3
+                                literal
+                statementBlock
+                  statementList
+                    statement
+                      callStatement
+                        callExpression
+                          expressionList
+                            expression0
+                              expression1
+                                expression2
+                                  expression3
+                                    designator
+                    statement
+                      callStatement
+                        callExpression
+                          expressionList
+                    statement
+                      assignmentStatement
+                        designator
+                        expression0
+                          expression1
+                            expression2
+                              expression3
+                                designator
+                            op1
+                            expression2
+                              expression3
+                                literal
+            statement
+              callStatement
+                callExpression
+                  expressionList
+                    expression0
+                      expression1
+                        expression2
+                          expression3
+                            literal
+                        op1
+                        expression2
+                          expression3
+                            literal
+            statement
+              callStatement
+                callExpression
+                  expressionList
+                    expression0
+                      expression1
+                        expression2
+                          expression3
+                            designator
 >
 	at crux.CompilerStageTests.lambda$parseTree$1(CompilerStageTests.java:48)
 
-crux.CompilerStageTests.parseTree  Time elapsed: 0.005 s  <<< FAILURE!
+crux.CompilerStageTests.parseTree  Time elapsed: 0.004 s  <<< FAILURE!
 org.opentest4j.AssertionFailedError: 
 Parse tree for program crux/stages/parse-tree/test27.crx differs from expected output. ==> expected: <program
   declarationList
@@ -1756,14 +2119,11 @@ Parse tree for program crux/stages/parse-tree/test27.crx differs from expected o
                                     expression2
                                       expression3
                                         literal
-> but was: <line 4:8 mismatched input '<=' expecting '['
-line 5:2 mismatched input 'return' expecting {'and', 'or', '+', '-', '*', '/', '>=', '<=', '!=', '==', '>', '<', ';'}
-line 5:16 mismatched input '-' expecting '['
-line 5:29 mismatched input '-' expecting '['
+> but was: <line 5:2 mismatched input 'return' expecting {'and', 'or', '+', '-', '*', '/', '>=', '<=', '!=', '==', '>', '<', ';'}
 >
 	at crux.CompilerStageTests.lambda$parseTree$1(CompilerStageTests.java:48)
 
-crux.CompilerStageTests.parseTree  Time elapsed: 0.005 s  <<< FAILURE!
+crux.CompilerStageTests.parseTree  Time elapsed: 0.004 s  <<< FAILURE!
 org.opentest4j.AssertionFailedError: 
 Parse tree for program crux/stages/parse-tree/test28.crx differs from expected output. ==> expected: <program
   declarationList
@@ -1834,12 +2194,79 @@ Parse tree for program crux/stages/parse-tree/test28.crx differs from expected o
               callStatement
                 callExpression
                   expressionList
-> but was: <line 4:14 mismatched input ')' expecting '['
-line 5:10 mismatched input ';' expecting '['
+> but was: <program
+  declarationList
+    declaration
+      functionDefinition
+        parameterList
+          parameter
+            type
+        type
+        statementBlock
+          statementList
+            statement
+              callStatement
+                callExpression
+                  expressionList
+                    expression0
+                      expression1
+                        expression2
+                          expression3
+                            designator
+            statement
+              return_statement
+                expression0
+                  expression1
+                    expression2
+                      expression3
+                        designator
+    declaration
+      functionDefinition
+        parameterList
+        type
+        statementBlock
+          statementList
+            statement
+              callStatement
+                callExpression
+                  expressionList
+                    expression0
+                      expression1
+                        expression2
+                          expression3
+                            literal
+            statement
+              callStatement
+                callExpression
+                  expressionList
+                    expression0
+                      expression1
+                        expression2
+                          expression3
+                            literal
+            statement
+              callStatement
+                callExpression
+                  expressionList
+                    expression0
+                      expression1
+                        expression2
+                          expression3
+                            literal
+    declaration
+      functionDefinition
+        parameterList
+        type
+        statementBlock
+          statementList
+            statement
+              callStatement
+                callExpression
+                  expressionList
 >
 	at crux.CompilerStageTests.lambda$parseTree$1(CompilerStageTests.java:48)
 
-crux.CompilerStageTests.parseTree  Time elapsed: 0.004 s  <<< FAILURE!
+crux.CompilerStageTests.parseTree  Time elapsed: 0.005 s  <<< FAILURE!
 org.opentest4j.AssertionFailedError: 
 Parse tree for program crux/stages/parse-tree/test29.crx differs from expected output. ==> expected: <program
   declarationList
@@ -1939,8 +2366,104 @@ Parse tree for program crux/stages/parse-tree/test29.crx differs from expected o
                                     expression2
                                       expression3
                                         literal
-> but was: <line 4:11 mismatched input '<' expecting '['
-line 4:14 mismatched input ';' expecting '['
+> but was: <program
+  declarationList
+    declaration
+      functionDefinition
+        parameterList
+          parameter
+            type
+          parameter
+            type
+        type
+        statementBlock
+          statementList
+            statement
+              return_statement
+                expression0
+                  expression1
+                    expression2
+                      expression3
+                        designator
+                  op0
+                  expression1
+                    expression2
+                      expression3
+                        designator
+    declaration
+      functionDefinition
+        parameterList
+        type
+        statementBlock
+          statementList
+            statement
+              callStatement
+                callExpression
+                  expressionList
+                    expression0
+                      expression1
+                        expression2
+                          expression3
+                            callExpression
+                              expressionList
+                                expression0
+                                  expression1
+                                    expression2
+                                      expression3
+                                        literal
+                                expression0
+                                  expression1
+                                    expression2
+                                      expression3
+                                        literal
+            statement
+              callStatement
+                callExpression
+                  expressionList
+            statement
+              callStatement
+                callExpression
+                  expressionList
+                    expression0
+                      expression1
+                        expression2
+                          expression3
+                            callExpression
+                              expressionList
+                                expression0
+                                  expression1
+                                    expression2
+                                      expression3
+                                        literal
+                                expression0
+                                  expression1
+                                    expression2
+                                      expression3
+                                        literal
+            statement
+              callStatement
+                callExpression
+                  expressionList
+            statement
+              callStatement
+                callExpression
+                  expressionList
+                    expression0
+                      expression1
+                        expression2
+                          expression3
+                            callExpression
+                              expressionList
+                                expression0
+                                  expression1
+                                    expression2
+                                      expression3
+                                        literal
+                                expression0
+                                  expression1
+                                    expression2
+                                      expression3
+                                        literal
 >
 	at crux.CompilerStageTests.lambda$parseTree$1(CompilerStageTests.java:48)
 
@@ -2078,14 +2601,142 @@ Parse tree for program crux/stages/parse-tree/test30.crx differs from expected o
                         expression2
                           expression3
                             designator
-> but was: <line 7:19 mismatched input '=' expecting '['
-line 8:17 mismatched input '=' expecting '['
-line 12:25 mismatched input ')' expecting '['
-line 16:23 mismatched input ')' expecting '['
+> but was: <program
+  declarationList
+    declaration
+      variable_declaration
+        type
+    declaration
+      array_declaration
+        type
+    declaration
+      variable_declaration
+        type
+    declaration
+      functionDefinition
+        parameterList
+        type
+        statementBlock
+          statementList
+            statement
+              assignmentStatement
+                designator
+                expression0
+                  expression1
+                    expression2
+                      expression3
+                        literal
+            statement
+              assignmentStatement
+                designator
+                expression0
+                  expression1
+                    expression2
+                      expression3
+                        literal
+            statement
+              assignmentStatement
+                designator
+                  expression0
+                    expression1
+                      expression2
+                        expression3
+                          literal
+                expression0
+                  expression1
+                    expression2
+                      expression3
+                        literal
+            statement
+              assignmentStatement
+                designator
+                  expression0
+                    expression1
+                      expression2
+                        expression3
+                          literal
+                expression0
+                  expression1
+                    expression2
+                      expression3
+                        literal
+            statement
+              assignmentStatement
+                designator
+                  expression0
+                    expression1
+                      expression2
+                        expression3
+                          literal
+                expression0
+                  expression1
+                    expression2
+                      expression3
+                        literal
+            statement
+              callStatement
+                callExpression
+                  expressionList
+                    expression0
+                      expression1
+                        expression2
+                          expression3
+                            designator
+            statement
+              callStatement
+                callExpression
+                  expressionList
+                    expression0
+                      expression1
+                        expression2
+                          expression3
+                            designator
+                              expression0
+                                expression1
+                                  expression2
+                                    expression3
+                                      literal
+            statement
+              callStatement
+                callExpression
+                  expressionList
+                    expression0
+                      expression1
+                        expression2
+                          expression3
+                            designator
+                              expression0
+                                expression1
+                                  expression2
+                                    expression3
+                                      literal
+            statement
+              callStatement
+                callExpression
+                  expressionList
+                    expression0
+                      expression1
+                        expression2
+                          expression3
+                            designator
+                              expression0
+                                expression1
+                                  expression2
+                                    expression3
+                                      literal
+            statement
+              callStatement
+                callExpression
+                  expressionList
+                    expression0
+                      expression1
+                        expression2
+                          expression3
+                            designator
 >
 	at crux.CompilerStageTests.lambda$parseTree$1(CompilerStageTests.java:48)
 
-crux.CompilerStageTests.parseTree  Time elapsed: 0.01 s  <<< FAILURE!
+crux.CompilerStageTests.parseTree  Time elapsed: 0.007 s  <<< FAILURE!
 org.opentest4j.AssertionFailedError: 
 Parse tree for program crux/stages/parse-tree/test31.crx differs from expected output. ==> expected: <program
   declarationList
@@ -2217,14 +2868,136 @@ Parse tree for program crux/stages/parse-tree/test31.crx differs from expected o
               callStatement
                 callExpression
                   expressionList
-> but was: <line 6:8 mismatched input '=' expecting '['
-line 7:14 mismatched input ')' expecting '['
-line 13:8 mismatched input '=' expecting '['
-line 14:14 mismatched input ')' expecting '['
-line 19:8 mismatched input '=' expecting '['
-line 20:14 mismatched input ')' expecting '['
-line 24:14 mismatched input ')' expecting '['
-line 28:14 mismatched input ')' expecting '['
+> but was: <program
+  declarationList
+    declaration
+      variable_declaration
+        type
+    declaration
+      functionDefinition
+        parameterList
+          parameter
+            type
+        type
+        statementBlock
+          statementList
+            statement
+              assignmentStatement
+                designator
+                expression0
+                  expression1
+                    expression2
+                      expression3
+                        literal
+            statement
+              callStatement
+                callExpression
+                  expressionList
+                    expression0
+                      expression1
+                        expression2
+                          expression3
+                            designator
+            statement
+              callStatement
+                callExpression
+                  expressionList
+    declaration
+      functionDefinition
+        parameterList
+        type
+        statementBlock
+          statementList
+            statement
+              variable_declaration
+                type
+            statement
+              assignmentStatement
+                designator
+                expression0
+                  expression1
+                    expression2
+                      expression3
+                        literal
+            statement
+              callStatement
+                callExpression
+                  expressionList
+                    expression0
+                      expression1
+                        expression2
+                          expression3
+                            designator
+            statement
+              callStatement
+                callExpression
+                  expressionList
+    declaration
+      functionDefinition
+        parameterList
+        type
+        statementBlock
+          statementList
+            statement
+              assignmentStatement
+                designator
+                expression0
+                  expression1
+                    expression2
+                      expression3
+                        literal
+            statement
+              callStatement
+                callExpression
+                  expressionList
+                    expression0
+                      expression1
+                        expression2
+                          expression3
+                            designator
+            statement
+              callStatement
+                callExpression
+                  expressionList
+            statement
+              callStatement
+                callExpression
+                  expressionList
+                    expression0
+                      expression1
+                        expression2
+                          expression3
+                            literal
+            statement
+              callStatement
+                callExpression
+                  expressionList
+                    expression0
+                      expression1
+                        expression2
+                          expression3
+                            designator
+            statement
+              callStatement
+                callExpression
+                  expressionList
+            statement
+              callStatement
+                callExpression
+                  expressionList
+            statement
+              callStatement
+                callExpression
+                  expressionList
+                    expression0
+                      expression1
+                        expression2
+                          expression3
+                            designator
+            statement
+              callStatement
+                callExpression
+                  expressionList
 >
 	at crux.CompilerStageTests.lambda$parseTree$1(CompilerStageTests.java:48)
 
@@ -2505,7 +3278,7 @@ Parse tree for program crux/stages/parse-tree/test32.crx differs from expected o
 >
 	at crux.CompilerStageTests.lambda$parseTree$1(CompilerStageTests.java:48)
 
-crux.CompilerStageTests.parseTree  Time elapsed: 0.012 s  <<< FAILURE!
+crux.CompilerStageTests.parseTree  Time elapsed: 0.006 s  <<< FAILURE!
 org.opentest4j.AssertionFailedError: 
 Parse tree for program crux/stages/parse-tree/test33.crx differs from expected output. ==> expected: <program
   declarationList
@@ -2774,7 +3547,7 @@ Parse tree for program crux/stages/parse-tree/test33.crx differs from expected o
 >
 	at crux.CompilerStageTests.lambda$parseTree$1(CompilerStageTests.java:48)
 
-crux.CompilerStageTests.parseTree  Time elapsed: 0.017 s  <<< FAILURE!
+crux.CompilerStageTests.parseTree  Time elapsed: 0.007 s  <<< FAILURE!
 org.opentest4j.AssertionFailedError: 
 Parse tree for program crux/stages/parse-tree/test34.crx differs from expected output. ==> expected: <program
   declarationList
@@ -3255,7 +4028,7 @@ Parse tree for program crux/stages/parse-tree/test34.crx differs from expected o
 >
 	at crux.CompilerStageTests.lambda$parseTree$1(CompilerStageTests.java:48)
 
-crux.CompilerStageTests.parseTree  Time elapsed: 0.009 s  <<< FAILURE!
+crux.CompilerStageTests.parseTree  Time elapsed: 0.008 s  <<< FAILURE!
 org.opentest4j.AssertionFailedError: 
 Parse tree for program crux/stages/parse-tree/test35.crx differs from expected output. ==> expected: <program
   declarationList
@@ -3426,16 +4199,179 @@ Parse tree for program crux/stages/parse-tree/test35.crx differs from expected o
               callStatement
                 callExpression
                   expressionList
-> but was: <line 8:14 mismatched input ')' expecting '['
-line 12:14 mismatched input ')' expecting '['
-line 13:14 mismatched input ')' expecting '['
-line 17:14 mismatched input ')' expecting '['
-line 18:14 mismatched input ')' expecting '['
-line 19:14 mismatched input ')' expecting '['
+> but was: <program
+  declarationList
+    declaration
+      functionDefinition
+        parameterList
+        type
+        statementBlock
+          statementList
+            statement
+              callStatement
+                callExpression
+                  expressionList
+                    expression0
+                      expression1
+                        expression2
+                          expression3
+                            literal
+    declaration
+      functionDefinition
+        parameterList
+          parameter
+            type
+        type
+        statementBlock
+          statementList
+            statement
+              callStatement
+                callExpression
+                  expressionList
+                    expression0
+                      expression1
+                        expression2
+                          expression3
+                            designator
+    declaration
+      functionDefinition
+        parameterList
+          parameter
+            type
+          parameter
+            type
+        type
+        statementBlock
+          statementList
+            statement
+              callStatement
+                callExpression
+                  expressionList
+                    expression0
+                      expression1
+                        expression2
+                          expression3
+                            designator
+            statement
+              callStatement
+                callExpression
+                  expressionList
+                    expression0
+                      expression1
+                        expression2
+                          expression3
+                            designator
+    declaration
+      functionDefinition
+        parameterList
+          parameter
+            type
+          parameter
+            type
+          parameter
+            type
+        type
+        statementBlock
+          statementList
+            statement
+              callStatement
+                callExpression
+                  expressionList
+                    expression0
+                      expression1
+                        expression2
+                          expression3
+                            designator
+            statement
+              callStatement
+                callExpression
+                  expressionList
+                    expression0
+                      expression1
+                        expression2
+                          expression3
+                            designator
+            statement
+              callStatement
+                callExpression
+                  expressionList
+                    expression0
+                      expression1
+                        expression2
+                          expression3
+                            designator
+    declaration
+      functionDefinition
+        parameterList
+        type
+        statementBlock
+          statementList
+            statement
+              callStatement
+                callExpression
+                  expressionList
+            statement
+              callStatement
+                callExpression
+                  expressionList
+            statement
+              callStatement
+                callExpression
+                  expressionList
+                    expression0
+                      expression1
+                        expression2
+                          expression3
+                            literal
+            statement
+              callStatement
+                callExpression
+                  expressionList
+            statement
+              callStatement
+                callExpression
+                  expressionList
+                    expression0
+                      expression1
+                        expression2
+                          expression3
+                            literal
+                    expression0
+                      expression1
+                        expression2
+                          expression3
+                            literal
+            statement
+              callStatement
+                callExpression
+                  expressionList
+            statement
+              callStatement
+                callExpression
+                  expressionList
+                    expression0
+                      expression1
+                        expression2
+                          expression3
+                            literal
+                    expression0
+                      expression1
+                        expression2
+                          expression3
+                            literal
+                    expression0
+                      expression1
+                        expression2
+                          expression3
+                            literal
+            statement
+              callStatement
+                callExpression
+                  expressionList
 >
 	at crux.CompilerStageTests.lambda$parseTree$1(CompilerStageTests.java:48)
 
-crux.CompilerStageTests.parseTree  Time elapsed: 0.007 s  <<< FAILURE!
+crux.CompilerStageTests.parseTree  Time elapsed: 0.005 s  <<< FAILURE!
 org.opentest4j.AssertionFailedError: 
 Parse tree for program crux/stages/parse-tree/test36.crx differs from expected output. ==> expected: <program
   declarationList
@@ -3496,14 +4432,69 @@ Parse tree for program crux/stages/parse-tree/test36.crx differs from expected o
                             expression2
                               expression3
                                 literal
-> but was: <line 5:7 mismatched input '=' expecting '['
-line 6:9 mismatched input '<' expecting '['
-line 8:9 mismatched input '=' expecting '['
-line 8:11 mismatched input '+' expecting '['
+> but was: <program
+  declarationList
+    declaration
+      functionDefinition
+        parameterList
+        type
+        statementBlock
+          statementList
+            statement
+              variable_declaration
+                type
+            statement
+              assignmentStatement
+                designator
+                expression0
+                  expression1
+                    expression2
+                      expression3
+                        literal
+            statement
+              while_statement
+                expression0
+                  expression1
+                    expression2
+                      expression3
+                        expression0
+                          expression1
+                            expression2
+                              expression3
+                                designator
+                          op0
+                          expression1
+                            expression2
+                              expression3
+                                literal
+                statementBlock
+                  statementList
+                    statement
+                      callStatement
+                        callExpression
+                          expressionList
+                            expression0
+                              expression1
+                                expression2
+                                  expression3
+                                    callExpression
+                                      expressionList
+                    statement
+                      assignmentStatement
+                        designator
+                        expression0
+                          expression1
+                            expression2
+                              expression3
+                                designator
+                            op1
+                            expression2
+                              expression3
+                                literal
 >
 	at crux.CompilerStageTests.lambda$parseTree$1(CompilerStageTests.java:48)
 
-crux.CompilerStageTests.parseTree  Time elapsed: 0.012 s  <<< FAILURE!
+crux.CompilerStageTests.parseTree  Time elapsed: 0.007 s  <<< FAILURE!
 org.opentest4j.AssertionFailedError: 
 Parse tree for program crux/stages/parse-tree/test37.crx differs from expected output. ==> expected: <program
   declarationList
@@ -3693,7 +4684,7 @@ Parse tree for program crux/stages/parse-tree/test37.crx differs from expected o
         statementBlock
           statementList
             statement
-              assignment_statement
+              assignmentStatement
                 designator
                   expression0
                     expression1
@@ -3706,7 +4697,7 @@ Parse tree for program crux/stages/parse-tree/test37.crx differs from expected o
                       expression3
                         literal
             statement
-              assignment_statement
+              assignmentStatement
                 designator
                   expression0
                     expression1
@@ -3719,7 +4710,7 @@ Parse tree for program crux/stages/parse-tree/test37.crx differs from expected o
                       expression3
                         literal
             statement
-              assignment_statement
+              assignmentStatement
                 designator
                   expression0
                     expression1
@@ -3732,7 +4723,7 @@ Parse tree for program crux/stages/parse-tree/test37.crx differs from expected o
                       expression3
                         literal
             statement
-              assignment_statement
+              assignmentStatement
                 designator
                   expression0
                     expression1
@@ -3745,7 +4736,7 @@ Parse tree for program crux/stages/parse-tree/test37.crx differs from expected o
                       expression3
                         literal
             statement
-              assignment_statement
+              assignmentStatement
                 designator
                   expression0
                     expression1
@@ -3758,7 +4749,7 @@ Parse tree for program crux/stages/parse-tree/test37.crx differs from expected o
                       expression3
                         literal
             statement
-              assignment_statement
+              assignmentStatement
                 designator
                   expression0
                     expression1
@@ -3771,7 +4762,7 @@ Parse tree for program crux/stages/parse-tree/test37.crx differs from expected o
                       expression3
                         literal
             statement
-              assignment_statement
+              assignmentStatement
                 designator
                   expression0
                     expression1
@@ -3784,7 +4775,7 @@ Parse tree for program crux/stages/parse-tree/test37.crx differs from expected o
                       expression3
                         literal
             statement
-              assignment_statement
+              assignmentStatement
                 designator
                   expression0
                     expression1
@@ -3797,7 +4788,7 @@ Parse tree for program crux/stages/parse-tree/test37.crx differs from expected o
                       expression3
                         literal
             statement
-              assignment_statement
+              assignmentStatement
                 designator
                   expression0
                     expression1
@@ -3810,7 +4801,7 @@ Parse tree for program crux/stages/parse-tree/test37.crx differs from expected o
                       expression3
                         literal
             statement
-              assignment_statement
+              assignmentStatement
                 designator
                   expression0
                     expression1
@@ -3854,7 +4845,7 @@ Parse tree for program crux/stages/parse-tree/test37.crx differs from expected o
 >
 	at crux.CompilerStageTests.lambda$parseTree$1(CompilerStageTests.java:48)
 
-crux.CompilerStageTests.parseTree  Time elapsed: 0.02 s  <<< FAILURE!
+crux.CompilerStageTests.parseTree  Time elapsed: 0.011 s  <<< FAILURE!
 org.opentest4j.AssertionFailedError: 
 Parse tree for program crux/stages/parse-tree/test38.crx differs from expected output. ==> expected: <program
   declarationList
@@ -4959,29 +5950,214 @@ Parse tree for program crux/stages/parse-tree/test39.crx differs from expected o
                             expression2
                               expression3
                                 literal
-> but was: <line 4:15 mismatched input '+' expecting '['
-line 4:18 mismatched input ')' expecting '['
-line 6:15 mismatched input '-' expecting '['
-line 6:18 mismatched input ')' expecting '['
-line 8:15 mismatched input '*' expecting '['
-line 8:18 mismatched input ')' expecting '['
-line 10:8 mismatched input '!=' expecting '['
-line 11:17 mismatched input '/' expecting '['
-line 11:20 mismatched input ')' expecting '['
-line 21:8 mismatched input '=' expecting '['
-line 22:10 mismatched input '<=' expecting '['
-line 23:10 mismatched input '=' expecting '['
-line 24:12 mismatched input '<=' expecting '['
-line 25:15 mismatched input ',' expecting '['
-line 25:18 mismatched input ')' expecting '['
-line 26:13 mismatched input '=' expecting '['
-line 26:17 mismatched input '+' expecting '['
-line 28:10 mismatched input '=' expecting '['
-line 28:14 mismatched input '+' expecting '['
+> but was: <program
+  declarationList
+    declaration
+      functionDefinition
+        parameterList
+          parameter
+            type
+          parameter
+            type
+        type
+        statementBlock
+          statementList
+            statement
+              callStatement
+                callExpression
+                  expressionList
+                    expression0
+                      expression1
+                        expression2
+                          expression3
+                            designator
+                        op1
+                        expression2
+                          expression3
+                            designator
+            statement
+              callStatement
+                callExpression
+                  expressionList
+            statement
+              callStatement
+                callExpression
+                  expressionList
+                    expression0
+                      expression1
+                        expression2
+                          expression3
+                            designator
+                        op1
+                        expression2
+                          expression3
+                            designator
+            statement
+              callStatement
+                callExpression
+                  expressionList
+            statement
+              callStatement
+                callExpression
+                  expressionList
+                    expression0
+                      expression1
+                        expression2
+                          expression3
+                            designator
+                          op2
+                          expression3
+                            designator
+            statement
+              callStatement
+                callExpression
+                  expressionList
+            statement
+              if_statement
+                expression0
+                  expression1
+                    expression2
+                      expression3
+                        expression0
+                          expression1
+                            expression2
+                              expression3
+                                designator
+                          op0
+                          expression1
+                            expression2
+                              expression3
+                                literal
+                statementBlock
+                  statementList
+                    statement
+                      callStatement
+                        callExpression
+                          expressionList
+                            expression0
+                              expression1
+                                expression2
+                                  expression3
+                                    designator
+                                  op2
+                                  expression3
+                                    designator
+                    statement
+                      callStatement
+                        callExpression
+                          expressionList
+                statementBlock
+                  statementList
+                    statement
+                      callStatement
+                        callExpression
+                          expressionList
+    declaration
+      functionDefinition
+        parameterList
+        type
+        statementBlock
+          statementList
+            statement
+              variable_declaration
+                type
+            statement
+              variable_declaration
+                type
+            statement
+              assignmentStatement
+                designator
+                expression0
+                  expression1
+                    expression2
+                      expression3
+                        literal
+            statement
+              while_statement
+                expression0
+                  expression1
+                    expression2
+                      expression3
+                        expression0
+                          expression1
+                            expression2
+                              expression3
+                                designator
+                          op0
+                          expression1
+                            expression2
+                              expression3
+                                literal
+                statementBlock
+                  statementList
+                    statement
+                      assignmentStatement
+                        designator
+                        expression0
+                          expression1
+                            expression2
+                              expression3
+                                literal
+                    statement
+                      while_statement
+                        expression0
+                          expression1
+                            expression2
+                              expression3
+                                expression0
+                                  expression1
+                                    expression2
+                                      expression3
+                                        designator
+                                  op0
+                                  expression1
+                                    expression2
+                                      expression3
+                                        literal
+                        statementBlock
+                          statementList
+                            statement
+                              callStatement
+                                callExpression
+                                  expressionList
+                                    expression0
+                                      expression1
+                                        expression2
+                                          expression3
+                                            designator
+                                    expression0
+                                      expression1
+                                        expression2
+                                          expression3
+                                            designator
+                            statement
+                              assignmentStatement
+                                designator
+                                expression0
+                                  expression1
+                                    expression2
+                                      expression3
+                                        designator
+                                    op1
+                                    expression2
+                                      expression3
+                                        literal
+                    statement
+                      assignmentStatement
+                        designator
+                        expression0
+                          expression1
+                            expression2
+                              expression3
+                                designator
+                            op1
+                            expression2
+                              expression3
+                                literal
 >
 	at crux.CompilerStageTests.lambda$parseTree$1(CompilerStageTests.java:48)
 
-crux.CompilerStageTests.parseTree  Time elapsed: 0.012 s  <<< FAILURE!
+crux.CompilerStageTests.parseTree  Time elapsed: 0.008 s  <<< FAILURE!
 org.opentest4j.AssertionFailedError: 
 Parse tree for program crux/stages/parse-tree/test40.crx differs from expected output. ==> expected: <program
   declarationList
@@ -5205,32 +6381,232 @@ Parse tree for program crux/stages/parse-tree/test40.crx differs from expected o
                             expression2
                               expression3
                                 literal
-> but was: <line 4:16 mismatched input '>=' expecting '['
-line 4:20 mismatched input ')' expecting '['
-line 6:16 mismatched input '<=' expecting '['
-line 6:20 mismatched input ')' expecting '['
-line 8:16 mismatched input '!=' expecting '['
-line 8:20 mismatched input ')' expecting '['
-line 10:16 mismatched input '==' expecting '['
-line 10:20 mismatched input ')' expecting '['
-line 12:16 mismatched input '<' expecting '['
-line 12:19 mismatched input ')' expecting '['
-line 14:16 mismatched input '>' expecting '['
-line 14:19 mismatched input ')' expecting '['
-line 21:8 mismatched input '=' expecting '['
-line 22:10 mismatched input '<=' expecting '['
-line 23:10 mismatched input '=' expecting '['
-line 24:12 mismatched input '<=' expecting '['
-line 25:15 mismatched input ',' expecting '['
-line 25:18 mismatched input ')' expecting '['
-line 26:13 mismatched input '=' expecting '['
-line 26:17 mismatched input '+' expecting '['
-line 28:10 mismatched input '=' expecting '['
-line 28:14 mismatched input '+' expecting '['
+> but was: <program
+  declarationList
+    declaration
+      functionDefinition
+        parameterList
+          parameter
+            type
+          parameter
+            type
+        type
+        statementBlock
+          statementList
+            statement
+              callStatement
+                callExpression
+                  expressionList
+                    expression0
+                      expression1
+                        expression2
+                          expression3
+                            designator
+                      op0
+                      expression1
+                        expression2
+                          expression3
+                            designator
+            statement
+              callStatement
+                callExpression
+                  expressionList
+            statement
+              callStatement
+                callExpression
+                  expressionList
+                    expression0
+                      expression1
+                        expression2
+                          expression3
+                            designator
+                      op0
+                      expression1
+                        expression2
+                          expression3
+                            designator
+            statement
+              callStatement
+                callExpression
+                  expressionList
+            statement
+              callStatement
+                callExpression
+                  expressionList
+                    expression0
+                      expression1
+                        expression2
+                          expression3
+                            designator
+                      op0
+                      expression1
+                        expression2
+                          expression3
+                            designator
+            statement
+              callStatement
+                callExpression
+                  expressionList
+            statement
+              callStatement
+                callExpression
+                  expressionList
+                    expression0
+                      expression1
+                        expression2
+                          expression3
+                            designator
+                      op0
+                      expression1
+                        expression2
+                          expression3
+                            designator
+            statement
+              callStatement
+                callExpression
+                  expressionList
+            statement
+              callStatement
+                callExpression
+                  expressionList
+                    expression0
+                      expression1
+                        expression2
+                          expression3
+                            designator
+                      op0
+                      expression1
+                        expression2
+                          expression3
+                            designator
+            statement
+              callStatement
+                callExpression
+                  expressionList
+            statement
+              callStatement
+                callExpression
+                  expressionList
+                    expression0
+                      expression1
+                        expression2
+                          expression3
+                            designator
+                      op0
+                      expression1
+                        expression2
+                          expression3
+                            designator
+            statement
+              callStatement
+                callExpression
+                  expressionList
+    declaration
+      functionDefinition
+        parameterList
+        type
+        statementBlock
+          statementList
+            statement
+              variable_declaration
+                type
+            statement
+              variable_declaration
+                type
+            statement
+              assignmentStatement
+                designator
+                expression0
+                  expression1
+                    expression2
+                      expression3
+                        literal
+            statement
+              while_statement
+                expression0
+                  expression1
+                    expression2
+                      expression3
+                        expression0
+                          expression1
+                            expression2
+                              expression3
+                                designator
+                          op0
+                          expression1
+                            expression2
+                              expression3
+                                literal
+                statementBlock
+                  statementList
+                    statement
+                      assignmentStatement
+                        designator
+                        expression0
+                          expression1
+                            expression2
+                              expression3
+                                literal
+                    statement
+                      while_statement
+                        expression0
+                          expression1
+                            expression2
+                              expression3
+                                expression0
+                                  expression1
+                                    expression2
+                                      expression3
+                                        designator
+                                  op0
+                                  expression1
+                                    expression2
+                                      expression3
+                                        literal
+                        statementBlock
+                          statementList
+                            statement
+                              callStatement
+                                callExpression
+                                  expressionList
+                                    expression0
+                                      expression1
+                                        expression2
+                                          expression3
+                                            designator
+                                    expression0
+                                      expression1
+                                        expression2
+                                          expression3
+                                            designator
+                            statement
+                              assignmentStatement
+                                designator
+                                expression0
+                                  expression1
+                                    expression2
+                                      expression3
+                                        designator
+                                    op1
+                                    expression2
+                                      expression3
+                                        literal
+                    statement
+                      assignmentStatement
+                        designator
+                        expression0
+                          expression1
+                            expression2
+                              expression3
+                                designator
+                            op1
+                            expression2
+                              expression3
+                                literal
 >
 	at crux.CompilerStageTests.lambda$parseTree$1(CompilerStageTests.java:48)
 
-crux.CompilerStageTests.parseTree  Time elapsed: 0.008 s  <<< FAILURE!
+crux.CompilerStageTests.parseTree  Time elapsed: 0.004 s  <<< FAILURE!
 org.opentest4j.AssertionFailedError: 
 Parse tree for program crux/stages/parse-tree/test41.crx differs from expected output. ==> expected: <program
   declarationList
@@ -5367,14 +6743,11 @@ Parse tree for program crux/stages/parse-tree/test41.crx differs from expected o
                                                             expression2
                                                               expression3
                                                                 literal
-> but was: <line 15:8 mismatched input '=' expecting '['
-line 19:10 mismatched input '=' expecting '['
-line 19:26 mismatched input ')' expecting '['
-line 21:0 mismatched input '}' expecting {'and', 'or', ')', '+', '-', '*', '/', '>=', '<=', '!=', '==', '>', '<'}
+> but was: <line 21:0 mismatched input '}' expecting {'and', 'or', ')', '+', '-', '*', '/', '>=', '<=', '!=', '==', '>', '<'}
 >
 	at crux.CompilerStageTests.lambda$parseTree$1(CompilerStageTests.java:48)
 
-crux.CompilerStageTests.parseTree  Time elapsed: 0.011 s  <<< FAILURE!
+crux.CompilerStageTests.parseTree  Time elapsed: 0.004 s  <<< FAILURE!
 org.opentest4j.AssertionFailedError: 
 Parse tree for program crux/stages/parse-tree/test42.crx differs from expected output. ==> expected: <program
   declarationList
@@ -5546,7 +6919,7 @@ Parse tree for program crux/stages/parse-tree/test42.crx differs from expected o
         statementBlock
           statementList
             statement
-              assignment_statement
+              assignmentStatement
                 designator
                   expression0
                     expression1
@@ -5572,7 +6945,7 @@ Parse tree for program crux/stages/parse-tree/test42.crx differs from expected o
         statementBlock
           statementList
             statement
-              assignment_statement
+              assignmentStatement
                 designator
                   expression0
                     expression1
@@ -5585,7 +6958,7 @@ Parse tree for program crux/stages/parse-tree/test42.crx differs from expected o
                       expression3
                         literal
             statement
-              assignment_statement
+              assignmentStatement
                 designator
                   expression0
                     expression1
@@ -5598,7 +6971,7 @@ Parse tree for program crux/stages/parse-tree/test42.crx differs from expected o
                       expression3
                         literal
             statement
-              assignment_statement
+              assignmentStatement
                 designator
                   expression0
                     expression1
@@ -5611,7 +6984,7 @@ Parse tree for program crux/stages/parse-tree/test42.crx differs from expected o
                       expression3
                         literal
             statement
-              assignment_statement
+              assignmentStatement
                 designator
                   expression0
                     expression1
@@ -5695,7 +7068,7 @@ Parse tree for program crux/stages/parse-tree/test42.crx differs from expected o
 >
 	at crux.CompilerStageTests.lambda$parseTree$1(CompilerStageTests.java:48)
 
-crux.CompilerStageTests.parseTree  Time elapsed: 0.011 s  <<< FAILURE!
+crux.CompilerStageTests.parseTree  Time elapsed: 0.004 s  <<< FAILURE!
 org.opentest4j.AssertionFailedError: 
 Parse tree for program crux/stages/parse-tree/test43.crx differs from expected output. ==> expected: <program
   declarationList
@@ -5809,13 +7182,122 @@ Parse tree for program crux/stages/parse-tree/test43.crx differs from expected o
                                     expression2
                                       expression3
                                         literal
-> but was: <line 6:12 mismatched input '=' expecting '['
-line 9:16 mismatched input ';' expecting '['
-line 14:12 mismatched input ';' expecting '['
+> but was: <program
+  declarationList
+    declaration
+      functionDefinition
+        parameterList
+          parameter
+            type
+        type
+        statementBlock
+          statementList
+            statement
+              if_statement
+                expression0
+                  expression1
+                    expression2
+                      expression3
+                        expression0
+                          expression1
+                            expression2
+                              expression3
+                                literal
+                statementBlock
+                  statementList
+                    statement
+                      if_statement
+                        expression0
+                          expression1
+                            expression2
+                              expression3
+                                expression0
+                                  expression1
+                                    expression2
+                                      expression3
+                                        literal
+                        statementBlock
+                          statementList
+                            statement
+                              assignmentStatement
+                                designator
+                                expression0
+                                  expression1
+                                    expression2
+                                      expression3
+                                        literal
+                        statementBlock
+                          statementList
+                            statement
+                              while_statement
+                                expression0
+                                  expression1
+                                    expression2
+                                      expression3
+                                        expression0
+                                          expression1
+                                            expression2
+                                              expression3
+                                                literal
+                                statementBlock
+                                  statementList
+                                    statement
+                                      return_statement
+                                        expression0
+                                          expression1
+                                            expression2
+                                              expression3
+                                                designator
+                    statement
+                      return_statement
+                        expression0
+                          expression1
+                            expression2
+                              expression3
+                                literal
+                statementBlock
+                  statementList
+                    statement
+                      return_statement
+                        expression0
+                          expression1
+                            expression2
+                              expression3
+                                designator
+    declaration
+      functionDefinition
+        parameterList
+        type
+        statementBlock
+          statementList
+            statement
+              callStatement
+                callExpression
+                  expressionList
+                    expression0
+                      expression1
+                        expression2
+                          expression3
+                            literal
+            statement
+              callStatement
+                callExpression
+                  expressionList
+                    expression0
+                      expression1
+                        expression2
+                          expression3
+                            callExpression
+                              expressionList
+                                expression0
+                                  expression1
+                                    expression2
+                                      expression3
+                                        literal
 >
 	at crux.CompilerStageTests.lambda$parseTree$1(CompilerStageTests.java:48)
 
-crux.CompilerStageTests.parseTree  Time elapsed: 0.005 s  <<< FAILURE!
+crux.CompilerStageTests.parseTree  Time elapsed: 0.004 s  <<< FAILURE!
 org.opentest4j.AssertionFailedError: 
 Parse tree for program crux/stages/parse-tree/test44.crx differs from expected output. ==> expected: <program
   declarationList
@@ -5971,19 +7453,11 @@ Parse tree for program crux/stages/parse-tree/test44.crx differs from expected o
                         expression2
                           expression3
                             literal
-> but was: <line 5:8 mismatched input '=' expecting '['
-line 7:8 mismatched input '=' expecting '['
-line 8:11 mismatched input '<' expecting '['
-line 11:17 mismatched input '<' expecting '['
-line 13:16 mismatched input '=' expecting '['
-line 13:20 mismatched input '+' expecting '['
-line 19:4 mismatched input '::' expecting {'and', 'or', ')', '+', '-', '*', '/', '>=', '<=', '!=', '==', '>', '<', ','}
-line 20:10 mismatched input '=' expecting '['
-line 20:14 mismatched input '+' expecting '['
+> but was: <line 19:4 mismatched input '::' expecting {'and', 'or', ')', '+', '-', '*', '/', '>=', '<=', '!=', '==', '>', '<', ','}
 >
 	at crux.CompilerStageTests.lambda$parseTree$1(CompilerStageTests.java:48)
 
-crux.CompilerStageTests.parseTree  Time elapsed: 0.006 s  <<< FAILURE!
+crux.CompilerStageTests.parseTree  Time elapsed: 0.005 s  <<< FAILURE!
 org.opentest4j.AssertionFailedError: 
 Parse tree for program crux/stages/parse-tree/test45.crx differs from expected output. ==> expected: <program
   declarationList
@@ -6183,19 +7657,208 @@ Parse tree for program crux/stages/parse-tree/test45.crx differs from expected o
                         expression2
                           expression3
                             literal
-> but was: <line 4:14 mismatched input ')' expecting '['
-line 6:14 mismatched input ')' expecting '['
-line 8:14 mismatched input ')' expecting '['
-line 10:14 mismatched input ')' expecting '['
-line 12:14 mismatched input ')' expecting '['
-line 14:14 mismatched input ')' expecting '['
-line 16:14 mismatched input ')' expecting '['
-line 18:14 mismatched input ')' expecting '['
-line 20:14 mismatched input ')' expecting '['
+> but was: <program
+  declarationList
+    declaration
+      functionDefinition
+        parameterList
+          parameter
+            type
+          parameter
+            type
+          parameter
+            type
+          parameter
+            type
+          parameter
+            type
+          parameter
+            type
+          parameter
+            type
+          parameter
+            type
+          parameter
+            type
+        type
+        statementBlock
+          statementList
+            statement
+              callStatement
+                callExpression
+                  expressionList
+                    expression0
+                      expression1
+                        expression2
+                          expression3
+                            designator
+            statement
+              callStatement
+                callExpression
+                  expressionList
+            statement
+              callStatement
+                callExpression
+                  expressionList
+                    expression0
+                      expression1
+                        expression2
+                          expression3
+                            designator
+            statement
+              callStatement
+                callExpression
+                  expressionList
+            statement
+              callStatement
+                callExpression
+                  expressionList
+                    expression0
+                      expression1
+                        expression2
+                          expression3
+                            designator
+            statement
+              callStatement
+                callExpression
+                  expressionList
+            statement
+              callStatement
+                callExpression
+                  expressionList
+                    expression0
+                      expression1
+                        expression2
+                          expression3
+                            designator
+            statement
+              callStatement
+                callExpression
+                  expressionList
+            statement
+              callStatement
+                callExpression
+                  expressionList
+                    expression0
+                      expression1
+                        expression2
+                          expression3
+                            designator
+            statement
+              callStatement
+                callExpression
+                  expressionList
+            statement
+              callStatement
+                callExpression
+                  expressionList
+                    expression0
+                      expression1
+                        expression2
+                          expression3
+                            designator
+            statement
+              callStatement
+                callExpression
+                  expressionList
+            statement
+              callStatement
+                callExpression
+                  expressionList
+                    expression0
+                      expression1
+                        expression2
+                          expression3
+                            designator
+            statement
+              callStatement
+                callExpression
+                  expressionList
+            statement
+              callStatement
+                callExpression
+                  expressionList
+                    expression0
+                      expression1
+                        expression2
+                          expression3
+                            designator
+            statement
+              callStatement
+                callExpression
+                  expressionList
+            statement
+              callStatement
+                callExpression
+                  expressionList
+                    expression0
+                      expression1
+                        expression2
+                          expression3
+                            designator
+            statement
+              callStatement
+                callExpression
+                  expressionList
+    declaration
+      functionDefinition
+        parameterList
+        type
+        statementBlock
+          statementList
+            statement
+              callStatement
+                callExpression
+                  expressionList
+                    expression0
+                      expression1
+                        expression2
+                          expression3
+                            literal
+                    expression0
+                      expression1
+                        expression2
+                          expression3
+                            literal
+                    expression0
+                      expression1
+                        expression2
+                          expression3
+                            literal
+                    expression0
+                      expression1
+                        expression2
+                          expression3
+                            literal
+                    expression0
+                      expression1
+                        expression2
+                          expression3
+                            literal
+                    expression0
+                      expression1
+                        expression2
+                          expression3
+                            literal
+                    expression0
+                      expression1
+                        expression2
+                          expression3
+                            literal
+                    expression0
+                      expression1
+                        expression2
+                          expression3
+                            literal
+                    expression0
+                      expression1
+                        expression2
+                          expression3
+                            literal
 >
 	at crux.CompilerStageTests.lambda$parseTree$1(CompilerStageTests.java:48)
 
-crux.CompilerStageTests.parseTree  Time elapsed: 0.009 s  <<< FAILURE!
+crux.CompilerStageTests.parseTree  Time elapsed: 0.007 s  <<< FAILURE!
 org.opentest4j.AssertionFailedError: 
 Parse tree for program crux/stages/parse-tree/test46.crx differs from expected output. ==> expected: <program
   declarationList
@@ -6467,32 +8130,276 @@ Parse tree for program crux/stages/parse-tree/test46.crx differs from expected o
                         expression2
                           expression3
                             designator
-> but was: <line 10:19 mismatched input '=' expecting '['
-line 11:17 mismatched input '=' expecting '['
-line 13:12 mismatched input '=' expecting '['
-line 14:12 mismatched input '=' expecting '['
-line 15:15 mismatched input '>=' expecting '['
-line 16:17 mismatched input '>=' expecting '['
-line 17:19 mismatched input ']' expecting '['
-line 17:29 mismatched input '*' expecting '['
-line 17:44 mismatched input '*' expecting '['
-line 18:16 mismatched input '=' expecting '['
-line 18:24 mismatched input '-' expecting '['
-line 20:14 mismatched input '=' expecting '['
-line 21:14 mismatched input '=' expecting '['
-line 21:22 mismatched input '-' expecting '['
-line 24:12 mismatched input '=' expecting '['
-line 25:12 mismatched input '=' expecting '['
-line 26:15 mismatched input '<' expecting '['
-line 27:17 mismatched input '<' expecting '['
-line 28:25 mismatched input ']' expecting '['
-line 29:17 mismatched input '=' expecting '['
-line 29:25 mismatched input '+' expecting '['
-line 32:15 mismatched input '=' expecting '['
-line 33:15 mismatched input '=' expecting '['
-line 33:23 mismatched input '+' expecting '['
-line 35:25 mismatched input ')' expecting '['
-line 36:23 mismatched input ')' expecting '['
+> but was: <program
+  declarationList
+    declaration
+      array_declaration
+        type
+    declaration
+      functionDefinition
+        parameterList
+        type
+        statementBlock
+          statementList
+            statement
+              variable_declaration
+                type
+            statement
+              variable_declaration
+                type
+            statement
+              variable_declaration
+                type
+            statement
+              variable_declaration
+                type
+            statement
+              assignmentStatement
+                designator
+                expression0
+                  expression1
+                    expression2
+                      expression3
+                        literal
+            statement
+              assignmentStatement
+                designator
+                expression0
+                  expression1
+                    expression2
+                      expression3
+                        literal
+            statement
+              assignmentStatement
+                designator
+                expression0
+                  expression1
+                    expression2
+                      expression3
+                        literal
+            statement
+              assignmentStatement
+                designator
+                expression0
+                  expression1
+                    expression2
+                      expression3
+                        literal
+            statement
+              while_statement
+                expression0
+                  expression1
+                    expression2
+                      expression3
+                        expression0
+                          expression1
+                            expression2
+                              expression3
+                                designator
+                          op0
+                          expression1
+                            expression2
+                              expression3
+                                literal
+                statementBlock
+                  statementList
+                    statement
+                      while_statement
+                        expression0
+                          expression1
+                            expression2
+                              expression3
+                                expression0
+                                  expression1
+                                    expression2
+                                      expression3
+                                        designator
+                                  op0
+                                  expression1
+                                    expression2
+                                      expression3
+                                        literal
+                        statementBlock
+                          statementList
+                            statement
+                              assignmentStatement
+                                designator
+                                  expression0
+                                    expression1
+                                      expression2
+                                        expression3
+                                          designator
+                                expression0
+                                  expression1
+                                    expression2
+                                      expression3
+                                        designator
+                                      op2
+                                      expression3
+                                        literal
+                                    op1
+                                    expression2
+                                      expression3
+                                        designator
+                                      op2
+                                      expression3
+                                        literal
+                                    op1
+                                    expression2
+                                      expression3
+                                        literal
+                            statement
+                              assignmentStatement
+                                designator
+                                expression0
+                                  expression1
+                                    expression2
+                                      expression3
+                                        designator
+                                    op1
+                                    expression2
+                                      expression3
+                                        literal
+                    statement
+                      assignmentStatement
+                        designator
+                        expression0
+                          expression1
+                            expression2
+                              expression3
+                                literal
+                    statement
+                      assignmentStatement
+                        designator
+                        expression0
+                          expression1
+                            expression2
+                              expression3
+                                designator
+                            op1
+                            expression2
+                              expression3
+                                literal
+            statement
+              assignmentStatement
+                designator
+                expression0
+                  expression1
+                    expression2
+                      expression3
+                        literal
+            statement
+              assignmentStatement
+                designator
+                expression0
+                  expression1
+                    expression2
+                      expression3
+                        literal
+            statement
+              while_statement
+                expression0
+                  expression1
+                    expression2
+                      expression3
+                        expression0
+                          expression1
+                            expression2
+                              expression3
+                                designator
+                          op0
+                          expression1
+                            expression2
+                              expression3
+                                literal
+                statementBlock
+                  statementList
+                    statement
+                      while_statement
+                        expression0
+                          expression1
+                            expression2
+                              expression3
+                                expression0
+                                  expression1
+                                    expression2
+                                      expression3
+                                        designator
+                                  op0
+                                  expression1
+                                    expression2
+                                      expression3
+                                        literal
+                        statementBlock
+                          statementList
+                            statement
+                              callStatement
+                                callExpression
+                                  expressionList
+                                    expression0
+                                      expression1
+                                        expression2
+                                          expression3
+                                            designator
+                                              expression0
+                                                expression1
+                                                  expression2
+                                                    expression3
+                                                      designator
+                            statement
+                              assignmentStatement
+                                designator
+                                expression0
+                                  expression1
+                                    expression2
+                                      expression3
+                                        designator
+                                    op1
+                                    expression2
+                                      expression3
+                                        literal
+                    statement
+                      callStatement
+                        callExpression
+                          expressionList
+                    statement
+                      assignmentStatement
+                        designator
+                        expression0
+                          expression1
+                            expression2
+                              expression3
+                                literal
+                    statement
+                      assignmentStatement
+                        designator
+                        expression0
+                          expression1
+                            expression2
+                              expression3
+                                designator
+                            op1
+                            expression2
+                              expression3
+                                literal
+            statement
+              callStatement
+                callExpression
+                  expressionList
+                    expression0
+                      expression1
+                        expression2
+                          expression3
+                            designator
+            statement
+              callStatement
+                callExpression
+                  expressionList
+                    expression0
+                      expression1
+                        expression2
+                          expression3
+                            designator
 >
 	at crux.CompilerStageTests.lambda$parseTree$1(CompilerStageTests.java:48)
 
@@ -6652,19 +8559,9 @@ Parse tree for program crux/stages/parse-tree/test47.crx differs from expected o
               callStatement
                 callExpression
                   expressionList
-> but was: <line 5:8 mismatched input '=' expecting '['
-line 8:10 mismatched input '=' expecting '['
-line 10:12 mismatched input '=' expecting '['
-line 10:16 mismatched input '*' expecting '['
-line 12:12 mismatched input '=' expecting '['
-line 15:7 mismatched input '=' expecting '['
-line 16:14 mismatched input ')' expecting '['
-line 19:6 mismatched input '::' expecting {'not', 'true', 'false', '(', ')', ',', '::', INTEGER, IDENTIFIER}
-line 19:18 mismatched input ')' expecting '['
+> but was: <line 19:6 mismatched input '::' expecting {'not', 'true', 'false', '(', ')', ',', '::', INTEGER, IDENTIFIER}
 line 22:4 mismatched input '::' expecting {'not', 'true', 'false', '(', ')', ',', '::', INTEGER, IDENTIFIER}
-line 22:16 mismatched input ')' expecting '['
 line 25:2 mismatched input '::' expecting {'not', 'true', 'false', '(', ')', ',', '::', INTEGER, IDENTIFIER}
-line 25:14 mismatched input ')' expecting '['
 >
 	at crux.CompilerStageTests.lambda$parseTree$1(CompilerStageTests.java:48)
 
@@ -6785,24 +8682,125 @@ Parse tree for program crux/stages/parse-tree/test48.crx differs from expected o
                             expression2
                               expression3
                                 literal
-> but was: <line 5:8 mismatched input '=' expecting '['
-line 8:8 mismatched input '=' expecting '['
-line 9:8 mismatched input '=' expecting '['
-line 10:11 mismatched input '<' expecting '['
-line 11:16 mismatched input ')' expecting '['
-line 14:10 mismatched input '=' expecting '['
-line 14:14 mismatched input '+' expecting '['
-line 14:17 mismatched input ';' expecting '['
-line 15:10 mismatched input '=' expecting '['
-line 15:13 mismatched input ';' expecting '['
-line 16:10 mismatched input '=' expecting '['
-line 16:13 mismatched input ';' expecting '['
-line 17:10 mismatched input '=' expecting '['
-line 17:14 mismatched input '+' expecting '['
+> but was: <program
+  declarationList
+    declaration
+      functionDefinition
+        parameterList
+        type
+        statementBlock
+          statementList
+            statement
+              variable_declaration
+                type
+            statement
+              assignmentStatement
+                designator
+                expression0
+                  expression1
+                    expression2
+                      expression3
+                        literal
+            statement
+              variable_declaration
+                type
+            statement
+              variable_declaration
+                type
+            statement
+              assignmentStatement
+                designator
+                expression0
+                  expression1
+                    expression2
+                      expression3
+                        literal
+            statement
+              assignmentStatement
+                designator
+                expression0
+                  expression1
+                    expression2
+                      expression3
+                        literal
+            statement
+              while_statement
+                expression0
+                  expression1
+                    expression2
+                      expression3
+                        expression0
+                          expression1
+                            expression2
+                              expression3
+                                designator
+                          op0
+                          expression1
+                            expression2
+                              expression3
+                                literal
+                statementBlock
+                  statementList
+                    statement
+                      callStatement
+                        callExpression
+                          expressionList
+                            expression0
+                              expression1
+                                expression2
+                                  expression3
+                                    designator
+                    statement
+                      callStatement
+                        callExpression
+                          expressionList
+                    statement
+                      variable_declaration
+                        type
+                    statement
+                      assignmentStatement
+                        designator
+                        expression0
+                          expression1
+                            expression2
+                              expression3
+                                designator
+                            op1
+                            expression2
+                              expression3
+                                designator
+                    statement
+                      assignmentStatement
+                        designator
+                        expression0
+                          expression1
+                            expression2
+                              expression3
+                                designator
+                    statement
+                      assignmentStatement
+                        designator
+                        expression0
+                          expression1
+                            expression2
+                              expression3
+                                designator
+                    statement
+                      assignmentStatement
+                        designator
+                        expression0
+                          expression1
+                            expression2
+                              expression3
+                                designator
+                            op1
+                            expression2
+                              expression3
+                                literal
 >
 	at crux.CompilerStageTests.lambda$parseTree$1(CompilerStageTests.java:48)
 
-crux.CompilerStageTests.parseTree  Time elapsed: 0.01 s  <<< FAILURE!
+crux.CompilerStageTests.parseTree  Time elapsed: 0.006 s  <<< FAILURE!
 org.opentest4j.AssertionFailedError: 
 Parse tree for program crux/stages/parse-tree/test49.crx differs from expected output. ==> expected: <program
   declarationList
@@ -7107,34 +9105,7 @@ Parse tree for program crux/stages/parse-tree/test49.crx differs from expected o
                             expression2
                               expression3
                                 literal
-> but was: <line 6:14 mismatched input '=' expecting '['
-line 7:15 mismatched input ')' expecting '['
-line 8:16 mismatched input '=' expecting '['
-line 10:10 mismatched input '=' expecting '['
-line 11:13 mismatched input '<' expecting '['
-line 12:13 mismatched input ']' expecting '['
-line 12:20 mismatched input '+' expecting '['
-line 14:9 mismatched input '=' expecting '['
-line 14:14 mismatched input ']' expecting '['
-line 15:8 mismatched input ']' expecting '['
-line 15:15 mismatched input '+' expecting '['
-line 16:8 mismatched input '+' expecting '['
-line 16:17 mismatched input ';' expecting '['
-line 17:20 mismatched input '=' expecting '['
-line 19:6 mismatched input 'let' expecting {'and', 'or', '+', '-', '*', '/', '>=', '<=', '!=', '==', '>', '<', ';'}
-line 19:12 mismatched input '=' expecting {'and', 'or', '+', '-', '*', '/', '>=', '<=', '!=', '==', '>', '<', ';'}
-line 19:16 mismatched input '+' expecting '['
-line 26:8 mismatched input '=' expecting '['
-line 27:11 mismatched input '<' expecting '['
-line 28:11 mismatched input ']' expecting '['
-line 28:19 mismatched input ';' expecting '['
-line 29:10 mismatched input '=' expecting '['
-line 29:14 mismatched input '+' expecting '['
-line 34:8 mismatched input '=' expecting '['
-line 35:11 mismatched input '<' expecting '['
-line 36:18 mismatched input ']' expecting '['
-line 38:10 mismatched input '=' expecting '['
-line 38:14 mismatched input '+' expecting '['
+> but was: <line 19:6 mismatched input 'let' expecting {'and', 'or', '+', '-', '*', '/', '>=', '<=', '!=', '==', '>', '<', ';'}
 >
 	at crux.CompilerStageTests.lambda$parseTree$1(CompilerStageTests.java:48)
 
@@ -7593,50 +9564,459 @@ Parse tree for program crux/stages/parse-tree/test50.crx differs from expected o
                             expression2
                               expression3
                                 literal
-> but was: <line 5:11 mismatched input '=' expecting '['
-line 7:13 mismatched input '=' expecting '['
-line 8:13 mismatched input '!=' expecting '['
-line 8:27 mismatched input '!=' expecting '['
-line 11:12 mismatched input '=' expecting '['
-line 11:17 mismatched input '-' expecting '['
-line 11:24 mismatched input '/' expecting '['
-line 12:12 mismatched input '=' expecting '['
-line 12:18 mismatched input '-' expecting '['
-line 12:26 mismatched input '/' expecting '['
-line 13:13 mismatched input '==' expecting '['
-line 13:26 mismatched input '==' expecting '['
-line 14:17 mismatched input '=' expecting '['
-line 14:23 mismatched input '*' expecting '['
-line 16:15 mismatched input '==' expecting '['
-line 16:28 mismatched input '==' expecting '['
-line 17:17 mismatched input '=' expecting '['
-line 17:23 mismatched input '*' expecting '['
-line 19:17 mismatched input '=' expecting '['
-line 19:23 mismatched input '*' expecting '['
-line 22:13 mismatched input '=' expecting '['
-line 22:18 mismatched input '/' expecting '['
-line 23:14 mismatched input '=' expecting '['
-line 23:20 mismatched input '/' expecting '['
-line 24:16 mismatched input '=' expecting '['
-line 24:24 mismatched input '+' expecting '['
-line 27:11 mismatched input '=' expecting '['
-line 28:15 mismatched input '!=' expecting '['
-line 29:13 mismatched input '=' expecting '['
-line 29:20 mismatched input '*' expecting '['
-line 29:32 mismatched input '-' expecting '['
-line 29:39 mismatched input '/' expecting '['
-line 30:13 mismatched input '=' expecting '['
-line 30:18 mismatched input '/' expecting '['
-line 31:15 mismatched input '=' expecting '['
-line 31:23 mismatched input '-' expecting '['
-line 33:13 mismatched input ';' expecting '['
-line 38:7 mismatched input '=' expecting '['
-line 39:9 mismatched input '<' expecting '['
-line 41:12 mismatched input '=' expecting '['
-line 42:28 mismatched input ',' expecting '['
-line 42:33 mismatched input ')' expecting '['
-line 43:9 mismatched input '=' expecting '['
-line 43:11 mismatched input '+' expecting '['
+> but was: <program
+  declarationList
+    declaration
+      functionDefinition
+        parameterList
+          parameter
+            type
+          parameter
+            type
+        type
+        statementBlock
+          statementList
+            statement
+              variable_declaration
+                type
+            statement
+              assignmentStatement
+                designator
+                expression0
+                  expression1
+                    expression2
+                      expression3
+                        literal
+            statement
+              variable_declaration
+                type
+            statement
+              assignmentStatement
+                designator
+                expression0
+                  expression1
+                    expression2
+                      expression3
+                        literal
+            statement
+              while_statement
+                expression0
+                  expression1
+                    expression2
+                      expression3
+                        expression0
+                          expression1
+                            expression2
+                              expression3
+                                expression0
+                                  expression1
+                                    expression2
+                                      expression3
+                                        designator
+                                  op0
+                                  expression1
+                                    expression2
+                                      expression3
+                                        literal
+                            op1
+                            expression2
+                              expression3
+                                expression0
+                                  expression1
+                                    expression2
+                                      expression3
+                                        designator
+                                  op0
+                                  expression1
+                                    expression2
+                                      expression3
+                                        literal
+                statementBlock
+                  statementList
+                    statement
+                      variable_declaration
+                        type
+                    statement
+                      variable_declaration
+                        type
+                    statement
+                      assignmentStatement
+                        designator
+                        expression0
+                          expression1
+                            expression2
+                              expression3
+                                designator
+                            op1
+                            expression2
+                              expression3
+                                expression0
+                                  expression1
+                                    expression2
+                                      expression3
+                                        expression0
+                                          expression1
+                                            expression2
+                                              expression3
+                                                designator
+                                              op2
+                                              expression3
+                                                literal
+                                      op2
+                                      expression3
+                                        literal
+                    statement
+                      assignmentStatement
+                        designator
+                        expression0
+                          expression1
+                            expression2
+                              expression3
+                                designator
+                            op1
+                            expression2
+                              expression3
+                                expression0
+                                  expression1
+                                    expression2
+                                      expression3
+                                        expression0
+                                          expression1
+                                            expression2
+                                              expression3
+                                                designator
+                                              op2
+                                              expression3
+                                                literal
+                                      op2
+                                      expression3
+                                        literal
+                    statement
+                      if_statement
+                        expression0
+                          expression1
+                            expression2
+                              expression3
+                                expression0
+                                  expression1
+                                    expression2
+                                      expression3
+                                        expression0
+                                          expression1
+                                            expression2
+                                              expression3
+                                                designator
+                                          op0
+                                          expression1
+                                            expression2
+                                              expression3
+                                                literal
+                                      op2
+                                      expression3
+                                        expression0
+                                          expression1
+                                            expression2
+                                              expression3
+                                                designator
+                                          op0
+                                          expression1
+                                            expression2
+                                              expression3
+                                                literal
+                        statementBlock
+                          statementList
+                            statement
+                              assignmentStatement
+                                designator
+                                expression0
+                                  expression1
+                                    expression2
+                                      expression3
+                                        designator
+                                      op2
+                                      expression3
+                                        literal
+                                    op1
+                                    expression2
+                                      expression3
+                                        literal
+                        statementBlock
+                          statementList
+                            statement
+                              if_statement
+                                expression0
+                                  expression1
+                                    expression2
+                                      expression3
+                                        expression0
+                                          expression1
+                                            expression2
+                                              expression3
+                                                expression0
+                                                  expression1
+                                                    expression2
+                                                      expression3
+                                                        designator
+                                                  op0
+                                                  expression1
+                                                    expression2
+                                                      expression3
+                                                        literal
+                                              op2
+                                              expression3
+                                                expression0
+                                                  expression1
+                                                    expression2
+                                                      expression3
+                                                        designator
+                                                  op0
+                                                  expression1
+                                                    expression2
+                                                      expression3
+                                                        literal
+                                statementBlock
+                                  statementList
+                                    statement
+                                      assignmentStatement
+                                        designator
+                                        expression0
+                                          expression1
+                                            expression2
+                                              expression3
+                                                designator
+                                              op2
+                                              expression3
+                                                literal
+                                            op1
+                                            expression2
+                                              expression3
+                                                literal
+                                statementBlock
+                                  statementList
+                                    statement
+                                      assignmentStatement
+                                        designator
+                                        expression0
+                                          expression1
+                                            expression2
+                                              expression3
+                                                designator
+                                              op2
+                                              expression3
+                                                literal
+                    statement
+                      assignmentStatement
+                        designator
+                        expression0
+                          expression1
+                            expression2
+                              expression3
+                                designator
+                              op2
+                              expression3
+                                literal
+                    statement
+                      assignmentStatement
+                        designator
+                        expression0
+                          expression1
+                            expression2
+                              expression3
+                                designator
+                              op2
+                              expression3
+                                literal
+                    statement
+                      assignmentStatement
+                        designator
+                        expression0
+                          expression1
+                            expression2
+                              expression3
+                                designator
+                            op1
+                            expression2
+                              expression3
+                                literal
+            statement
+              variable_declaration
+                type
+            statement
+              assignmentStatement
+                designator
+                expression0
+                  expression1
+                    expression2
+                      expression3
+                        literal
+            statement
+              while_statement
+                expression0
+                  expression1
+                    expression2
+                      expression3
+                        expression0
+                          expression1
+                            expression2
+                              expression3
+                                designator
+                          op0
+                          expression1
+                            expression2
+                              expression3
+                                literal
+                statementBlock
+                  statementList
+                    statement
+                      assignmentStatement
+                        designator
+                        expression0
+                          expression1
+                            expression2
+                              expression3
+                                expression0
+                                  expression1
+                                    expression2
+                                      expression3
+                                        designator
+                                      op2
+                                      expression3
+                                        literal
+                            op1
+                            expression2
+                              expression3
+                                expression0
+                                  expression1
+                                    expression2
+                                      expression3
+                                        designator
+                                    op1
+                                    expression2
+                                      expression3
+                                        expression0
+                                          expression1
+                                            expression2
+                                              expression3
+                                                designator
+                                              op2
+                                              expression3
+                                                literal
+                                      op2
+                                      expression3
+                                        literal
+                    statement
+                      assignmentStatement
+                        designator
+                        expression0
+                          expression1
+                            expression2
+                              expression3
+                                designator
+                              op2
+                              expression3
+                                literal
+                    statement
+                      assignmentStatement
+                        designator
+                        expression0
+                          expression1
+                            expression2
+                              expression3
+                                designator
+                            op1
+                            expression2
+                              expression3
+                                literal
+            statement
+              return_statement
+                expression0
+                  expression1
+                    expression2
+                      expression3
+                        designator
+    declaration
+      functionDefinition
+        parameterList
+        type
+        statementBlock
+          statementList
+            statement
+              variable_declaration
+                type
+            statement
+              assignmentStatement
+                designator
+                expression0
+                  expression1
+                    expression2
+                      expression3
+                        literal
+            statement
+              while_statement
+                expression0
+                  expression1
+                    expression2
+                      expression3
+                        expression0
+                          expression1
+                            expression2
+                              expression3
+                                designator
+                          op0
+                          expression1
+                            expression2
+                              expression3
+                                literal
+                statementBlock
+                  statementList
+                    statement
+                      variable_declaration
+                        type
+                    statement
+                      assignmentStatement
+                        designator
+                        expression0
+                          expression1
+                            expression2
+                              expression3
+                                callExpression
+                                  expressionList
+                    statement
+                      callStatement
+                        callExpression
+                          expressionList
+                            expression0
+                              expression1
+                                expression2
+                                  expression3
+                                    callExpression
+                                      expressionList
+                                        expression0
+                                          expression1
+                                            expression2
+                                              expression3
+                                                designator
+                                        expression0
+                                          expression1
+                                            expression2
+                                              expression3
+                                                literal
+                                            op1
+                                            expression2
+                                              expression3
+                                                designator
+                    statement
+                      assignmentStatement
+                        designator
+                        expression0
+                          expression1
+                            expression2
+                              expression3
+                                designator
+                            op1
+                            expression2
+                              expression3
+                                literal
 >
 	at crux.CompilerStageTests.lambda$parseTree$1(CompilerStageTests.java:48)
 
