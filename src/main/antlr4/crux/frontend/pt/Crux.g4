@@ -101,7 +101,7 @@ PRINTLN		:	'println';
  	:  variable_declaration 
  	| callStatement 
  	| assignmentStatement 
- 	| if_statement 
+ 	| ifStatement 
  	| while_statement 
  	| return_statement
  ;
