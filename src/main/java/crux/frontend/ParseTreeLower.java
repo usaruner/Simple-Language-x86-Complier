@@ -2,6 +2,7 @@ package crux.frontend;
 
 import crux.frontend.ast.*;
 import crux.frontend.ast.OpExpr.Operation;
+import crux.frontend.ast.traversal.NodeVisitor;
 import crux.frontend.pt.CruxBaseVisitor;
 import crux.frontend.pt.CruxParser;
 import crux.frontend.types.*;
@@ -331,46 +332,56 @@ public final class ParseTreeLower {
         @Override
         public Expression visitExpression1(CruxParser.Expression1Context ctx) {
             System.out.print("ex1");
-
-            //System.out.print(op);
-            //System.out.print(ctx.op1(0).getText() + OpExpr.Operation.valueOf(op));
-            int i = 0;
-            //System.out.print("count :" + ctx.getChildCount());
-
-                if (ctx.op1(0) != null) {
-                    String op = "";
-                    System.out.print("op" +  ctx.op1(0).getText());
-                    System.out.print( "value" + ctx.expression2(0).getText());
+            if (ctx.op1(0) != null) {
+                String op = "";
+                if (ctx.op1(0).getText().equals("+"))
+                    op = "ADD";
+                if (ctx.op1(0).getText().equals("-"))
+                    op = "SUB";
+                if (ctx.op1(0).getText().equals("or"))
+                    op = "LOGIC_OR";
+                OpExpr prev = new OpExpr(makePosition(ctx),OpExpr.Operation.valueOf(op), ctx.expression2( 0).accept(expressionVisitor), ctx.expression2( 1).accept(expressionVisitor));
+                for (int i = 1; i < ctx.op1().size(); i++) {
                     if (ctx.op1(i).getText().equals("+"))
                         op = "ADD";
                     if (ctx.op1(i).getText().equals("-"))
                         op = "SUB";
                     if (ctx.op1(i).getText().equals("or"))
                         op = "LOGIC_OR";
-                    return new OpExpr(makePosition(ctx), OpExpr.Operation.valueOf(op), ctx.expression2(0).accept(expressionVisitor), ctx.expression2(1).accept(expressionVisitor));
+                    prev = new OpExpr(makePosition(ctx),OpExpr.Operation.valueOf(op), prev, ctx.expression2(i + 1).accept(expressionVisitor));
                 }
+                return prev;
+            }
             return ctx.expression2(0).accept(expressionVisitor);
-
         }
 
 
 
         @Override
         public Expression visitExpression2(CruxParser.Expression2Context ctx) {
-            System.out.print("ex2");
+            System.out.println("ex2");
 
                 if (ctx.op2(0) != null) {
-                    for(int i = 0; i > ctx.expression3().size(); i++) {
-                        String op = "";
-                        System.out.print("op" + ctx.op2(0).getText());
+                    String op = "";
+                    if (ctx.op2(0).getText().equals("*"))
+                        op = "MULT";
+                    if (ctx.op2(0).getText().equals("/"))
+                        op = "DIV";
+                    if (ctx.op2(0).getText().equals("and"))
+                        op = "LOGIC_AND";
+                    OpExpr prev = new OpExpr(makePosition(ctx),OpExpr.Operation.valueOf(op), ctx.expression3( 0).accept(expressionVisitor), ctx.expression3( 1).accept(expressionVisitor));
+                    for(int i = 1; i < ctx.op2().size(); i++) {
+
+                        System.out.println("op" + ctx.op2(0).getText());
                         if (ctx.op2(0).getText().equals("*"))
                             op = "MULT";
                         if (ctx.op2(0).getText().equals("/"))
                             op = "DIV";
                         if (ctx.op2(0).getText().equals("and"))
                             op = "LOGIC_AND";
-                         return new OpExpr(makePosition(ctx), OpExpr.Operation.valueOf(op), ctx.expression3(0).accept(expressionVisitor), ctx.expression3(1).accept(expressionVisitor));
+                        prev = new OpExpr(makePosition(ctx),OpExpr.Operation.valueOf(op), prev, ctx.expression3(i + 1).accept(expressionVisitor));
                     }
+                    return prev;
                 }
             return ctx.expression3(0).accept(expressionVisitor);
         }
