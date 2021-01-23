@@ -22,14 +22,14 @@ final class SymbolTable {
         glob.put("readChar", new Symbol("readChar",new FuncType(new TypeList() ,new IntType())));
         List<Type> Blist = new ArrayList<Type>();
         Blist.add(new BoolType());
-        glob.put("PrintBool", new Symbol("PrintBool",new FuncType(new TypeList(Blist),new VoidType())));
+        glob.put("printBool", new Symbol("printBool",new FuncType(new TypeList(Blist),new VoidType())));
         List<Type> Ilist = new ArrayList<Type>();
         Ilist.add(new IntType());
-        glob.put("PrintInt", new Symbol("PrintInt",new FuncType(new TypeList(Ilist),new VoidType())));
+        glob.put("printInt", new Symbol("printInt",new FuncType(new TypeList(Ilist),new VoidType())));
         List<Type> Clist = new ArrayList<Type>();
         Clist.add(new IntType());
-        glob.put("PrintChar", new Symbol("PrintChar",new FuncType(new TypeList(Clist),new VoidType())));
-        glob.put("Println", new Symbol("Println",new FuncType(new TypeList(Clist),new VoidType())));
+        glob.put("printChar", new Symbol("printChar",new FuncType(new TypeList(Clist),new VoidType())));
+        glob.put("println", new Symbol("println",new FuncType(new TypeList(Clist),new VoidType())));
         symbolScopes.add(glob);
         // TODO
     }
@@ -74,10 +74,12 @@ final class SymbolTable {
     }
 
     private Symbol find(String name) {
-        for(int i = symbolScopes.size(); i > 0;i--)
+
+        for(int i = symbolScopes.size() ; i > 0;i--)
         {
-            if(symbolScopes.get(i).containsKey(name))
-                return symbolScopes.get(i).get(name);
+            //System.out.print("Key: " + symbolScopes.get(i-1).get(name).toString());
+            if(symbolScopes.get(i-1).containsKey(name))
+                return symbolScopes.get(i-1).get(name);
         }
         // TODO
         return null;

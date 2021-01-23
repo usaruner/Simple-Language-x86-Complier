@@ -57,8 +57,10 @@ public final class ParseTreeLower {
         List<CruxParser.DeclarationContext> DList = program.declarationList().declaration();
         List<Declaration> declarations = new ArrayList<Declaration>();
         System.out.print("Declaration");
+
         for(int i = 0; i < DList.size(); i++)
         {
+            //System.out.print(program.declarationList().declaration().get(i).getText());
             declarations.add(DList.get(i).accept(declarationVisitor));
             //declarations.add(declarationVisitor.visitVariableDeclaration(DList.get(i).variableDeclaration()));
             //declarations.add(declarationVisitor.visitArrayDeclaration(DList.get(i).arrayDeclaration()));
@@ -77,7 +79,7 @@ public final class ParseTreeLower {
     private StatementList lower(CruxParser.StatementListContext statementList) {
         List<CruxParser.StatementContext> SList = statementList.statement();
         List<Statement> statements = new ArrayList<Statement>();
-
+        System.out.print("Statement List");
         for(int i = 0; i < SList.size(); i++)
         {
             statements.add(SList.get(i).accept(statementVisitor));
@@ -88,6 +90,7 @@ public final class ParseTreeLower {
 //            statements.add(statementVisitor.visitWhileStatement(SList.get(i).whileStatement()));
 //            statements.add(statementVisitor.visitReturnStatement(SList.get(i).returnStatement()));
         }
+        System.out.print("Done" );
         return new StatementList(makePosition(statementList), statements);
     }
 
@@ -100,13 +103,15 @@ public final class ParseTreeLower {
 
 
     private StatementList lower(CruxParser.StatementBlockContext statementBlock) {
+        System.out.print("Statement Block");
         List<CruxParser.StatementContext> SList = statementBlock.statementList().statement();
         List<Statement> statements = new ArrayList<Statement>();
 
-        for(int i = 0; i < SList.size(); i++)
+        for(int i = 0; i < SList.size() ; i++)
         {
             statements.add(SList.get(i).accept(statementVisitor));
         }
+
         return new StatementList(makePosition(statementBlock), statements);
     }
 
@@ -123,6 +128,7 @@ public final class ParseTreeLower {
 
         @Override
         public VariableDeclaration visitVariableDeclaration(CruxParser.VariableDeclarationContext ctx) {
+            System.out.print("Declare Var");
             return new VariableDeclaration(makePosition(ctx), symTab.add( makePosition(ctx), ctx.IDENTIFIER().getText()));
         }
 
@@ -146,7 +152,7 @@ public final class ParseTreeLower {
 
         @Override
         public Declaration visitFunctionDefinition(CruxParser.FunctionDefinitionContext ctx) {
-            System.out.print(ctx.IDENTIFIER().getText());
+            System.out.print("Func");
             List<CruxParser.ParameterContext> FList = ctx.parameterList().parameter();
             ArrayList<Type> types = new ArrayList<Type>();
             ArrayList<Symbol> symbols = new ArrayList<Symbol>();
@@ -154,7 +160,7 @@ public final class ParseTreeLower {
             {
                 symbols.add(symTab.add(makePosition(ctx),FList.get(i).IDENTIFIER().getText()));
             }
-            System.out.print(ctx.IDENTIFIER().getText());
+            //System.out.print(ctx.IDENTIFIER().getText());
             return new FunctionDefinition(makePosition(ctx), symTab.add(makePosition(ctx),ctx.IDENTIFIER().getText()),symbols, lower(ctx.statementBlock().statementList()));
 
         }
@@ -174,100 +180,115 @@ public final class ParseTreeLower {
          * @return an AST {@link VariableDeclaration}
          * */
 
-//
-//        @Override
-//        public Statement visitVariableDeclaration(CruxParser.VariableDeclarationContext ctx) {
-//            return new VariableDeclaration(makePosition(ctx), symTab.add(makePosition(ctx),ctx.IDENTIFIER().getText()));
-//        }
-//
-//
-//        /**
-//         * Visit a parse tree assignment statement and create an AST {@link Assignment}
-//         * @return an AST {@link Assignment}
-//         * */
-//
-//
-//        @Override
-//        public Statement visitAssignmentStatement(CruxParser.AssignmentStatementContext ctx) {
-//            return new Assignment(makePosition(ctx), ctx.accept(locationVisitor), ctx.accept(expressionVisitor));
-//        }
-//
-//
-//        /**
-//         * Visit a parse tree call statement and create an AST {@link Call}.
-//         * Since {@link Call} is both {@link Expression} and {@link Statement},
-//         * we simply delegate this to {@link ExpressionVisitor#visitCallExpression(CruxParser.CallExpressionContext)}
-//         * that we will implement later.
-//         * @return an AST {@link Call}
-//         * */
-//
-//        @Override
-//        public Statement visitCallStatement(CruxParser.CallStatementContext ctx) {
+
+        @Override
+        public Statement visitVariableDeclaration(CruxParser.VariableDeclarationContext ctx) {
+            System.out.print("Visit Variable");
+            return new VariableDeclaration(makePosition(ctx), symTab.add(makePosition(ctx),ctx.IDENTIFIER().getText()));
+        }
+
+
+        /**
+         * Visit a parse tree assignment statement and create an AST {@link Assignment}
+         * @return an AST {@link Assignment}
+         * */
+
+
+        @Override
+        public Statement visitAssignmentStatement(CruxParser.AssignmentStatementContext ctx) {
+            System.out.print("AssignStatement");
+            //System.out.print(ctx.designator().expression0(0).getText());
+            return new Assignment(makePosition(ctx), ctx.designator().accept(expressionVisitor), ctx.expression0().accept(expressionVisitor));
+        }
+
+
+        /**
+         * Visit a parse tree call statement and create an AST {@link Call}.
+         * Since {@link Call} is both {@link Expression} and {@link Statement},
+         * we simply delegate this to {@link ExpressionVisitor#visitCallExpression(CruxParser.CallExpressionContext)}
+         * that we will implement later.
+         * @return an AST {@link Call}
+         * */
+
+        @Override
+        public Statement visitCallStatement(CruxParser.CallStatementContext ctx) {
+
 //            List<CruxParser.Expression0Context> EList = ctx.callExpression().expressionList().expression0();
 //            List<Expression> exp = new ArrayList<Expression>();
+//            System.out.print("callStatement");
 //            for(int i = 0; i < EList.size(); i++)
 //            {
 //                exp.add(EList.get(i).accept(expressionVisitor));
+//                //System.out.print(EList.get(i).getText());
 //            }
-//            return new Call(makePosition(ctx), symTab.lookup(makePosition(ctx),ctx.getText()) ,exp);
-//        }
-//
-//
-//        /**
-//         * Visit a parse tree if-else branch and create an AST {@link IfElseBranch}.
-//         * The template code shows partial implementations that visit the then block and else block
-//         * recursively before using those returned AST nodes to construct {@link IfElseBranch} object.
-//         * @return an AST {@link IfElseBranch}
-//         * */
-//
-//        @Override
-//        public Statement visitIfStatement(CruxParser.IfStatementContext ctx) {
-//            List<CruxParser.StatementContext> SList = ctx.statementBlock().get(0).statementList().statement();
-//            List<CruxParser.StatementContext> SList2 = ctx.statementBlock().get(1).statementList().statement();;
-//            List<Statement> thenState = new ArrayList<Statement>();
-//            List<Statement> elseState = new ArrayList<Statement>();
-//            for(int i = 0; i < SList.size(); i++)
-//            {
-//                thenState.add(SList.get(i).accept(statementVisitor));
-//            }
-//            for(int i = 0; i < SList2.size(); i++)
-//            {
-//                elseState.add(SList.get(i).accept(statementVisitor));
-//            }
-//            return new IfElseBranch(makePosition(ctx), ctx.expression0().accept(expressionVisitor),new StatementList(makePosition(ctx),thenState), new StatementList(makePosition(ctx),elseState));
-//        }
-//
-//
-//        /**
-//         * Visit a parse tree while loop and create an AST {@link WhileLoop}.
-//         * You'll going to use a similar techniques as {@link #visitIfStatement(CruxParser.IfStatementContext)}
-//         * to decompose this construction.
-//         * @return an AST {@link WhileLoop}
-//         * */
-//
-//        @Override
-//        public Statement visitWhileStatement(CruxParser.WhileStatementContext ctx) {
-//            List<CruxParser.StatementContext> SList =  ctx.statementBlock().statementList().statement();
-//            List<Statement> State = new ArrayList<Statement>();
-//            for(int i = 0; i < SList.size(); i++)
-//            {
-//                State.add(SList.get(i).accept(statementVisitor));
-//            }
-//            ctx.statementBlock().statementList();
-//            return new WhileLoop(makePosition(ctx), ctx.expression0().accept(expressionVisitor),new StatementList(makePosition(ctx),State));
-//        }
-//
-//
-//        /**
-//         * Visit a parse tree return statement and create an AST {@link Return}.
-//         * Here we show a simple example of how to lower a simple parse tree construction.
-//         * @return an AST {@link Return}
-//         * */
-//
-//        @Override
-//        public Statement visitReturnStatement(CruxParser.ReturnStatementContext ctx) {
-//            return new Return(makePosition(ctx), ctx.expression0().accept(expressionVisitor));
-//        }
+            return (Call)ctx.callExpression().accept(expressionVisitor);
+            //return new Call(makePosition(ctx), symTab.lookup(makePosition(ctx),ctx.callExpression().IDENTIFIER().getText()) ,exp);
+        }
+
+
+        /**
+         * Visit a parse tree if-else branch and create an AST {@link IfElseBranch}.
+         * The template code shows partial implementations that visit the then block and else block
+         * recursively before using those returned AST nodes to construct {@link IfElseBranch} object.
+         * @return an AST {@link IfElseBranch}
+         * */
+
+        @Override
+        public Statement visitIfStatement(CruxParser.IfStatementContext ctx) {
+            System.out.print("IF:");
+            List<CruxParser.StatementContext> SList = ctx.statementBlock().get(0).statementList().statement();
+
+            List<Statement> thenState = new ArrayList<Statement>();
+            List<Statement> elseState = new ArrayList<Statement>();
+
+            for(int i = 0; i < SList.size() ; i++)
+            {
+                thenState.add(SList.get(i).accept(statementVisitor));
+            }
+            if(ctx.statementBlock().size() > 1) {
+                List<CruxParser.StatementContext> SList2 = ctx.statementBlock().get(1).statementList().statement();
+
+                for (int i = 0; i < SList2.size(); i++) {
+                    elseState.add(SList2.get(i).accept(statementVisitor));
+                }
+                //return new IfElseBranch(makePosition(ctx), ctx.expression0().accept(expressionVisitor),new StatementList(makePosition(ctx),thenState), new StatementList(makePosition(ctx),elseState));
+                return new IfElseBranch(makePosition(ctx), ctx.expression0().accept(expressionVisitor),new StatementList(makePosition(ctx.statementBlock(0).statementList()),thenState), new StatementList(makePosition(ctx.statementBlock(1).statementList()),elseState));
+            }
+            return new IfElseBranch(makePosition(ctx), ctx.expression0().accept(expressionVisitor),new StatementList(makePosition(ctx.statementBlock(0).statementList()),thenState), new StatementList(makePosition(ctx),elseState));
+            //return new IfElseBranch(makePosition(ctx), ctx.expression0().accept(expressionVisitor),lower(ctx.statementBlock(0)), null);
+        }
+
+
+        /**
+         * Visit a parse tree while loop and create an AST {@link WhileLoop}.
+         * You'll going to use a similar techniques as {@link #visitIfStatement(CruxParser.IfStatementContext)}
+         * to decompose this construction.
+         * @return an AST {@link WhileLoop}
+         * */
+
+        @Override
+        public Statement visitWhileStatement(CruxParser.WhileStatementContext ctx) {
+            List<CruxParser.StatementContext> SList =  ctx.statementBlock().statementList().statement();
+            List<Statement> State = new ArrayList<Statement>();
+            for(int i = 0; i < SList.size(); i++)
+            {
+                State.add(SList.get(i).accept(statementVisitor));
+            }
+            ctx.statementBlock().statementList();
+            return new WhileLoop(makePosition(ctx), ctx.expression0().accept(expressionVisitor),new StatementList(makePosition(ctx.statementBlock().statementList()),State));
+        }
+
+
+        /**
+         * Visit a parse tree return statement and create an AST {@link Return}.
+         * Here we show a simple example of how to lower a simple parse tree construction.
+         * @return an AST {@link Return}
+         * */
+
+        @Override
+        public Statement visitReturnStatement(CruxParser.ReturnStatementContext ctx) {
+            return new Return(makePosition(ctx), ctx.expression0().accept(expressionVisitor));
+        }
 
     }
 
@@ -278,11 +299,30 @@ public final class ParseTreeLower {
             this.dereferenceDesignator = dereferenceDesignator;
         }
 
-        /*
+
         @Override
         public Expression visitExpression0(CruxParser.Expression0Context ctx) {
+            System.out.print("ex0");
+            if (ctx.op0(0) != null){
+                String op = "";
+                System.out.print("op" +  ctx.op0(0).getText());
+                System.out.print( "value" + ctx.expression1(0).getText());
+                if (ctx.op0(0).getText().equals(">="))
+                    op = "GE";
+                if (ctx.op0(0).getText().equals("<="))
+                    op = "LE";
+                if (ctx.op0(0).getText().equals("!="))
+                    op = "NE";
+                if (ctx.op0(0).getText().equals("=="))
+                    op = "EQ";
+                if (ctx.op0(0).getText().equals(">"))
+                    op = "GT";
+                if (ctx.op0(0).getText().equals("<"))
+                    op = "LT";
+                return new OpExpr(makePosition(ctx), OpExpr.Operation.valueOf(op), ctx.expression1(0).accept(expressionVisitor), ctx.expression1(1).accept(expressionVisitor));
+            }
 
-            return new OpExpr(makePosition(ctx), Operation.valueOf(ctx.op0(0).getText()) , ctx.expression1(0).accept(expressionVisitor),ctx.expression1(1).accept(expressionVisitor));
+            return ctx.expression1(0).accept(expressionVisitor);
 
         }
 
@@ -290,20 +330,56 @@ public final class ParseTreeLower {
 
         @Override
         public Expression visitExpression1(CruxParser.Expression1Context ctx) {
-            return new OpExpr(makePosition(ctx), Operation.valueOf(ctx.op1(0).getText()) , ctx.expression2(0).accept(expressionVisitor),ctx.expression2(1).accept(expressionVisitor));
+            System.out.print("ex1");
+
+            //System.out.print(op);
+            //System.out.print(ctx.op1(0).getText() + OpExpr.Operation.valueOf(op));
+            int i = 0;
+            //System.out.print("count :" + ctx.getChildCount());
+
+                if (ctx.op1(0) != null) {
+                    String op = "";
+                    System.out.print("op" +  ctx.op1(0).getText());
+                    System.out.print( "value" + ctx.expression2(0).getText());
+                    if (ctx.op1(i).getText().equals("+"))
+                        op = "ADD";
+                    if (ctx.op1(i).getText().equals("-"))
+                        op = "SUB";
+                    if (ctx.op1(i).getText().equals("or"))
+                        op = "LOGIC_OR";
+                    return new OpExpr(makePosition(ctx), OpExpr.Operation.valueOf(op), ctx.expression2(0).accept(expressionVisitor), ctx.expression2(1).accept(expressionVisitor));
+                }
+            return ctx.expression2(0).accept(expressionVisitor);
+
         }
 
 
 
         @Override
         public Expression visitExpression2(CruxParser.Expression2Context ctx) {
-            return new OpExpr(makePosition(ctx), Operation.valueOf(ctx.op2(0).getText()) , ctx.expression3(0).accept(expressionVisitor),ctx.expression3(1).accept(expressionVisitor));
+            System.out.print("ex2");
+
+                if (ctx.op2(0) != null) {
+                    for(int i = 0; i > ctx.expression3().size(); i++) {
+                        String op = "";
+                        System.out.print("op" + ctx.op2(0).getText());
+                        if (ctx.op2(0).getText().equals("*"))
+                            op = "MULT";
+                        if (ctx.op2(0).getText().equals("/"))
+                            op = "DIV";
+                        if (ctx.op2(0).getText().equals("and"))
+                            op = "LOGIC_AND";
+                         return new OpExpr(makePosition(ctx), OpExpr.Operation.valueOf(op), ctx.expression3(0).accept(expressionVisitor), ctx.expression3(1).accept(expressionVisitor));
+                    }
+                }
+            return ctx.expression3(0).accept(expressionVisitor);
         }
 
 
 
         @Override
         public Expression visitExpression3(CruxParser.Expression3Context ctx) {
+            System.out.print("ex3");
             if(ctx.NOT() !=  null) {
                 return new OpExpr(makePosition(ctx), Operation.valueOf("!"), ctx.expression3().accept(expressionVisitor), null);
             }
@@ -311,7 +387,7 @@ public final class ParseTreeLower {
                 return ctx.expression0().accept(expressionVisitor);
             }
             if(ctx.designator() != null){
-                return ctx.designator().accept(expressionVisitor);
+                return ctx.designator().accept(locationVisitor);
             }
             if(ctx.callExpression() != null){
                 return ctx.callExpression().accept(expressionVisitor);
@@ -323,21 +399,34 @@ public final class ParseTreeLower {
 
         @Override
         public Call visitCallExpression(CruxParser.CallExpressionContext ctx) {
+            System.out.print("Expression Statement");
             List<CruxParser.Expression0Context> EList = ctx.expressionList().expression0();
             List<Expression> exp = new ArrayList<Expression>();
             for(int i = 0; i < EList.size(); i++)
             {
-                exp.add(EList.get(i).accept(expressionVisitor));
+                    exp.add(EList.get(i).accept(expressionVisitor));
             }
-            return new Call(makePosition(ctx), symTab.lookup(makePosition(ctx),ctx.getText()), exp);
+            return new Call(makePosition(ctx), symTab.lookup(makePosition(ctx),ctx.IDENTIFIER().getText()), exp);
         }
 
 
 
         @Override
         public Expression visitDesignator(CruxParser.DesignatorContext ctx) {
-            return new Dereference(makePosition(ctx), ctx.expression0(0).accept(expressionVisitor));
-            // TODO
+            System.out.print("Designator");
+            //System.out.print(ctx.expression0(0).getText());
+            if(ctx.expression0(0) != null) {
+                if (!dereferenceDesignator) {
+                    return new Dereference(makePosition(ctx), new ArrayAccess(makePosition(ctx), new Name(makePosition(ctx), symTab.lookup(makePosition(ctx), ctx.IDENTIFIER().getText())), ctx.expression0(0).accept(expressionVisitor)));
+                }
+                //new Dereference(makePosition(ctx),
+                return new ArrayAccess(makePosition(ctx), new Name(makePosition(ctx), symTab.lookup(makePosition(ctx), ctx.IDENTIFIER().getText())), ctx.expression0(0).accept(expressionVisitor));
+                // TODO
+            }
+            if (!dereferenceDesignator) {
+                return new Dereference(makePosition(ctx), new Name(makePosition(ctx), symTab.lookup(makePosition(ctx), ctx.IDENTIFIER().getText())));
+            }
+            return new Name(makePosition(ctx), symTab.lookup(makePosition(ctx), ctx.IDENTIFIER().getText()));
         }
 
 
@@ -345,15 +434,16 @@ public final class ParseTreeLower {
         @Override
         public Expression visitLiteral(CruxParser.LiteralContext ctx) {
             // TODO
+            //System.out.print("Lit");
             var position = makePosition(ctx);
-            if(ctx.INTEGER().getChildCount() != 0) {
-                return new LiteralInt(position, ctx.INTEGER().hashCode());
+            if(ctx.INTEGER() != null) {
+                return new LiteralInt(position, Integer.parseInt(ctx.INTEGER().toString()));
             }
-            if(ctx.TRUE().getChildCount() != 0){
-                return new LiteralInt(position, ctx.TRUE().hashCode());
+            if(ctx.TRUE() != null){
+                return new LiteralBool(position, Boolean.valueOf(ctx.TRUE().toString()));
             }
-            return new LiteralInt(position, ctx.FALSE().hashCode());
+            return new LiteralBool(position, Boolean.valueOf(ctx.FALSE().toString()));
         }
-        */
+
     }
 }

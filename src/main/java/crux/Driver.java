@@ -47,7 +47,7 @@ public final class Driver {
     private final PrintStream err;
 
     private boolean printPt = false;
-    private boolean printAst = false;
+    private boolean printAst = true; //<<
     private boolean includeTypes = false;
     private boolean typeCheck = false;
     private boolean printIR = false;
