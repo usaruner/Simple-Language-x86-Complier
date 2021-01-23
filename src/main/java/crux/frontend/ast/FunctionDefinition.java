@@ -12,6 +12,7 @@ public final class FunctionDefinition extends BaseNode implements Declaration {
 
     public FunctionDefinition(Position position, Symbol symbol, List<Symbol> parameters, StatementList statements) {
         super(position);
+        //System.out.print("Symbol:" + symbol.toString());
         this.symbol = symbol;
         this.parameters = parameters;
         this.statements = statements;
