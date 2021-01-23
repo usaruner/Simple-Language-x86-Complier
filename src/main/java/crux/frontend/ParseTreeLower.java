@@ -57,11 +57,11 @@ public final class ParseTreeLower {
 
         List<CruxParser.DeclarationContext> DList = program.declarationList().declaration();
         List<Declaration> declarations = new ArrayList<Declaration>();
-        System.out.print("Declaration");
+//        System.out.print("Declaration");
 
         for(int i = 0; i < DList.size(); i++)
         {
-            //System.out.print(program.declarationList().declaration().get(i).getText());
+//            System.out.print(program.declarationList().declaration().get(i).getText());
             declarations.add(DList.get(i).accept(declarationVisitor));
             //declarations.add(declarationVisitor.visitVariableDeclaration(DList.get(i).variableDeclaration()));
             //declarations.add(declarationVisitor.visitArrayDeclaration(DList.get(i).arrayDeclaration()));
@@ -80,7 +80,7 @@ public final class ParseTreeLower {
     private StatementList lower(CruxParser.StatementListContext statementList) {
         List<CruxParser.StatementContext> SList = statementList.statement();
         List<Statement> statements = new ArrayList<Statement>();
-        System.out.print("Statement List");
+//        System.out.print("Statement List");
         for(int i = 0; i < SList.size(); i++)
         {
             statements.add(SList.get(i).accept(statementVisitor));
@@ -91,7 +91,7 @@ public final class ParseTreeLower {
 //            statements.add(statementVisitor.visitWhileStatement(SList.get(i).whileStatement()));
 //            statements.add(statementVisitor.visitReturnStatement(SList.get(i).returnStatement()));
         }
-        System.out.print("Done" );
+//        System.out.print("Done" );
         return new StatementList(makePosition(statementList), statements);
     }
 
@@ -104,7 +104,7 @@ public final class ParseTreeLower {
 
 
     private StatementList lower(CruxParser.StatementBlockContext statementBlock) {
-        System.out.print("Statement Block");
+//        System.out.print("Statement Block");
         List<CruxParser.StatementContext> SList = statementBlock.statementList().statement();
         List<Statement> statements = new ArrayList<Statement>();
 
@@ -129,7 +129,7 @@ public final class ParseTreeLower {
 
         @Override
         public VariableDeclaration visitVariableDeclaration(CruxParser.VariableDeclarationContext ctx) {
-            System.out.print("Declare Var");
+//            System.out.print("Declare Var");
             return new VariableDeclaration(makePosition(ctx), symTab.add( makePosition(ctx), ctx.IDENTIFIER().getText()));
         }
 
@@ -153,7 +153,7 @@ public final class ParseTreeLower {
 
         @Override
         public Declaration visitFunctionDefinition(CruxParser.FunctionDefinitionContext ctx) {
-            System.out.print("Func");
+//            System.out.print("Func");
             List<CruxParser.ParameterContext> FList = ctx.parameterList().parameter();
             ArrayList<Type> types = new ArrayList<Type>();
             ArrayList<Symbol> symbols = new ArrayList<Symbol>();
@@ -184,7 +184,7 @@ public final class ParseTreeLower {
 
         @Override
         public Statement visitVariableDeclaration(CruxParser.VariableDeclarationContext ctx) {
-            System.out.print("Visit Variable");
+//            System.out.print("Visit Variable");
             return new VariableDeclaration(makePosition(ctx), symTab.add(makePosition(ctx),ctx.IDENTIFIER().getText()));
         }
 
@@ -197,7 +197,7 @@ public final class ParseTreeLower {
 
         @Override
         public Statement visitAssignmentStatement(CruxParser.AssignmentStatementContext ctx) {
-            System.out.print("AssignStatement");
+//            System.out.print("AssignStatement");
             //System.out.print(ctx.designator().expression0(0).getText());
             return new Assignment(makePosition(ctx), ctx.designator().accept(expressionVisitor), ctx.expression0().accept(expressionVisitor));
         }
@@ -236,7 +236,7 @@ public final class ParseTreeLower {
 
         @Override
         public Statement visitIfStatement(CruxParser.IfStatementContext ctx) {
-            System.out.print("IF:");
+//            System.out.print("IF:");
             List<CruxParser.StatementContext> SList = ctx.statementBlock().get(0).statementList().statement();
 
             List<Statement> thenState = new ArrayList<Statement>();
@@ -303,11 +303,11 @@ public final class ParseTreeLower {
 
         @Override
         public Expression visitExpression0(CruxParser.Expression0Context ctx) {
-            System.out.print("ex0");
+//            System.out.print("ex0");
             if (ctx.op0(0) != null){
                 String op = "";
-                System.out.print("op" +  ctx.op0(0).getText());
-                System.out.print( "value" + ctx.expression1(0).getText());
+//                System.out.print("op" +  ctx.op0(0).getText());
+//                System.out.print( "value" + ctx.expression1(0).getText());
                 if (ctx.op0(0).getText().equals(">="))
                     op = "GE";
                 if (ctx.op0(0).getText().equals("<="))
@@ -331,7 +331,7 @@ public final class ParseTreeLower {
 
         @Override
         public Expression visitExpression1(CruxParser.Expression1Context ctx) {
-            System.out.print("ex1");
+            //System.out.print("ex1");
             if (ctx.op1(0) != null) {
                 String op = "";
                 if (ctx.op1(0).getText().equals("+"))
@@ -359,7 +359,7 @@ public final class ParseTreeLower {
 
         @Override
         public Expression visitExpression2(CruxParser.Expression2Context ctx) {
-            System.out.println("ex2");
+            //System.out.println("ex2");
 
                 if (ctx.op2(0) != null) {
                     String op = "";
@@ -372,12 +372,12 @@ public final class ParseTreeLower {
                     OpExpr prev = new OpExpr(makePosition(ctx),OpExpr.Operation.valueOf(op), ctx.expression3( 0).accept(expressionVisitor), ctx.expression3( 1).accept(expressionVisitor));
                     for(int i = 1; i < ctx.op2().size(); i++) {
 
-                        System.out.println("op" + ctx.op2(0).getText());
-                        if (ctx.op2(0).getText().equals("*"))
+                        //System.out.println("op" + ctx.op2(i).getText());
+                        if (ctx.op2(i).getText().equals("*"))
                             op = "MULT";
-                        if (ctx.op2(0).getText().equals("/"))
+                        if (ctx.op2(i).getText().equals("/"))
                             op = "DIV";
-                        if (ctx.op2(0).getText().equals("and"))
+                        if (ctx.op2(i).getText().equals("and"))
                             op = "LOGIC_AND";
                         prev = new OpExpr(makePosition(ctx),OpExpr.Operation.valueOf(op), prev, ctx.expression3(i + 1).accept(expressionVisitor));
                     }
@@ -390,7 +390,7 @@ public final class ParseTreeLower {
 
         @Override
         public Expression visitExpression3(CruxParser.Expression3Context ctx) {
-            System.out.print("ex3");
+            //System.out.print("ex3");
             if(ctx.NOT() !=  null) {
                 return new OpExpr(makePosition(ctx), Operation.valueOf("!"), ctx.expression3().accept(expressionVisitor), null);
             }
@@ -410,7 +410,7 @@ public final class ParseTreeLower {
 
         @Override
         public Call visitCallExpression(CruxParser.CallExpressionContext ctx) {
-            System.out.print("Expression Statement");
+//            System.out.print("Expression Statement");
             List<CruxParser.Expression0Context> EList = ctx.expressionList().expression0();
             List<Expression> exp = new ArrayList<Expression>();
             for(int i = 0; i < EList.size(); i++)
@@ -424,7 +424,7 @@ public final class ParseTreeLower {
 
         @Override
         public Expression visitDesignator(CruxParser.DesignatorContext ctx) {
-            System.out.print("Designator");
+            //System.out.print("Designator");
             //System.out.print(ctx.expression0(0).getText());
             if(ctx.expression0(0) != null) {
                 if (!dereferenceDesignator) {
