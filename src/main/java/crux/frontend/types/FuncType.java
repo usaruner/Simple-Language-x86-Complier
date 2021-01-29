@@ -21,4 +21,7 @@ public final class FuncType extends Type {
     public String toString() {
         return "func(" + args + "):" + ret;
     }
+    public boolean equivalent(Type that) {
+        return ret.getClass() == that.getClass();
+    }
 }

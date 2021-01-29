@@ -19,4 +19,9 @@ public final class ArrayType extends Type {
     public String toString() {
         return String.format("array[%d,%s]", extent, base);
     }
+
+    @Override
+    public boolean equivalent(Type that) {
+        return (base.getClass() == that.getClass() && this.getClass() == that.getClass());
+    }
 }

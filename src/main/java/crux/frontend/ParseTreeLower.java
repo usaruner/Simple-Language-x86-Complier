@@ -39,6 +39,17 @@ public final class ParseTreeLower {
         var start = ctx.start;
         return new Position(start.getLine());
     }
+    public Type StringToType(String t){
+        switch (t){
+            case "bool":
+                return new BoolType();
+            case "int":
+                return new IntType();
+            case "void":
+                return new VoidType();
+        }
+        return null;
+    }
 
     /**
      * Should returns true if we have encountered an error.
@@ -67,6 +78,7 @@ public final class ParseTreeLower {
             //declarations.add(declarationVisitor.visitArrayDeclaration(DList.get(i).arrayDeclaration()));
             //declarations.add(declarationVisitor.visitFunctionDefinition(DList.get(i).functionDefinition()));
         }
+        new DeclarationList(makePosition(program), declarations);
 
         return new DeclarationList(makePosition(program), declarations);
     }
@@ -130,7 +142,8 @@ public final class ParseTreeLower {
         @Override
         public VariableDeclaration visitVariableDeclaration(CruxParser.VariableDeclarationContext ctx) {
 //            System.out.print("Declare Var");
-            return new VariableDeclaration(makePosition(ctx), symTab.add( makePosition(ctx), ctx.IDENTIFIER().getText()));
+            //System.out.print(ctx.type().getText());
+            return new VariableDeclaration(makePosition(ctx), symTab.add( makePosition(ctx), ctx.IDENTIFIER().getText(), StringToType(ctx.type().getText())));
         }
 
 
@@ -142,7 +155,8 @@ public final class ParseTreeLower {
 
         @Override
         public Declaration visitArrayDeclaration(CruxParser.ArrayDeclarationContext ctx) {
-            return new ArrayDeclaration(makePosition(ctx), symTab.add( makePosition(ctx), ctx.IDENTIFIER().getText()));
+            //System.out.print(ctx.type().getText());
+            return new ArrayDeclaration(makePosition(ctx), symTab.add( makePosition(ctx), ctx.IDENTIFIER().getText(), new ArrayType(Integer.parseInt(ctx.INTEGER().getText()),StringToType(ctx.type().getText()))));
         }
 
 
@@ -153,16 +167,21 @@ public final class ParseTreeLower {
 
         @Override
         public Declaration visitFunctionDefinition(CruxParser.FunctionDefinitionContext ctx) {
-//            System.out.print("Func");
+//           System.out.print("Func");
+            //System.out.print(ctx.type().getText());
             List<CruxParser.ParameterContext> FList = ctx.parameterList().parameter();
             ArrayList<Type> types = new ArrayList<Type>();
             ArrayList<Symbol> symbols = new ArrayList<Symbol>();
+            symTab.enter();
             for(int i = 0; i < FList.size(); i++)
             {
+
+                types.add(StringToType(FList.get(i).type().getText()));
                 symbols.add(symTab.add(makePosition(ctx),FList.get(i).IDENTIFIER().getText()));
             }
+            TypeList TList = new TypeList(types);
             //System.out.print(ctx.IDENTIFIER().getText());
-            return new FunctionDefinition(makePosition(ctx), symTab.add(makePosition(ctx),ctx.IDENTIFIER().getText()),symbols, lower(ctx.statementBlock().statementList()));
+            return new FunctionDefinition(makePosition(ctx), symTab.add(makePosition(ctx),ctx.IDENTIFIER().getText(),new FuncType(TList, StringToType(ctx.type().getText()))),symbols, lower(ctx.statementBlock().statementList()));
 
         }
 
@@ -185,7 +204,7 @@ public final class ParseTreeLower {
         @Override
         public Statement visitVariableDeclaration(CruxParser.VariableDeclarationContext ctx) {
 //            System.out.print("Visit Variable");
-            return new VariableDeclaration(makePosition(ctx), symTab.add(makePosition(ctx),ctx.IDENTIFIER().getText()));
+            return new VariableDeclaration(makePosition(ctx), symTab.add( makePosition(ctx), ctx.IDENTIFIER().getText(), StringToType(ctx.type().getText())));
         }
 
 
@@ -413,9 +432,8 @@ public final class ParseTreeLower {
 //            System.out.print("Expression Statement");
             List<CruxParser.Expression0Context> EList = ctx.expressionList().expression0();
             List<Expression> exp = new ArrayList<Expression>();
-            for(int i = 0; i < EList.size(); i++)
-            {
-                    exp.add(EList.get(i).accept(expressionVisitor));
+            for(int i = 0; i < EList.size(); i++) {
+                exp.add(EList.get(i).accept(expressionVisitor));
             }
             return new Call(makePosition(ctx), symTab.lookup(makePosition(ctx),ctx.IDENTIFIER().getText()), exp);
         }

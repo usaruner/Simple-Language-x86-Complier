@@ -5,4 +5,8 @@ public final class IntType extends Type {
     public String toString() {
         return "int";
     }
+    @Override
+    public boolean equivalent(Type that) {
+        return that.getClass() == IntType.class;
+    }
 }
