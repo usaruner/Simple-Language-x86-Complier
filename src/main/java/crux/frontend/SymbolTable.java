@@ -84,4 +84,13 @@ final class SymbolTable {
         // TODO
         return null;
     }
+    public void printAll(){
+        for(int i = 0 ; i < symbolScopes.size();i++)
+        {
+            for(String key: symbolScopes.get(i).keySet()){
+                System.out.print(", " + symbolScopes.get(i).get(key.toString()));
+            }
+            System.out.println();
+        }
+    }
 }

@@ -51,13 +51,13 @@ public final class TypeChecker {
 
         @Override
         public void visit(Name name) {
-            System.out.print("Name: " + name.getSymbol().getType());
+            //System.out.print("Name: " + name.getSymbol().getType());
             typeMap.put(name,new AddressType(name.getSymbol().getType()));
         }
 
         @Override
         public void visit(ArrayDeclaration arrayDeclaration) {
-            System.out.print("Array");
+            //System.out.print("Array");
             Class type = ((ArrayType)arrayDeclaration.getSymbol().getType()).getBase().getClass();
             if(type != IntType.class && type != BoolType.class){
                 errors.add("ERROR: ARRAY DECLARED CAN NOT BE TYPE " + type + " LINE "  + arrayDeclaration.getPosition());
@@ -66,28 +66,30 @@ public final class TypeChecker {
 
         @Override
         public void visit(Assignment assignment) {
-            System.out.println("Assignment");
+            //System.out.println("Assignment");
             //System.out.println("AssignValue" + assignment.getValue());
             //System.out.println("AssignLocation" + assignment.getLocation());
             typeMap.put(assignment,new VoidType());
             assignment.getValue().accept(this);
-            System.out.print("hi");
+            //System.out.print("hi");
             assignment.getLocation().accept(this);
 
         }
 
         @Override
         public void visit(Call call) {
-            System.out.print("call");
-            typeMap.put(call,((FuncType)call.getCallee().getType()).getRet());
+            //System.out.println("call" + call.getCallee().getName() + ((FuncType)call.getCallee().getType()));
             for(int i = 0; i < call.getChildren().size(); i++) {
                 call.getChildren().get(i).accept(this);
+            }
+            if(((FuncType)call.getCallee().getType()) != null) {
+                typeMap.put(call, ((FuncType) call.getCallee().getType()).getRet());
             }
         }
 
         @Override
         public void visit(DeclarationList declarationList){
-            System.out.print("Declaration");
+            //System.out.print("Declaration");
 
             for(int i = 0; i < declarationList.getChildren().size(); i++){
                 declarationList.getChildren().get(i).accept(this);
@@ -96,8 +98,8 @@ public final class TypeChecker {
 
         @Override
         public void visit(Dereference dereference) {
-            System.out.print("deref");
-            System.out.print("REF: " + ListNode.class);
+            //System.out.print("deref");
+            //System.out.print("REF: " + ListNode.class);
             if(dereference.getAddress().getClass() == Name.class){
                 typeMap.put(dereference, ((Name) dereference.getAddress()).getSymbol().getType());
             }else{
@@ -112,12 +114,12 @@ public final class TypeChecker {
 
         @Override
         public void visit(FunctionDefinition functionDefinition) {
-            System.out.print("FuncDef");
-            /*
+            //System.out.print("FuncDef");
             for(int i = 0; i < functionDefinition.getParameters().size(); i++){
-                System.out.println(functionDefinition.getParameters().get(i).toString());
+                //System.out.println(functionDefinition.getParameters().get(i).toString());
                 typeMap.put(new Name(functionDefinition.getPosition(),functionDefinition.getParameters().get(i)),functionDefinition.getParameters().get(i).getType());
-            }*/
+            }
+
             for(int i = 0; i < functionDefinition.getStatements().getChildren().size(); i++){
                 functionDefinition.getStatements().getChildren().get(i).accept(this);
             }
@@ -126,16 +128,16 @@ public final class TypeChecker {
 
         @Override
         public void visit(IfElseBranch ifElseBranch) {
-            System.out.print("if");
+            //System.out.print("if");
             StatementList sList1 = ifElseBranch.getElseBlock();
             StatementList sList2 = ifElseBranch.getThenBlock();
                 ifElseBranch.getCondition().accept(this);
                 for(int i = 0; i < sList2.getChildren().size(); i++){
-                    System.out.println(sList2.getChildren().toString());
+                    //System.out.println(sList2.getChildren().toString());
                     sList2.getChildren().get(i).accept(this);
                 }
                 for(int i = 0; i < sList1.getChildren().size(); i++){
-                    System.out.println(sList1.getChildren().toString());
+                    //System.out.println(sList1.getChildren().toString());
                     sList1.getChildren().get(i).accept(this);
                 }
 
@@ -144,8 +146,8 @@ public final class TypeChecker {
 
         @Override
         public void visit(ArrayAccess access) {
-            System.out.print("access");
-            System.out.println("ac" + access.getBase().getSymbol().getType());
+            //System.out.print("access");
+            //System.out.println("ac" + access.getBase().getSymbol().getType());
             if (access.getBase().getSymbol().getType().toString().contains("int")) {
                 typeMap.put(access, new AddressType(new IntType()));
             } else if (access.getBase().getSymbol().getType().toString().contains("bool")) {
@@ -160,19 +162,19 @@ public final class TypeChecker {
 
         @Override
         public void visit(LiteralBool literalBool) {
-            System.out.print("Bool");
+            //System.out.print("Bool");
             typeMap.put(literalBool,new BoolType());
         }
 
         @Override
         public void visit(LiteralInt literalInt) {
-            System.out.print("Int");
+            //System.out.print("Int");
             typeMap.put(literalInt,new IntType());
         }
 
         @Override
         public void visit(OpExpr op) {
-            System.out.print("OP");
+            //System.out.print("OP");
 
             if(op.getOp() == OpExpr.Operation.ADD || op.getOp() == OpExpr.Operation.SUB || op.getOp() == OpExpr.Operation.MULT || op.getOp() == OpExpr.Operation.DIV) {
                 op.getRight().accept(this);
@@ -193,7 +195,9 @@ public final class TypeChecker {
 
         @Override
         public void visit(StatementList statementList) {
-            statementList.accept(this);
+            for(int i = 0; i < statementList.getChildren().size(); i++) {
+                statementList.getChildren().get(i).accept(this);
+            }
         }
 
         @Override

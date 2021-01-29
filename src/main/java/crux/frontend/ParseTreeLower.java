@@ -78,8 +78,6 @@ public final class ParseTreeLower {
             //declarations.add(declarationVisitor.visitArrayDeclaration(DList.get(i).arrayDeclaration()));
             //declarations.add(declarationVisitor.visitFunctionDefinition(DList.get(i).functionDefinition()));
         }
-        new DeclarationList(makePosition(program), declarations);
-
         return new DeclarationList(makePosition(program), declarations);
     }
 
@@ -156,7 +154,7 @@ public final class ParseTreeLower {
         @Override
         public Declaration visitArrayDeclaration(CruxParser.ArrayDeclarationContext ctx) {
             //System.out.print(ctx.type().getText());
-            System.out.println(ctx.ARRAY().getText());
+            //System.out.println(ctx.ARRAY().getText());
             return new ArrayDeclaration(makePosition(ctx), symTab.add( makePosition(ctx), ctx.IDENTIFIER().getText(), new ArrayType(Integer.parseInt(ctx.INTEGER().getText()),StringToType(ctx.type().getText()))));
         }
 
@@ -173,7 +171,6 @@ public final class ParseTreeLower {
             List<CruxParser.ParameterContext> FList = ctx.parameterList().parameter();
             ArrayList<Type> types = new ArrayList<Type>();
             ArrayList<Symbol> symbols = new ArrayList<Symbol>();
-            symTab.enter();
             for(int i = 0; i < FList.size(); i++)
             {
                 //System.out.println(FList.get(i).IDENTIFIER().getText());
@@ -182,9 +179,7 @@ public final class ParseTreeLower {
             }
             TypeList TList = new TypeList(types);
             //System.out.println(StringToType(ctx.type().getText()));
-            StatementList Slist = lower(ctx.statementBlock().statementList());
-            symTab.exit();
-            return new FunctionDefinition(makePosition(ctx), symTab.add(makePosition(ctx),ctx.IDENTIFIER().getText(),new FuncType(TList, StringToType(ctx.type().getText()))),symbols,Slist);
+            return new FunctionDefinition(makePosition(ctx), symTab.add(makePosition(ctx),ctx.IDENTIFIER().getText(),new FuncType(TList, StringToType(ctx.type().getText()))),symbols,lower(ctx.statementBlock().statementList()));
 
         }
 
@@ -438,13 +433,11 @@ public final class ParseTreeLower {
         @Override
         public Call visitCallExpression(CruxParser.CallExpressionContext ctx) {
 //            System.out.print("Expression Statement");
-            symTab.enter();
             List<CruxParser.Expression0Context> EList = ctx.expressionList().expression0();
             List<Expression> exp = new ArrayList<Expression>();
             for(int i = 0; i < EList.size(); i++) {
                 exp.add(EList.get(i).accept(expressionVisitor));
             }
-            symTab.exit();
             return new Call(makePosition(ctx), symTab.lookup(makePosition(ctx),ctx.IDENTIFIER().getText()), exp);
         }
 
@@ -474,6 +467,7 @@ public final class ParseTreeLower {
         public Expression visitLiteral(CruxParser.LiteralContext ctx) {
             // TODO
             //System.out.print("Lit");
+            //symTab.printAll();
             var position = makePosition(ctx);
             if(ctx.INTEGER() != null) {
                 return new LiteralInt(position, Integer.parseInt(ctx.INTEGER().toString()));
