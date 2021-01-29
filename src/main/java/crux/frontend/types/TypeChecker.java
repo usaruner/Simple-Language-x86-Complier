@@ -71,9 +71,8 @@ public final class TypeChecker {
             //System.out.println("AssignLocation" + assignment.getLocation());
             typeMap.put(assignment,new VoidType());
             assignment.getValue().accept(this);
+            System.out.print("hi");
             assignment.getLocation().accept(this);
-
-
 
         }
 
@@ -98,13 +97,27 @@ public final class TypeChecker {
         @Override
         public void visit(Dereference dereference) {
             System.out.print("deref");
-            typeMap.put(dereference,((Name)dereference.getAddress()).getSymbol().getType());
+            System.out.print("REF: " + ListNode.class);
+            if(dereference.getAddress().getClass() == Name.class){
+                typeMap.put(dereference, ((Name) dereference.getAddress()).getSymbol().getType());
+            }else{
+                if (((ArrayAccess)dereference.getAddress()).getBase().getSymbol().getType().toString().contains("int")) {
+                    typeMap.put(dereference, new IntType());
+                }else if(((ArrayAccess)dereference.getAddress()).getBase().getSymbol().getType().toString().contains("bool")) {
+                    typeMap.put(dereference, new BoolType());
+                }
+            }
             dereference.getAddress().accept(this);
         }
 
         @Override
         public void visit(FunctionDefinition functionDefinition) {
             System.out.print("FuncDef");
+            /*
+            for(int i = 0; i < functionDefinition.getParameters().size(); i++){
+                System.out.println(functionDefinition.getParameters().get(i).toString());
+                typeMap.put(new Name(functionDefinition.getPosition(),functionDefinition.getParameters().get(i)),functionDefinition.getParameters().get(i).getType());
+            }*/
             for(int i = 0; i < functionDefinition.getStatements().getChildren().size(); i++){
                 functionDefinition.getStatements().getChildren().get(i).accept(this);
             }
@@ -114,14 +127,35 @@ public final class TypeChecker {
         @Override
         public void visit(IfElseBranch ifElseBranch) {
             System.out.print("if");
-            ifElseBranch.accept(this);
+            StatementList sList1 = ifElseBranch.getElseBlock();
+            StatementList sList2 = ifElseBranch.getThenBlock();
+                ifElseBranch.getCondition().accept(this);
+                for(int i = 0; i < sList2.getChildren().size(); i++){
+                    System.out.println(sList2.getChildren().toString());
+                    sList2.getChildren().get(i).accept(this);
+                }
+                for(int i = 0; i < sList1.getChildren().size(); i++){
+                    System.out.println(sList1.getChildren().toString());
+                    sList1.getChildren().get(i).accept(this);
+                }
+
+
         }
 
         @Override
         public void visit(ArrayAccess access) {
             System.out.print("access");
-            typeMap.put(access,access.getBase().getSymbol().getType());
-            access.accept(this);
+            System.out.println("ac" + access.getBase().getSymbol().getType());
+            if (access.getBase().getSymbol().getType().toString().contains("int")) {
+                typeMap.put(access, new AddressType(new IntType()));
+            } else if (access.getBase().getSymbol().getType().toString().contains("bool")) {
+                typeMap.put(access, new AddressType(new BoolType()));
+                // ( access.getBase()).accept(this);
+            } else{
+                errors.add("ERROR: ARRAY CAN NOT ACCESS TYPE " + access.getBase().getSymbol().getType() + " LINE " + access.getPosition());
+            }
+            access.getBase().accept(this);
+            access.getOffset().accept(this);
         }
 
         @Override
@@ -154,7 +188,7 @@ public final class TypeChecker {
 
         @Override
         public void visit(Return ret) {
-            ret.accept(this);
+            ret.getValue().accept(this);
         }
 
         @Override
@@ -172,7 +206,12 @@ public final class TypeChecker {
 
         @Override
         public void visit(WhileLoop whileLoop) {
-            whileLoop.accept(this);
+            whileLoop.getCondition().accept(this);
+            StatementList sList1 = whileLoop.getBody();
+            for(int i = 0; i < sList1.getChildren().size(); i++){
+                //System.out.println(sList1.getChildren().toString());
+                sList1.getChildren().get(i).accept(this);
+            }
         }
     }
 }

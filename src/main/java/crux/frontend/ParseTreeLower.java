@@ -156,6 +156,7 @@ public final class ParseTreeLower {
         @Override
         public Declaration visitArrayDeclaration(CruxParser.ArrayDeclarationContext ctx) {
             //System.out.print(ctx.type().getText());
+            System.out.println(ctx.ARRAY().getText());
             return new ArrayDeclaration(makePosition(ctx), symTab.add( makePosition(ctx), ctx.IDENTIFIER().getText(), new ArrayType(Integer.parseInt(ctx.INTEGER().getText()),StringToType(ctx.type().getText()))));
         }
 
@@ -175,13 +176,15 @@ public final class ParseTreeLower {
             symTab.enter();
             for(int i = 0; i < FList.size(); i++)
             {
-
+                //System.out.println(FList.get(i).IDENTIFIER().getText());
                 types.add(StringToType(FList.get(i).type().getText()));
-                symbols.add(symTab.add(makePosition(ctx),FList.get(i).IDENTIFIER().getText()));
+                symbols.add(symTab.add(makePosition(ctx),FList.get(i).IDENTIFIER().getText(),StringToType(FList.get(i).type().getText())));
             }
             TypeList TList = new TypeList(types);
-            //System.out.print(ctx.IDENTIFIER().getText());
-            return new FunctionDefinition(makePosition(ctx), symTab.add(makePosition(ctx),ctx.IDENTIFIER().getText(),new FuncType(TList, StringToType(ctx.type().getText()))),symbols, lower(ctx.statementBlock().statementList()));
+            //System.out.println(StringToType(ctx.type().getText()));
+            StatementList Slist = lower(ctx.statementBlock().statementList());
+            symTab.exit();
+            return new FunctionDefinition(makePosition(ctx), symTab.add(makePosition(ctx),ctx.IDENTIFIER().getText(),new FuncType(TList, StringToType(ctx.type().getText()))),symbols,Slist);
 
         }
 
@@ -255,6 +258,7 @@ public final class ParseTreeLower {
 
         @Override
         public Statement visitIfStatement(CruxParser.IfStatementContext ctx) {
+            symTab.enter();
 //            System.out.print("IF:");
             List<CruxParser.StatementContext> SList = ctx.statementBlock().get(0).statementList().statement();
 
@@ -271,9 +275,11 @@ public final class ParseTreeLower {
                 for (int i = 0; i < SList2.size(); i++) {
                     elseState.add(SList2.get(i).accept(statementVisitor));
                 }
+                symTab.exit();
                 //return new IfElseBranch(makePosition(ctx), ctx.expression0().accept(expressionVisitor),new StatementList(makePosition(ctx),thenState), new StatementList(makePosition(ctx),elseState));
                 return new IfElseBranch(makePosition(ctx), ctx.expression0().accept(expressionVisitor),new StatementList(makePosition(ctx.statementBlock(0).statementList()),thenState), new StatementList(makePosition(ctx.statementBlock(1).statementList()),elseState));
             }
+            symTab.exit();
             return new IfElseBranch(makePosition(ctx), ctx.expression0().accept(expressionVisitor),new StatementList(makePosition(ctx.statementBlock(0).statementList()),thenState), new StatementList(makePosition(ctx),elseState));
             //return new IfElseBranch(makePosition(ctx), ctx.expression0().accept(expressionVisitor),lower(ctx.statementBlock(0)), null);
         }
@@ -288,6 +294,7 @@ public final class ParseTreeLower {
 
         @Override
         public Statement visitWhileStatement(CruxParser.WhileStatementContext ctx) {
+            symTab.enter();
             List<CruxParser.StatementContext> SList =  ctx.statementBlock().statementList().statement();
             List<Statement> State = new ArrayList<Statement>();
             for(int i = 0; i < SList.size(); i++)
@@ -295,6 +302,7 @@ public final class ParseTreeLower {
                 State.add(SList.get(i).accept(statementVisitor));
             }
             ctx.statementBlock().statementList();
+            symTab.exit();
             return new WhileLoop(makePosition(ctx), ctx.expression0().accept(expressionVisitor),new StatementList(makePosition(ctx.statementBlock().statementList()),State));
         }
 
@@ -430,11 +438,13 @@ public final class ParseTreeLower {
         @Override
         public Call visitCallExpression(CruxParser.CallExpressionContext ctx) {
 //            System.out.print("Expression Statement");
+            symTab.enter();
             List<CruxParser.Expression0Context> EList = ctx.expressionList().expression0();
             List<Expression> exp = new ArrayList<Expression>();
             for(int i = 0; i < EList.size(); i++) {
                 exp.add(EList.get(i).accept(expressionVisitor));
             }
+            symTab.exit();
             return new Call(makePosition(ctx), symTab.lookup(makePosition(ctx),ctx.IDENTIFIER().getText()), exp);
         }
 
