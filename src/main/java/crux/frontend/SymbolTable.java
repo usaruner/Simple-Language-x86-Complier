@@ -12,7 +12,7 @@ import java.util.Map;
 final class SymbolTable {
     private final PrintStream err;
     private final List<Map<String, Symbol>> symbolScopes = new ArrayList<>();
-
+    //private final List<Map<Node, Type>> symbolType = new ArrayList<>();
     private boolean encounteredError = false;
 
     SymbolTable(PrintStream err) {
@@ -29,7 +29,7 @@ final class SymbolTable {
         List<Type> Clist = new ArrayList<Type>();
         Clist.add(new IntType());
         glob.put("printChar", new Symbol("printChar",new FuncType(new TypeList(Clist),new VoidType())));
-        glob.put("println", new Symbol("println",new FuncType(new TypeList(Clist),new VoidType())));
+        glob.put("println", new Symbol("println",new FuncType(new TypeList(),new VoidType())));
         symbolScopes.add(glob);
         // TODO
     }
