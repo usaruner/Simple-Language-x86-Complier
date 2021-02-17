@@ -22,6 +22,7 @@ public final class ASTLower implements NodeVisitor {
     private TypeChecker mTypeChecker;
     private Instruction currInstruction;
     private LocalVar currentVar;
+    private AddressVar currentAddr;
 
     public ASTLower(TypeChecker checker) {
         mTypeChecker = checker;
@@ -82,16 +83,17 @@ public final class ASTLower implements NodeVisitor {
                 adv = new AddressVar(((ArrayDeclaration)dec).getSymbol().getType(), ((ArrayDeclaration)dec).getSymbol().getName());
                 globMap.put(((ArrayDeclaration) dec).getSymbol(), adv);
                 mCurrentGlobalSymMap = globMap;
-                visit((ArrayDeclaration) dec);
-
+                System.out.println("hello:" + Integer.parseInt(((ArrayDeclaration)dec).getSymbol().toString().replaceAll("\\D+","")));
+                mCurrentProgram.addGlobalVar(new GlobalDecl(adv, IntegerConstant.get(mCurrentProgram, Integer.parseInt(((ArrayDeclaration)dec).getSymbol().toString().replaceAll("\\D+","")))));
             } else if (dec.getClass() == VariableDeclaration.class) {
-                adv = new AddressVar(((FunctionDefinition)dec).getSymbol().getType(), ((VariableDeclaration)dec).getSymbol().getName());
+                adv = new AddressVar(((VariableDeclaration)dec).getSymbol().getType(), ((VariableDeclaration)dec).getSymbol().getName());
                 globMap.put(((VariableDeclaration)dec).getSymbol(), adv);
                 mCurrentGlobalSymMap = globMap;
-                visit((VariableDeclaration) dec);
+                mCurrentProgram.addGlobalVar(new GlobalDecl(adv, IntegerConstant.get(mCurrentProgram, 1)));
             }
 
         }
+
     }
 
     /**
@@ -109,7 +111,7 @@ public final class ASTLower implements NodeVisitor {
             tempVar = new LocalVar(functionDefinition.getParameters().get(i).getType(),functionDefinition.getParameters().get(i).getName());
             mCurrentLocalVarMap.put(functionDefinition.getParameters().get(i), tempVar);
             loc.add(tempVar);
-//            LocalMap.put(functionDefinition.getParameters().get(i),tempVar);
+//          LocalMap.put(functionDefinition.getParameters().get(i),tempVar);
         }
         Function func = new Function(functionDefinition.getSymbol().getName(),loc,(FuncType)functionDefinition.getSymbol().getType());
         mCurrentFunction = func;
@@ -122,6 +124,7 @@ public final class ASTLower implements NodeVisitor {
         //System.out.print(mCurrentProgram.getFunctions().next().getStart());
         visit(functionDefinition.getStatements());
         mCurrentLocalVarMap = temploc;
+
     }
 
     @Override
@@ -164,15 +167,55 @@ public final class ASTLower implements NodeVisitor {
 
     @Override
     public void visit(Name name) {
-
+        if(mCurrentLocalVarMap.containsKey(name.getSymbol())){
+            currentVar = (LocalVar) mCurrentLocalVarMap.get(name.getSymbol());
+            currentAddr = null;
+        }else if(mCurrentGlobalSymMap.containsKey(name.getSymbol())){
+            currentAddr = (AddressVar)mCurrentGlobalSymMap.get(name.getSymbol());
+            currentVar = null;
+        }
     }
 
     @Override
     public void visit(Assignment assignment) {
-        LocalVar loc = new LocalVar(mTypeChecker.getType(assignment.getValue()),assignment.getValue().toString());
-        AddressVar adv = new AddressVar(mTypeChecker.getType(assignment.getLocation()),assignment.getLocation().toString());
-        StoreInst store = new StoreInst(loc,adv);
-        mCurrentFunction.setStart(store);
+        System.out.println("Assignment");
+        visit(assignment.getValue());
+        LocalVar loc = currentVar;
+        visit(assignment.getLocation());
+        AddressVar adv = currentAddr;
+        AddressVar dst = mCurrentFunction.getTempAddressVar(mTypeChecker.getType(assignment.getLocation()));
+        if(assignment.getLocation().getClass() != ArrayAccess.class) {
+            LocalVar temploc = new LocalVar(((Name) assignment.getLocation()).getSymbol().getType(), ((Name) assignment.getLocation()).getSymbol().getName());
+
+            if (currentVar != null) {
+                currInstruction.setNext(0, new CopyInst(temploc, loc));
+                currInstruction = currInstruction.getNext(0);
+                System.out.println("AVAR" + loc);
+                currentVar = loc;
+                mCurrentLocalVarMap.put(((Name) assignment.getLocation()).getSymbol(), temploc);
+            } else if (currentAddr != null) {
+                currInstruction.setNext(0, new AddressAt(dst, adv));
+                currInstruction = currInstruction.getNext(0);
+                currInstruction.setNext(0, new StoreInst(loc, dst));
+                currInstruction = currInstruction.getNext(0);
+            }
+        }else{
+            visit(((ArrayAccess) assignment.getLocation()).getBase());
+            adv = currentAddr;
+            //AddressVar tempAddr = new AddressVar(((Name)((ArrayAccess) assignment.getLocation()).getBase()).getSymbol().getType(),((Name)((ArrayAccess) assignment.getLocation()).getBase()).getSymbol().getName());
+            if(assignment.getValue().getClass() == LiteralInt.class){
+                LocalVar temploc = new LocalVar(new IntType(), ((Name)((ArrayAccess) assignment.getLocation()).getBase()).getSymbol().getName());
+            }else{
+                LocalVar temploc = new LocalVar(new BoolType(), ((Name)((ArrayAccess) assignment.getLocation()).getBase()).getSymbol().getName());
+            }
+            dst = mCurrentFunction.getTempAddressVar(mTypeChecker.getType(((ArrayAccess) assignment.getLocation()).getOffset()));
+            System.out.println("LINE:" + dst.getType() + adv.getType() + loc.getType());
+            currInstruction.setNext(0, new AddressAt(dst, adv));
+            currInstruction = currInstruction.getNext(0);
+            currInstruction.setNext(0, new StoreInst(loc, dst));
+            currInstruction = currInstruction.getNext(0);
+
+        }
     }
 
     @Override
@@ -182,8 +225,7 @@ public final class ASTLower implements NodeVisitor {
         Map<Symbol, Variable> temploc = mCurrentLocalVarMap;
         AddressVar adv =  null;
         ArrayList<LocalVar> args = new ArrayList<LocalVar>();
-        Map<Symbol, Variable> locVar = new HashMap<>();
-        mCurrentLocalVarMap = locVar;
+
         LocalVar temp;
         System.out.println("CALLEE: " + currInstruction.toString());
 
@@ -191,23 +233,25 @@ public final class ASTLower implements NodeVisitor {
             System.out.println("BIN");
             //loc = (LocalVar)mBuiltInFuncMap.get(call.getCallee());
             adv = mBuiltInFuncMap.get(call.getCallee().getName());
-        }else if(mCurrentLocalVarMap.containsKey(call.getCallee())){
+        }else if(mCurrentGlobalSymMap.containsKey(call.getCallee())){
             System.out.println("LOC");
              //loc = (LocalVar) mCurrentLocalVarMap.get(call.getCallee());
-             adv = mCurrentGlobalSymMap.get(call.getCallee().getName());
-        }else{
+             adv = mCurrentGlobalSymMap.get(call.getCallee());
+        }else {
             System.out.println("FUNCTION NOT FOUND: " + call.getCallee().getName());
         }
-
+        System.out.println("FUNCTION FOUND: " + call.getArguments().size());
         for(int i = 0;  i < call.getArguments().size(); i++){
+            System.out.println("ARGS: " + i + " "+ call.getArguments().get(i).getClass());
             visit(call.getArguments().get(i));
             args.add((LocalVar)currentVar);
         }
-        System.out.println("INST: " + currInstruction);
+        System.out.println("INST: " + adv);
+        System.out.println("INST: " + args);
         currInstruction.setNext(0,new CallInst(adv,args));
         currInstruction = currInstruction.getNext(0);
         System.out.println("INST: " + currInstruction);
-        mCurrentLocalVarMap = temploc;
+        System.out.println("localVAR" + mCurrentLocalVarMap.entrySet().toString());
     }
 
     @Override
@@ -252,6 +296,45 @@ public final class ASTLower implements NodeVisitor {
 
     @Override
     public void visit(Dereference dereference) {
+        System.out.println("DEREF: ");
+        visit(dereference.getAddress());
+        if(dereference.getAddress().getClass() != ArrayAccess.class) {
+            if (currentVar != null) {
+                System.out.println("LOC");
+                LocalVar loc = mCurrentFunction.getTempVar(((Name) dereference.getAddress()).getSymbol().getType());
+                currInstruction.setNext(0, new CopyInst(loc, currentVar));
+                currInstruction = currInstruction.getNext(0);
+                mCurrentLocalVarMap.put(((Name) dereference.getAddress()).getSymbol(), currentVar);
+                currentVar = loc;
+                System.out.println("DEREF: " + ((Name) dereference.getAddress()).getSymbol() + "->" + currentVar);
+            } else if (currentAddr != null) {
+                System.out.println("ADDR");
+                AddressVar dst = mCurrentFunction.getTempAddressVar(((Name) dereference.getAddress()).getSymbol().getType());
+                currentVar = mCurrentFunction.getTempVar(mTypeChecker.getType(dereference.getAddress()));
+                currInstruction.setNext(0, new AddressAt(dst, currentAddr));
+                currInstruction = currInstruction.getNext(0);
+                currInstruction.setNext(0, new LoadInst(currentVar, dst));
+                currInstruction = currInstruction.getNext(0);
+            }
+        }else{
+            System.out.println("ARRAY");
+            visit(((ArrayAccess) dereference.getAddress()).getBase());
+            AddressVar dst;
+            System.out.println("CLASS" + dereference.getAddress().getClass());
+            if(((ArrayAccess)dereference.getAddress()).getOffset().getClass() == LiteralInt.class){
+                dst = mCurrentFunction.getTempAddressVar(new IntType());
+            }else{
+                dst = mCurrentFunction.getTempAddressVar(new BoolType());
+            }
+
+
+            currentVar = mCurrentFunction.getTempVar(mTypeChecker.getType(dereference.getAddress()));
+            System.out.println("ARRAY: " + currentAddr);
+            currInstruction.setNext(0, new AddressAt(dst, currentAddr));
+            currInstruction = currInstruction.getNext(0);
+            currInstruction.setNext(0, new LoadInst(currentVar, dst));
+            currInstruction = currInstruction.getNext(0);
+        }
     }
 
     private void visit(Expression expression) {
