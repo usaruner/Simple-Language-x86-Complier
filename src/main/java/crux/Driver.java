@@ -48,10 +48,10 @@ public final class Driver {
 
     private boolean printPt = false;
     private boolean printAst = false; //<<
-    private boolean includeTypes = true;
-    private boolean typeCheck = true;
+    private boolean includeTypes = false;
+    private boolean typeCheck = false;
     private boolean printIR = false;
-    private boolean runEmulator = false;
+    private boolean runEmulator = true;
 
     private String inputFile;
     private InputStream inputStream;

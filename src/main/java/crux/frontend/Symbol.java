@@ -13,7 +13,7 @@ public final class Symbol {
         this.error = null;
     }
 
-    Symbol(String name, Type type) {
+    public Symbol(String name, Type type) {
         this.name = name;
         this.type = type;
         this.error = null;

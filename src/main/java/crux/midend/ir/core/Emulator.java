@@ -196,7 +196,6 @@ public class Emulator {
             for(int j = 0; j < args.length; j++) {
                 args[j] = localMap.get(params.get(j));
             }
-
             AddressVar varCallee = i.getCallee();
             //Chop off leading %
             String fName = varCallee.getName().substring(1);
