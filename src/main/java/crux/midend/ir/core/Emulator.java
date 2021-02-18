@@ -34,7 +34,7 @@ public class Emulator {
         CallContext mainc = new CallContext(main, null, null);
         stack.push(mainc);
         int total = 0;
-        while(!stack.isEmpty() && total < 10000) { //<< CHANGED
+        while(!stack.isEmpty() && total < 1000000) { //<< CHANGED
             total++;
             CallContext c = stack.peek();
             if (c.pc == null) {
