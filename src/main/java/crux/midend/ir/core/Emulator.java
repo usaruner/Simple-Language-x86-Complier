@@ -9,7 +9,6 @@ public class Emulator {
     Stack<CallContext> stack = new Stack<>();
     HashMap<Long, Long> globalMap = new HashMap<>();
     HashMap<AddressVar, Long> offsetMap = new HashMap<>();
-
     BufferedReader br;
     PrintStream out;
     public static boolean DEBUG = false;
@@ -34,7 +33,9 @@ public class Emulator {
         Function main = functions.get("main");
         CallContext mainc = new CallContext(main, null, null);
         stack.push(mainc);
-        while(!stack.isEmpty()) {
+        int total = 0;
+        while(!stack.isEmpty() && total < 10000) { //<< CHANGED
+            total++;
             CallContext c = stack.peek();
             if (c.pc == null) {
                 //Handle implicit return from void function
@@ -71,12 +72,16 @@ public class Emulator {
 
         public void visit(AddressAt i) {
             AddressVar base = i.getBase();
+//            System.out.println("BASE: " + base + offsetMap.get(base) + i.getOffset());
+//            System.out.println(localMap);
             long address = offsetMap.get(base);
             Value v = i.getOffset();
             if (v != null) {
                 address += 8 * ((Long) localMap.get(v));
             }
             localMap.put(i.getDst(), address);
+
+
             debug("AddressAt: "+i.getDst()+" = "+address);
             pc = pc.getNext(0);
         }
@@ -130,6 +135,7 @@ public class Emulator {
         }
       
         public void visit(JumpInst i) {
+
             Boolean pred = (Boolean) localMap.get(i.getPredicate());
             debug("Jump: "+i.getPredicate()+"="+pred);
             pc = pred ? pc.getNext(1) : pc.getNext(0);
