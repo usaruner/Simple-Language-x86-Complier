@@ -39,7 +39,7 @@ public final class ASTLower implements NodeVisitor {
      * */
     private void initBuiltInFunctions() {
         // TODO: Add built-in function symbols
-        System.out.println("HIS");
+        //System.out.println("HIS");
         mBuiltInFuncMap = new HashMap<>();
         List<Type> Blist = new ArrayList<Type>();
         List<Type> Ilist = new ArrayList<Type>();
@@ -65,7 +65,7 @@ public final class ASTLower implements NodeVisitor {
 
     @Override
     public void visit(DeclarationList declarationList) {
-        System.out.println("DelcareL");
+        //System.out.println("DelcareL");
         Declaration dec;
         AddressVar adv;
         Map<Symbol, AddressVar> globMap = new HashMap<>();
@@ -73,7 +73,7 @@ public final class ASTLower implements NodeVisitor {
             dec = (Declaration) declarationList.getChildren().get(i);
 
             if (dec.getClass() == FunctionDefinition.class) {
-                System.out.println("DelcareL => func");
+                //System.out.println("DelcareL => func");
                 adv = new AddressVar(((FunctionDefinition)dec).getSymbol().getType(), ((FunctionDefinition)dec).getSymbol().getName());
                 globMap.put(((FunctionDefinition)dec).getSymbol(), adv);
                 mCurrentGlobalSymMap = globMap;
@@ -83,7 +83,7 @@ public final class ASTLower implements NodeVisitor {
                 adv = new AddressVar(((ArrayDeclaration)dec).getSymbol().getType(), ((ArrayDeclaration)dec).getSymbol().getName());
                 globMap.put(((ArrayDeclaration) dec).getSymbol(), adv);
                 mCurrentGlobalSymMap = globMap;
-                System.out.println("hello:" + Integer.parseInt(((ArrayDeclaration)dec).getSymbol().toString().replaceAll("\\D+","")));
+                //System.out.println("hello:" + Integer.parseInt(((ArrayDeclaration)dec).getSymbol().toString().replaceAll("\\D+","")));
                 mCurrentProgram.addGlobalVar(new GlobalDecl(adv, IntegerConstant.get(mCurrentProgram, Integer.parseInt(((ArrayDeclaration)dec).getSymbol().toString().replaceAll("\\D+","")))));
             } else if (dec.getClass() == VariableDeclaration.class) {
                 adv = new AddressVar(((VariableDeclaration)dec).getSymbol().getType(), ((VariableDeclaration)dec).getSymbol().getName());
@@ -101,7 +101,7 @@ public final class ASTLower implements NodeVisitor {
      * */
     @Override
     public void visit(FunctionDefinition functionDefinition) {
-        System.out.println("Func");
+        //System.out.println("Func");
         Map<Symbol, Variable> temploc = mCurrentLocalVarMap;
         ArrayList<LocalVar> loc = new ArrayList<>();
         Map<Symbol, Variable> LocalMap = new HashMap<>();
@@ -139,10 +139,10 @@ public final class ASTLower implements NodeVisitor {
 //            mCurrentGlobalSymMap.put((Symbol) m.getKey(),new AddressVar(((LocalVar)m.getValue()).getType(),((LocalVar)m.getValue()).getName()));
 //        }
 //        System.out.println("LOCAL: " + mCurrentLocalVarMap);
-        System.out.println("StamementList");
+        //System.out.println("StamementList");
             Statement stat = null;
         for(int i = 0; i < statementList.getChildren().size(); i++) {
-            System.out.println("StamementList" + i);
+            //System.out.println("StamementList" + i);
             stat = (Statement) statementList.getChildren().get(i);
             if(stat.getClass() == VariableDeclaration.class) {
                 visit((VariableDeclaration)stat);
@@ -169,7 +169,7 @@ public final class ASTLower implements NodeVisitor {
      * */
     @Override
     public void visit(VariableDeclaration variableDeclaration) {
-        System.out.println("VARDEC");
+        //System.out.println("VARDEC");
         mCurrentLocalVarMap.put(variableDeclaration.getSymbol(),new LocalVar(variableDeclaration.getSymbol().getType(),variableDeclaration.getSymbol().getName()));
     }
   
@@ -180,7 +180,7 @@ public final class ASTLower implements NodeVisitor {
 
     @Override
     public void visit(Name name) {
-        System.out.println("NAME:" + name.getSymbol().toString() + mCurrentGlobalSymMap);
+        //System.out.println("NAME:" + name.getSymbol().toString() + mCurrentGlobalSymMap);
         if(mCurrentLocalVarMap.containsKey(name.getSymbol())){
             currentVar = (LocalVar) mCurrentLocalVarMap.get(name.getSymbol());
             currentAddr = null;
@@ -206,33 +206,33 @@ public final class ASTLower implements NodeVisitor {
 
     @Override
     public void visit(Assignment assignment) {
-        System.out.println("Assignment" + currentVar);
+        //System.out.println("Assignment" + currentVar);
         visit(assignment.getLocation());
-        System.out.println("Assignment" + currentVar);
+        //System.out.println("Assignment" + currentVar);
         LocalVar loc = currentVar;
         AddressVar adv = currentAddr;
         boolean globalV = glob;
         //System.out.println("CHECK:" + ((Name)assignment.getLocation()).getSymbol().getName() + globalV);
         visit(assignment.getValue());
         AddressVar dst = mCurrentFunction.getTempAddressVar(mTypeChecker.getType(assignment.getLocation()));
-        System.out.println(mCurrentLocalVarMap);
-        System.out.println(mCurrentGlobalSymMap);
+        //System.out.println(mCurrentLocalVarMap);
+        //System.out.println(mCurrentGlobalSymMap);
         if(assignment.getLocation().getClass() != ArrayAccess.class) {
 
             if (!globalV) {
-                System.out.println("Bye");
+                //System.out.println("Bye");
                 currInstruction.setNext(0, new CopyInst(loc,currentVar));
                 currInstruction = currInstruction.getNext(0);
-                System.out.println("AVAR" + currentVar + loc);
+                //System.out.println("AVAR" + currentVar + loc);
                 currentVar = loc;
-                System.out.println("BUGGGGG" + currentVar);
+                //System.out.println("BUGGGGG" + currentVar);
             } else if (globalV) {
-                System.out.println("HELLO");
+                //System.out.println("HELLO");
                 currInstruction.setNext(0, new AddressAt(dst, adv));
                 currInstruction = currInstruction.getNext(0);
                 currInstruction.setNext(0, new StoreInst(currentVar, dst));
                 currInstruction = currInstruction.getNext(0);
-                System.out.println("ADDVAR" + dst + adv + loc);
+                //System.out.println("ADDVAR" + dst + adv + loc);
             }
         }else{
 
@@ -243,15 +243,15 @@ public final class ASTLower implements NodeVisitor {
 //                LocalVar temploc = new LocalVar(new BoolType(), ((Name)((ArrayAccess) assignment.getLocation()).getBase()).getSymbol().getName());
 //            }
             dst = mCurrentFunction.getTempAddressVar(mTypeChecker.getType(((ArrayAccess) assignment.getLocation()).getOffset()));
-            System.out.println("LINE:" + dst.getType() + adv.getType() + loc.getType());
+            //System.out.println("LINE:" + dst.getType() + adv.getType() + loc.getType());
 //            currInstruction.setNext(0, new AddressAt(dst, adv));
 //            currInstruction = currInstruction.getNext(0);
             currInstruction.setNext(0, new StoreInst(currentVar, adv));
             currInstruction = currInstruction.getNext(0);
 
         }
-        System.out.println(mCurrentLocalVarMap);
-        System.out.println(mCurrentGlobalSymMap);
+        //System.out.println(mCurrentLocalVarMap);
+        //System.out.println(mCurrentGlobalSymMap);
     }
 
     @Override
@@ -276,23 +276,23 @@ public final class ASTLower implements NodeVisitor {
 
 
         if(mBuiltInFuncMap.containsKey(call.getCallee().getName())){
-            System.out.println("BIN");
+            //System.out.println("BIN");
             //loc = (LocalVar)mBuiltInFuncMap.get(call.getCallee());
             adv = mBuiltInFuncMap.get(call.getCallee().getName());
         }else if(mCurrentGlobalSymMap.containsKey(call.getCallee())){
-            System.out.println("LOC");
+            //System.out.println("LOC");
              //loc = (LocalVar) mCurrentLocalVarMap.get(call.getCallee());
              adv = mCurrentGlobalSymMap.get(call.getCallee());
         }else {
             System.out.println("FUNCTION NOT FOUND: " + call.getCallee().getName());
         }
-        System.out.println("FUNCTION FOUND: " + call.getArguments().size());
+        //System.out.println("FUNCTION FOUND: " + call.getArguments().size());
         for(int i = 0;  i < call.getArguments().size(); i++){
-            System.out.println("ARGS: " + i + " "+ call.getArguments().get(i).getClass());
+            //System.out.println("ARGS: " + i + " "+ call.getArguments().get(i).getClass());
             visit(call.getArguments().get(i));
             args.add((LocalVar)currentVar);
         }
-        System.out.println("TTTTTTTTTTTTTTTYYYYYYYYYYPPPPP" + call.getCallee().getType());
+        //System.out.println("TTTTTTTTTTTTTTTYYYYYYYYYYPPPPP" + call.getCallee().getType());
         currentVar = mCurrentFunction.getTempVar(mTypeChecker.getType(call));
         CallInst Cinst = new CallInst(currentVar,adv,args);
         currInstruction.setNext(0,Cinst);
@@ -304,7 +304,7 @@ public final class ASTLower implements NodeVisitor {
 //
 //
 //        System.out.println("INST: " + currInstruction);
-        System.out.println("GLOB" + mCurrentGlobalSymMap.entrySet().toString());
+        //System.out.println("GLOB" + mCurrentGlobalSymMap.entrySet().toString());
 //        mCurrentLocalVarMap = temploc;
 //        mCurrentGlobalSymMap = tempglob;
 //        System.out.print(mCurrentGlobalSymMap);
@@ -312,15 +312,15 @@ public final class ASTLower implements NodeVisitor {
 
     @Override
     public void visit(OpExpr operation) {
-        System.out.println("OP" + currentVar);
+        //System.out.println("OP" + currentVar);
         if( mTypeChecker.getType(operation).getClass() == IntType.class){
             visit( operation.getLeft());
             LocalVar opl = currentVar;
 
             visit( operation.getRight());
             LocalVar opr = currentVar;
-            System.out.println("L: " + opl);
-            System.out.println("R: " + opr);
+            //System.out.println("L: " + opl);
+            //System.out.println("R: " + opr);
             LocalVar temp1 = mCurrentFunction.getTempVar(new IntType());
             mCurrentLocalVarMap.put(new Symbol(temp1.getName(),new IntType()),temp1);
             if(operation.getOp() == OpExpr.Operation.ADD) {
@@ -352,7 +352,7 @@ public final class ASTLower implements NodeVisitor {
 
 
             if(operation.getOp().toString() == "||"){
-                System.out.println("OR");
+                //System.out.println("OR");
                 Instruction temp = new NopInst();
                 visit( operation.getLeft());
                 LocalVar opl = currentVar;
@@ -398,12 +398,12 @@ public final class ASTLower implements NodeVisitor {
 
     @Override
     public void visit(Dereference dereference) {
-        System.out.println("DEREF: ");
+        //System.out.println("DEREF: ");
         visit(dereference.getAddress());
-        System.out.println("ADDDDRESSS" + currentVar);
+        //System.out.println("ADDDDRESSS" + currentVar);
         if(dereference.getAddress().getClass() != ArrayAccess.class) {
             if (currentVar != null) {
-                System.out.println("LOC" + ((Name) dereference.getAddress()).getSymbol().getType());
+                //System.out.println("LOC" + ((Name) dereference.getAddress()).getSymbol().getType());
                 LocalVar loc = mCurrentFunction.getTempVar(((Name) dereference.getAddress()).getSymbol().getType());
                 currInstruction.setNext(0, new CopyInst(loc, currentVar));
                 currInstruction = currInstruction.getNext(0);
@@ -436,7 +436,7 @@ public final class ASTLower implements NodeVisitor {
 //           System.out.println("ARRAY: " + currentAddr);
 //            currInstruction.setNext(0, new AddressAt(dst, currentAddr));
 //            currInstruction = currInstruction.getNext(0);
-            System.out.println("ARRAY: " + currentVar + "=>" +currentAddr);
+            //System.out.println("ARRAY: " + currentVar + "=>" +currentAddr);
             currInstruction.setNext(0, new LoadInst(currentVar, currentAddr));
             currInstruction = currInstruction.getNext(0);
 
@@ -449,16 +449,16 @@ public final class ASTLower implements NodeVisitor {
 
     @Override
     public void visit(ArrayAccess access) {
-        System.out.println("ACCCCC" + currentVar);
+        //System.out.println("ACCCCC" + currentVar);
         visit(access.getBase());
         AddressVar base = currentAddr;
         visit(access.getOffset());
         LocalVar off = currentVar;
-        System.out.println("TYOSADIOHFISN" + mTypeChecker.getType(access.getOffset()));
+        //System.out.println("TYOSADIOHFISN" + mTypeChecker.getType(access.getOffset()));
         AddressVar dst = mCurrentFunction.getTempAddressVar( mTypeChecker.getType(access.getOffset()));
         currInstruction.setNext(0, new AddressAt(dst, base, off));
         currInstruction = currInstruction.getNext(0);
-        System.out.println("ACCCC " + dst + base + off);
+        //System.out.println("ACCCC " + dst + base + off);
         currentAddr = dst;
     }
 
@@ -472,7 +472,7 @@ public final class ASTLower implements NodeVisitor {
 
     @Override
     public void visit(LiteralInt literalInt) {
-        System.out.println("INT");
+        //System.out.println("INT");
         currentVar = mCurrentFunction.getTempVar(new IntType());
         currInstruction.setNext(0,new CopyInst(currentVar, IntegerConstant.get(mCurrentProgram,(literalInt).getValue())));
         currInstruction = currInstruction.getNext(0);
@@ -482,7 +482,7 @@ public final class ASTLower implements NodeVisitor {
     @Override
     public void visit(Return ret) {
         visit(ret.getValue());
-        System.out.println("RETURN" + currentVar);
+        //System.out.println("RETURN" + currentVar);
         currInstruction.setNext(0,new ReturnInst(currentVar));
         currInstruction = currInstruction.getNext(0);
         rturn = null;
@@ -493,7 +493,7 @@ public final class ASTLower implements NodeVisitor {
      * */
     @Override
     public void visit(IfElseBranch ifElseBranch) {
-        System.out.println("IF ELSE");
+        //System.out.println("IF ELSE");
         Instruction tempr = rturn;
         Instruction tempI;
         visit(ifElseBranch.getCondition());
@@ -506,7 +506,7 @@ public final class ASTLower implements NodeVisitor {
         tempI = currInstruction;
         currInstruction = currInstruction.getNext(1);
         visit(ifElseBranch.getThenBlock());
-        System.out.println("HEE" + rturn);
+        //System.out.println("HEE" + rturn);
         if(rturn != null) {
             currInstruction.setNext(0,rturn);
             currInstruction = currInstruction.getNext(0);
@@ -522,13 +522,13 @@ public final class ASTLower implements NodeVisitor {
 
     @Override
     public void visit(WhileLoop whileLoop) {
-        System.out.println("WHILE");
+        //System.out.println("WHILE");
         Instruction temp = rturn;
         rturn = new NopInst();
         currInstruction.setNext(0,rturn);
         currInstruction = currInstruction.getNext(0);
         visit(whileLoop.getCondition());
-        System.out.println("NOSS:" + currentVar);
+        //System.out.println("NOSS:" + currentVar);
         Instruction Jtemp = new NopInst();
 
         currInstruction.setNext(0, new JumpInst(currentVar));
