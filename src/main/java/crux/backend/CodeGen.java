@@ -53,7 +53,8 @@ public final class CodeGen extends InstVisitor {
             func = (Function)globF.next();
             genCode(func);
             tep++;
-            //System.out.print("tep:" + tep);
+            System.out.print("tep:" + var);
+            var.clear();
         }
         out.close();
     }
@@ -158,7 +159,9 @@ public final class CodeGen extends InstVisitor {
         while(inst != null && tep < 500){
             visit(inst,(f.getArguments().size()+2 + tempNum -1));
             if(jumpMap.containsKey(inst)){
-//                System.out.println(inst);
+                out.bufferCode("\tjmp " + jumpMap.get(inst));
+                output.append(out.sb);
+                out.sb.delete(0,out.sb.length());
                 break;
             }
             inst = inst.getNext(0);
@@ -197,7 +200,6 @@ public final class CodeGen extends InstVisitor {
                     out.sb.delete(0,out.sb.length());
                     break;
                 }
-
             }
         }
 
@@ -374,7 +376,8 @@ public final class CodeGen extends InstVisitor {
         if(jumpMap.containsKey(i.getNext(0))) {
             out.bufferCode("\tcmp $0,"  + "%r10");
             out.bufferCode("\tje " + jumpMap.get(i.getNext(0)));
-        }else if(jumpMap.containsKey(i.getNext(1))){
+        }
+        if(jumpMap.containsKey(i.getNext(1))){
             out.bufferCode("\tcmp $1,"  + "%r10");
             out.bufferCode("\tje " + jumpMap.get(i.getNext(1)));
         }
