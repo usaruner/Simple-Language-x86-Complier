@@ -22,6 +22,7 @@ public final class CodeGen extends InstVisitor {
     private int numOfVar = 0;
     private int numOftemp = 0;
     private int numOfGlob = 0;
+    private int numOfArgs = 0;
     public CodeGen(Program p) {
         this.p = p;
         // Do not change the file name that is outputted or it will
@@ -53,7 +54,7 @@ public final class CodeGen extends InstVisitor {
             func = (Function)globF.next();
             genCode(func);
             tep++;
-            System.out.print("tep:" + var);
+//            System.out.print("tep:" + var);
             var.clear();
         }
         out.close();
@@ -131,9 +132,12 @@ public final class CodeGen extends InstVisitor {
         int tempNum = Integer.parseInt(f.getTempVar(new IntType()).toString().replace("$t",""));
 //        System.out.println("ARGS: " + f.getArguments().size());
         numOftemp = (f.getArguments().size() + tempNum);
+        numOfArgs = f.getArguments().size();
 //        System.out.println(tempNum);
         //Assign labels for jump targets
-        jumpMap = assignLabels(f);
+        if(f.getStart() != null) {
+            jumpMap = assignLabels(f);
+        }
         //Declare functions and print label    “.globl main”      “main:”
 //        System.out.println("Name "+ f.getName() );
         out.bufferLabel(".globl " + f.getName());
@@ -145,12 +149,15 @@ public final class CodeGen extends InstVisitor {
 
         //For functions Arguments
         if(f.getArguments().size() > 6) {
-            for (int i = 5; i < f.getArguments().size(); i++) {
-                out.bufferCode("\tmovq " + convLocAddr((LocalVar) f.getArguments().get(i))  + ", " + (-8*(i+1)) + "(%rbp)");
+            for (int i = 6; i < f.getArguments().size(); i++) {
+                out.bufferCode("\tmovq " + (8*(f.getArguments().size()-i + 1)) + "(%rbp)" + ", %r10" );
+                out.bufferCode("\tmovq %r10, "  + convLocAddr((LocalVar) f.getArguments().get(i)) + " " );
+                output.append(out.sb);
+                out.sb.delete(0,out.sb.length());
             }
         }
         for(int i = 0; i < f.getArguments().size(); i++){
-            if(f.getArguments().size() <= 5) {
+            if(i <= 5) {
                 out.bufferCode("\tmovq " + InitArgs[i] + ", " + convLocAddr((LocalVar) f.getArguments().get(i)) + " ");
             }
         }
@@ -175,16 +182,16 @@ public final class CodeGen extends InstVisitor {
         }
         Instruction key;
         String lab;
-        System.out.println(jumpMap);
+//        System.out.println(jumpMap);
         for (Map.Entry< Instruction, String> entry : jumpMap.entrySet()) {
             key = entry.getKey();
             lab = entry.getValue();
-            System.out.println(key + lab);
+//            System.out.println(key + lab);
             out.bufferLabel(lab + ":");
             tep = 0;
 
             while(key != null && tep < 500){
-                System.out.println("lab:" + key);
+//                System.out.println("lab:" + key);
                 visit(key,(f.getArguments().size()+2 + tempNum -1));
                 key = key.getNext(0);
                 tep++;
@@ -241,20 +248,21 @@ public final class CodeGen extends InstVisitor {
         tovisit.push(f.getStart());
         while (!tovisit.isEmpty()) {
             Instruction inst = tovisit.pop();
-
-            for (int childIdx = 0; childIdx < inst.numNext(); childIdx++) {
-                Instruction child = inst.getNext(childIdx);
-                if (discovered.contains(child)) {
-                    //Found the node for a second time...need a label for merge points
-                    if (!labelMap.containsKey(child)) {
-                        labelMap.put(child, getNewLabel());
-                    }
-                } else {
-                    discovered.add(child);
-                    tovisit.push(child);
-                    //Need a label for jump targets also
-                    if (childIdx == 1 && !labelMap.containsKey(child)) {
-                        labelMap.put(child, getNewLabel());
+            if(inst != null) {
+                for (int childIdx = 0; childIdx < inst.numNext(); childIdx++) {
+                    Instruction child = inst.getNext(childIdx);
+                    if (discovered.contains(child)) {
+                        //Found the node for a second time...need a label for merge points
+                        if (!labelMap.containsKey(child)) {
+                            labelMap.put(child, getNewLabel());
+                        }
+                    } else {
+                        discovered.add(child);
+                        tovisit.push(child);
+                        //Need a label for jump targets also
+                        if (childIdx == 1 && !labelMap.containsKey(child)) {
+                            labelMap.put(child, getNewLabel());
+                        }
                     }
                 }
             }
@@ -270,14 +278,14 @@ public final class CodeGen extends InstVisitor {
 //            out.bufferCode("\tmovq " + convLocAddr(i.getOffset()) + ", %rip");
 //            out.printCode("\tmovq " + convLocAddr(i.getOffset()) + ", %rip");
 //        }
-        System.out.println("ADDR");
+//        System.out.println("ADDR");
         out.bufferCode("/* AddressAt: */");
         if(i.getOffset() == null) {
-            System.out.println("ADDR1");
+//            System.out.println("ADDR1");
             out.bufferCode("\tmovq " + i.getBase().toString().replace("%", "") + "@GOTPCREL(%rip)" + ", %r10");
             out.bufferCode("\tmovq %r10, " + convAddr(i.getDst()) + " ");
         }else{
-            System.out.println("ADDR2");
+//            System.out.println("ADDR2");
             out.bufferCode("\tmovq " + convLocAddr((LocalVar) i.getOffset())+ " , %r11 ");
             out.bufferCode("\tmovq $8 , %r10 ");
             out.bufferCode("\timul %r10, %r11");
@@ -314,6 +322,7 @@ public final class CodeGen extends InstVisitor {
             out.bufferCode("\tmovq %r10, %rax");
             out.bufferCode("\tmovq " + convLocAddr(((LocalVar)i.getRightOperand())) + " , %r11");
             out.bufferCode("\tdivq %r11 ");
+            out.bufferCode("\tmovq " + "%rax, "+ convLocAddr(i.getDst()) + " " );
             out.bufferCode("\tmovq " + "%rax, "+ convLocAddr(i.getDst()) + " " );
         }
 
@@ -417,12 +426,12 @@ public final class CodeGen extends InstVisitor {
     public void visit(CallInst i) {
         out.bufferCode("/* CallInst */");
         if(i.getParams().size() > 6) {
-            for (int j = 5; j < i.getParams().size(); j++) {
-                out.bufferCode("\tmovq " + convLocAddr((LocalVar) i.getParams().get(j))+ " , " + (-8*(j+1)) + "(%rbp)");
+            for (int j = 6; j < i.getParams().size()-1; j++) {
+                out.bufferCode("\tpush " + convLocAddr((LocalVar) i.getParams().get(j)));
             }
         }
         for(int j = 0; j < i.getParams().size(); j++){
-            if(i.getParams().size() <= 5) {
+            if(j <= 5) {
                 out.bufferCode("\tmovq " + convLocAddr((LocalVar)i.getParams().get(j)) + " , " + InitArgs[j]);
             }
         }

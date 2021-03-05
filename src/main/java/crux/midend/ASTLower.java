@@ -119,8 +119,8 @@ public final class ASTLower implements NodeVisitor {
         currInstruction = func.getStart();
         //System.out.println("NAME: " + func.getName());
         mCurrentProgram.addFunction(func);
-        System.out.println("NAME: " + mCurrentProgram.getFunctions().next().getName());
-        System.out.println("Func => StatementList");
+//        System.out.println("NAME: " + mCurrentProgram.getFunctions().next().getName());
+//        System.out.println("Func => StatementList");
         //System.out.print(mCurrentProgram.getFunctions().next().getStart());
         visit(functionDefinition.getStatements());
         mCurrentLocalVarMap = temploc;
@@ -138,7 +138,7 @@ public final class ASTLower implements NodeVisitor {
 //            Map.Entry m = (Map.Entry)iterator.next();
 //            mCurrentGlobalSymMap.put((Symbol) m.getKey(),new AddressVar(((LocalVar)m.getValue()).getType(),((LocalVar)m.getValue()).getName()));
 //        }
-        System.out.println("LOCAL: " + mCurrentLocalVarMap);
+//        System.out.println("LOCAL: " + mCurrentLocalVarMap);
         //System.out.println("StamementList");
             Statement stat = null;
         for(int i = 0; i < statementList.getChildren().size(); i++) {
@@ -180,7 +180,7 @@ public final class ASTLower implements NodeVisitor {
 
     @Override
     public void visit(Name name) {
-        System.out.println("NAME:" + name.getSymbol().toString() + mCurrentGlobalSymMap);
+//        System.out.println("NAME:" + name.getSymbol().toString() + mCurrentGlobalSymMap);
         if(mCurrentLocalVarMap.containsKey(name.getSymbol())){
             currentVar = (LocalVar) mCurrentLocalVarMap.get(name.getSymbol());
             currentAddr = null;
@@ -210,9 +210,9 @@ public final class ASTLower implements NodeVisitor {
 
     @Override
     public void visit(Assignment assignment) {
-        System.out.println("Assignment" + currentVar);
+//        System.out.println("Assignment" + currentVar);
         visit(assignment.getLocation());
-        System.out.println("Assignment" + currentVar);
+//        System.out.println("Assignment" + currentVar);
         LocalVar loc = currentVar;
         AddressVar adv = currentAddr;
         boolean globalV = glob;

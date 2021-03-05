@@ -126,7 +126,7 @@ final class CompilerStageTests {
 
     @TestFactory
     Stream<DynamicTest> codegen() throws IOException {
-        if(skipStage("stage5")){
+        if(skipStage("stage4")){
             return Stream.empty();
         }
         var tests = getTests("codegen");
