@@ -43,8 +43,8 @@ public final class CodeGen extends InstVisitor {
         while(globV.hasNext()&& tep  < 500){
             temp = (GlobalDecl)globV.next();
             name = temp.getAllocatedAddress().getName().replace("%","");
-            size = 8*Integer.parseInt(irFormat.apply(temp.getNumElement()));
-            out.bufferCode(".comm " + name + ", " + size + ", " + 8);
+            size = 16*Integer.parseInt(irFormat.apply(temp.getNumElement()));
+            out.bufferCode(".comm " + name + ", " + size + ", " + 16);
 
             //System.out.println("SIZE: " + ".comm " + name + ", " + irFormat.apply(size) + ", " + codeSize);
             tep++;
@@ -287,7 +287,7 @@ public final class CodeGen extends InstVisitor {
         }else{
 //            System.out.println("ADDR2");
             out.bufferCode("\tmovq " + convLocAddr((LocalVar) i.getOffset())+ " , %r11 ");
-            out.bufferCode("\tmovq $8 , %r10 ");
+            out.bufferCode("\tmovq $16 , %r10 ");
             out.bufferCode("\timul %r10, %r11");
             out.bufferCode("\tmovq " + i.getBase().toString().replace("%", "") + "@GOTPCREL(%rip)" + ", %r10");
             out.bufferCode("\taddq %r10, %r11");
