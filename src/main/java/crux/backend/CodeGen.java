@@ -14,7 +14,7 @@ public final class CodeGen extends InstVisitor {
 
     private final Program p;
     private final CodePrinter out;
-    private final String codeSize = "8";
+    private final int StackAlign = 16;
     private final String[] InitArgs = {"%rdi", "%rsi", "%rdx", "%rcx", "%r8", "%r9"};
     private StringBuffer output = new StringBuffer();
     private HashMap<String, String> var = new HashMap<>();
@@ -44,7 +44,7 @@ public final class CodeGen extends InstVisitor {
             temp = (GlobalDecl)globV.next();
             name = temp.getAllocatedAddress().getName().replace("%","");
             size = 8*Integer.parseInt(irFormat.apply(temp.getNumElement()));
-            out.bufferCode(".comm " + name + ", " + size + ", " + codeSize);
+            out.bufferCode(".comm " + name + ", " + size + ", " + 8);
 
             //System.out.println("SIZE: " + ".comm " + name + ", " + irFormat.apply(size) + ", " + codeSize);
             tep++;
@@ -75,7 +75,7 @@ public final class CodeGen extends InstVisitor {
             isNum = false;
         }
         if(isNum) {
-            int num = (8 * (1 + Integer.parseInt(t.toString().replace("$t", ""))));
+            int num = (StackAlign * (1 + Integer.parseInt(t.toString().replace("$t", ""))));
             return ("-" + num + "(%rbp) ");
         }
         return("var:" + t.toString().substring(1,t.toString().length()));
@@ -84,7 +84,7 @@ public final class CodeGen extends InstVisitor {
         int num = Integer.parseInt(t.toString().replace("%t",""));
         if(num > numOfGlob - 1)
             numOfGlob = num + 1;
-        return ("-" + 8*(numOftemp + 1 + num) + "(%rbp) ");
+        return ("-" + StackAlign*(numOftemp + 1 + num) + "(%rbp) ");
     }
 
     private void visit(Instruction inst,int add){
@@ -118,7 +118,7 @@ public final class CodeGen extends InstVisitor {
             //System.out.println("five" + temp);
             temp = temp.substring(0, temp.indexOf(" "));
             if(!var.containsKey(temp)){
-                var.put(temp,"-" + 8*(numOfVar + add) + "(%rbp)");
+                var.put(temp,"-" + StackAlign*(numOfVar + add) + "(%rbp)");
                 numOfVar++;
             }
 //            System.out.println("TEMP: " + temp);
@@ -150,7 +150,7 @@ public final class CodeGen extends InstVisitor {
         //For functions Arguments
         if(f.getArguments().size() > 6) {
             for (int i = 6; i < f.getArguments().size(); i++) {
-                out.bufferCode("\tmovq " + (8*(f.getArguments().size()-i + 1)) + "(%rbp)" + ", %r10" );
+                out.bufferCode("\tmovq " + (StackAlign*(f.getArguments().size()-i + 1)) + "(%rbp)" + ", %r10" );
                 out.bufferCode("\tmovq %r10, "  + convLocAddr((LocalVar) f.getArguments().get(i)) + " " );
                 output.append(out.sb);
                 out.sb.delete(0,out.sb.length());
@@ -210,8 +210,8 @@ public final class CodeGen extends InstVisitor {
             }
         }
 
-        output = output.insert(output.indexOf("(UNKNOWN)"), "(8*" + (numOftemp+numOfGlob+numOfVar+2));
-        output = output.replace(output.indexOf("(UNKNOWN)"),output.indexOf("(UNKNOWN)") + 8,"");
+        output = output.insert(output.indexOf("(UNKNOWN)"), "("+ StackAlign + "*" + (numOftemp+numOfGlob+numOfVar+2) + "), $0");
+        output = output.replace(output.indexOf("(UNKNOWN)"),output.indexOf("(UNKNOWN)") + StackAlign,"");
         String variable;
         String repl;
         String buf = output.toString();
