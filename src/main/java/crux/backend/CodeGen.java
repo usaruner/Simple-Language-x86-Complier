@@ -39,7 +39,7 @@ public final class CodeGen extends InstVisitor {
         Value size;
         Function func;
         int tep = 0;
-        while(globV.hasNext()&& tep  < 100000){
+        while(globV.hasNext()&& tep  < 500){
             temp = (GlobalDecl)globV.next();
             name = temp.getAllocatedAddress().getName().replace("%","");
             size = temp.getNumElement();
@@ -49,7 +49,7 @@ public final class CodeGen extends InstVisitor {
             tep++;
         }
         tep = 0;
-        while(globF.hasNext() && tep  < 100000){
+        while(globF.hasNext() && tep  < 500){
             func = (Function)globF.next();
             genCode(func);
             tep++;
@@ -155,7 +155,7 @@ public final class CodeGen extends InstVisitor {
         }
         Instruction inst = f.getStart();
         int tep = 0;
-        while(inst != null && tep < 100000){
+        while(inst != null && tep < 500){
             visit(inst,(f.getArguments().size()+2 + tempNum -1));
             if(jumpMap.containsKey(inst)){
 //                System.out.println(inst);
@@ -166,6 +166,8 @@ public final class CodeGen extends InstVisitor {
             if(inst == null){
                 out.bufferCode("\tleave");
                 out.bufferCode("\tret");
+                output.append(out.sb);
+                out.sb.delete(0,out.sb.length());
             }
         }
         Instruction key;
@@ -178,7 +180,7 @@ public final class CodeGen extends InstVisitor {
             out.bufferLabel(lab + ":");
             tep = 0;
 
-            while(key != null && tep < 100000){
+            while(key != null && tep < 500){
                 System.out.println("lab:" + key);
                 visit(key,(f.getArguments().size()+2 + tempNum -1));
                 key = key.getNext(0);
@@ -186,6 +188,8 @@ public final class CodeGen extends InstVisitor {
                 if(key == null){
                     out.bufferCode("\tleave");
                     out.bufferCode("\tret");
+                    output.append(out.sb);
+                    out.sb.delete(0,out.sb.length());
                 }
                 if(jumpMap.containsKey(key)){
                     out.bufferCode("\tjmp " + jumpMap.get(key));
