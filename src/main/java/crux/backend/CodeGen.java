@@ -304,15 +304,17 @@ public final class CodeGen extends InstVisitor {
             out.bufferCode("\tsubq %r11 , %r10");
             out.bufferCode("\tmovq " + "%r10, "+ convLocAddr(i.getDst()) + " " );
         }else if(i.getOperator() == BinaryOperator.Op.Mul){
-            out.bufferCode("\tmovq " + convLocAddr(((LocalVar)i.getLeftOperand())) + " , %rax");
+            out.bufferCode("\tmovq " + convLocAddr(((LocalVar)i.getLeftOperand())) + " , %r10");
+            out.bufferCode("\tmovq %r10, %rax");
             out.bufferCode("\tmovq " + convLocAddr(((LocalVar)i.getRightOperand())) + " , %r11");
-            out.bufferCode("\tsubq %r11 , %r10");
+            out.bufferCode("\tmulq %r11 ");
             out.bufferCode("\tmovq " + "%rax, "+ convLocAddr(i.getDst()) + " " );
         }else if(i.getOperator() == BinaryOperator.Op.Div){
-            out.bufferCode("\tmovq " + convLocAddr(((LocalVar)i.getLeftOperand())) + ",  %rax");
+            out.bufferCode("\tmovq " + convLocAddr(((LocalVar)i.getLeftOperand())) + " , %r10");
+            out.bufferCode("\tmovq %r10, %rax");
             out.bufferCode("\tmovq " + convLocAddr(((LocalVar)i.getRightOperand())) + " , %r11");
-            out.bufferCode("\tsubq %r11 , %r10");
-            out.bufferCode("\tmoveq " + "%rax, "+ convLocAddr(i.getDst()) + " " );
+            out.bufferCode("\tdivq %r11 ");
+            out.bufferCode("\tmovq " + "%rax, "+ convLocAddr(i.getDst()) + " " );
         }
 
     }
