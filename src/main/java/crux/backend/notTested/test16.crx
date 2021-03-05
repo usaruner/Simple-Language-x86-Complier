@@ -1,0 +1,11 @@
+// shadow global with local
+
+var a : int;
+
+func main() : void {
+  let a = 1;
+
+  var a : int;
+  let a = 2;
+  ::printInt(a);
+}

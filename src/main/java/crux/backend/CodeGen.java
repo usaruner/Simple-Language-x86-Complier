@@ -1,5 +1,6 @@
 package crux.backend;
 
+import crux.frontend.types.IntType;
 import crux.frontend.types.VoidType;
 import crux.midend.ir.core.*;
 import crux.midend.ir.core.insts.*;
@@ -15,6 +16,12 @@ public final class CodeGen extends InstVisitor {
     private final CodePrinter out;
     private final String codeSize = "8";
     private final String[] InitArgs = {"%rdi", "%rsi", "%rdx", "%rcx", "%r8", "%r9"};
+    private StringBuffer output = new StringBuffer();
+    private HashMap<String, String> var = new HashMap<>();
+    private HashMap<Instruction, String> jumpMap;
+    private int numOfVar = 0;
+    private int numOftemp = 0;
+    private int numOfGlob = 0;
     public CodeGen(Program p) {
         this.p = p;
         // Do not change the file name that is outputted or it will
@@ -31,17 +38,22 @@ public final class CodeGen extends InstVisitor {
         String name;
         Value size;
         Function func;
-        while(globV.hasNext()){
+        int tep = 0;
+        while(globV.hasNext()&& tep  < 100000){
             temp = (GlobalDecl)globV.next();
             name = temp.getAllocatedAddress().getName().replace("%","");
             size = temp.getNumElement();
             out.bufferCode(".comm " + name + ", " + irFormat.apply(size) + ", " + codeSize);
-            out.printCode(".comm " + name + ", " + irFormat.apply(size) + ", " + codeSize);
-            System.out.println("SIZE: " + ".comm " + name + ", " + irFormat.apply(size) + ", " + codeSize);
+
+            //System.out.println("SIZE: " + ".comm " + name + ", " + irFormat.apply(size) + ", " + codeSize);
+            tep++;
         }
-        while(globF.hasNext()){
+        tep = 0;
+        while(globF.hasNext() && tep  < 100000){
             func = (Function)globF.next();
             genCode(func);
+            tep++;
+            //System.out.print("tep:" + tep);
         }
         out.close();
     }
@@ -52,14 +64,28 @@ public final class CodeGen extends InstVisitor {
         return "L" + (labelcount++);
     }
     private String convLocAddr(LocalVar t){
-        int num = (8*(1+ Integer.parseInt(t.toString().replace("$t",""))));
-        return ("-" + num);
+
+        boolean isNum = false;
+        try {
+            Integer.parseInt(t.toString().substring(2,t.toString().length()));
+            isNum = true;
+        } catch(NumberFormatException e){
+            isNum = false;
+        }
+        if(isNum) {
+            int num = (8 * (1 + Integer.parseInt(t.toString().replace("$t", ""))));
+            return ("-" + num + "(%rbp) ");
+        }
+        return("var:" + t.toString().substring(1,t.toString().length()));
     }
     private String convAddr(AddressVar t) {
-        int num = (8*(1+ Integer.parseInt(t.toString().replace("%t",""))));
-        return ("-" + num);
+        int num = Integer.parseInt(t.toString().replace("%t",""));
+        if(num > numOfGlob - 1)
+            numOfGlob = num + 1;
+        return ("-" + 8*(numOftemp + 1 + num) + "(%rbp) ");
     }
-    private void visit(Instruction inst){
+
+    private void visit(Instruction inst,int add){
         if(inst.getClass() == AddressAt.class) {
             visit((AddressAt)inst);
         }else if(inst.getClass() == BinaryOperator.class) {
@@ -83,56 +109,120 @@ public final class CodeGen extends InstVisitor {
         }else if(inst.getClass() == UnaryNotInst.class) {
             visit((UnaryNotInst) inst);
         }
+        String temp = out.sb.toString();
+        temp = temp.replace("$t","");
+        if(temp.contains("var:")) {
+            temp = temp.substring(temp.indexOf("var:"), temp.length());
+            //System.out.println("five" + temp);
+            temp = temp.substring(0, temp.indexOf(" "));
+            if(!var.containsKey(temp)){
+                var.put(temp,"-" + 8*(numOfVar + add) + "(%rbp)");
+                numOfVar++;
+            }
+//            System.out.println("TEMP: " + temp);
+        }
+
+
+        output.append(out.sb);
+        out.sb.delete(0,out.sb.length());
     }
     private void genCode(Function f) {
+        int tempNum = Integer.parseInt(f.getTempVar(new IntType()).toString().replace("$t",""));
+//        System.out.println("ARGS: " + f.getArguments().size());
+        numOftemp = (f.getArguments().size() + tempNum);
+//        System.out.println(tempNum);
         //Assign labels for jump targets
-        HashMap<Instruction, String> temp = assignLabels(f);
+        jumpMap = assignLabels(f);
         //Declare functions and print label    “.globl main”      “main:”
-        System.out.println("Name "+ f.getName() + "t/f" + f.getName() == "main");
-        if(f.getName().equals("main")){
-            out.bufferCode(".globl main");
-            out.printCode(".globl main");
-        }
+//        System.out.println("Name "+ f.getName() );
+        out.bufferLabel(".globl " + f.getName());
         //print label
-        out.bufferCode(f.getName() + ":");
-        out.printCode(f.getName() + ":");
+        out.bufferLabel(f.getName() + ":");
         //Emit functions prologue
-        out.bufferCode("\tenter $(" + 16+ "+"+Integer.parseInt(codeSize) + "*" + (f.getArguments().size()+1) + ")" + ", $0");
-        out.printCode("\tenter $(" + 16+ "+" +Integer.parseInt(codeSize) + "*" + (f.getArguments().size()+1) + ")" + ", $0");
+
+        out.bufferCode("\tenter $(UNKNOWN)" + ", $0");
+
         //For functions Arguments
         if(f.getArguments().size() > 6) {
-            for (int i = 6; i < f.getArguments().size(); i++) {
-                out.bufferCode("\tmovq " + (-8*(i+1)) + "(%rbp)" + ", " + (-8*(i+1)) + "(%rbp)");
-                out.printCode("\tmovq " + (-8*(i+1)) + "(%rbp)" + ", " + (-8*(i+1)) + "(%rbp)");
+            for (int i = 5; i < f.getArguments().size(); i++) {
+                out.bufferCode("\tmovq " + convLocAddr((LocalVar) f.getArguments().get(i))  + ", " + (-8*(i+1)) + "(%rbp)");
             }
         }
         for(int i = 0; i < f.getArguments().size(); i++){
             if(f.getArguments().size() <= 5) {
-                out.bufferCode("\tmovq " + InitArgs[i] + ", " + (-8*(i+1)) + "(%rbp)");
-                out.printCode("\tmovq " + InitArgs[i] + ", " + (-8*(i+1)) + "(%rbp)");
+                out.bufferCode("\tmovq " + InitArgs[i] + ", " + convLocAddr((LocalVar) f.getArguments().get(i)) + " ");
             }
         }
         Instruction inst = f.getStart();
-        while(inst.numNext() != 0){
-            visit(inst);
+        int tep = 0;
+        while(inst != null && tep < 100000){
+            visit(inst,(f.getArguments().size()+2 + tempNum -1));
+            if(jumpMap.containsKey(inst)){
+//                System.out.println(inst);
+                break;
+            }
             inst = inst.getNext(0);
+            tep++;
+            if(inst == null){
+                out.bufferCode("\tleave");
+                out.bufferCode("\tret");
+            }
         }
         Instruction key;
         String lab;
-        for (Map.Entry< Instruction, String> entry : temp.entrySet()) {
+        System.out.println(jumpMap);
+        for (Map.Entry< Instruction, String> entry : jumpMap.entrySet()) {
             key = entry.getKey();
             lab = entry.getValue();
-            out.bufferCode(lab + ":");
-            out.printCode(lab + ":");
-            while(key.numNext() != 0){
-                visit(key);
+            System.out.println(key + lab);
+            out.bufferLabel(lab + ":");
+            tep = 0;
+
+            while(key != null && tep < 100000){
+                System.out.println("lab:" + key);
+                visit(key,(f.getArguments().size()+2 + tempNum -1));
                 key = key.getNext(0);
+                tep++;
+                if(key == null){
+                    out.bufferCode("\tleave");
+                    out.bufferCode("\tret");
+                }
+                if(jumpMap.containsKey(key)){
+                    out.bufferCode("\tjmp " + jumpMap.get(key));
+                    output.append(out.sb);
+                    out.sb.delete(0,out.sb.length());
+                    break;
+                }
+
             }
         }
-        out.bufferCode("\tleave");
-        out.printCode("\tleave");
-        out.bufferCode("\tret");
-        out.printCode("\tret");
+
+        output = output.insert(output.indexOf("(UNKNOWN)"), "(8*" + (numOftemp+numOfGlob+numOfVar+2));
+        output = output.replace(output.indexOf("(UNKNOWN)"),output.indexOf("(UNKNOWN)") + 8,"");
+        String variable;
+        String repl;
+        String buf = output.toString();
+        for (Map.Entry< String,String> entry : var.entrySet()) {
+            variable = entry.getKey();
+            repl = entry.getValue();
+            buf = buf.replace(variable,repl);
+        }
+//        System.out.println("hill" + jumpMap);
+        output.delete(0,output.length());
+        output.append(buf);
+
+
+//        System.out.println(numOfVar);
+//        System.out.println(var);
+        out.sb = output;
+
+        System.out.println("Glob = " + numOfGlob);
+        System.out.println("Temp = " + numOftemp);
+        System.out.println("Var = " + numOfVar);
+        System.out.println(out.sb);
+        out.outputBuffer();
+        numOftemp = 0;
+        output.delete(0,output.length());
     }
 
     /** Assigns Labels to any Instruction that might be the target of a
@@ -167,18 +257,17 @@ public final class CodeGen extends InstVisitor {
     }
 
     public void visit(AddressAt i) {
-        if(i.getOffset() == null) {
-            out.bufferCode("\tmovq $0" + ", %rip");
-            out.printCode("\tmovq $0" + ", %rip");
-        }else {
-            out.bufferCode("\tmovq " + convLocAddr(i.getOffset()) + ", %rip");
-            out.printCode("\tmovq " + convLocAddr(i.getOffset()) + ", %rip");
-        }
-        out.bufferCode("\tmovq " + i.getBase().toString().replace("%","") + "@GOTPCREL(%rip) , %r11");
-        out.bufferCode("\tmovq "  + " %r11, "+ convAddr(i.getDst()) + "(%rbp)");
-
-        out.printCode("\tmovq " + i.getBase().toString().replace("%","") + "@GOTPCREL(%rip) , %r11");
-        out.printCode("\tmovq "  + " %r11, "+ convAddr(i.getDst()) + "(%rbp)");
+//        if(i.getOffset() == null) {
+//            out.bufferCode("\tmovq $0" + ", %rip");
+//            out.printCode("\tmovq $0" + ", %rip");
+//        }else {
+//            out.bufferCode("\tmovq " + convLocAddr(i.getOffset()) + ", %rip");
+//            out.printCode("\tmovq " + convLocAddr(i.getOffset()) + ", %rip");
+//        }
+        out.bufferCode("\tmovq " + i.getBase().toString().replace("%","") + "@GOTPCREL(%rip)" +  ", %r10");
+        out.bufferCode("\tmovq %r10, " + convAddr(i.getDst()) + " ");
+//        out.bufferCode("\tmovq "  + "%r11" + ", " + );
+//        out.printCode("\tmovq "  + "%r11" + ", " + );
 //        out.bufferCode("movq " + (i.getBase().getName()) + " %r11");
 //        out.bufferCode("movq $" + (i.getOffset().toString()) + "%r10");
 //        out.bufferCode("imul %r10, %r11");                 // Multiply offset by 8
@@ -188,119 +277,136 @@ public final class CodeGen extends InstVisitor {
     }
 
     public void visit(BinaryOperator i) {
-        System.out.println(convLocAddr(i.getLeftOperand()));
-        System.out.println(convLocAddr(i.getRightOperand()));
-        System.out.println(convLocAddr(i.getDst()));
-        if(i.getOperator().getClass() == BinaryOperator.Op.Add.getClass()){
-            out.bufferCode("\tmovq " + convLocAddr(((LocalVar)i.getLeftOperand())) + "%, %r10");
-            out.bufferCode("\taddq " + convLocAddr(((LocalVar)i.getRightOperand())) + "%, %r10");
-            out.bufferCode("\tmoveq " + "%r10, "+ convLocAddr(i.getDst()) + "(%rbp)");
-            out.printCode("\tmovq " + convLocAddr(((LocalVar)i.getLeftOperand())) + "%, %r10");
-            out.printCode("\taddq " + convLocAddr(((LocalVar)i.getRightOperand())) + "%, %r10");
-            out.printCode("\tmoveq " + "%r10, "+ convLocAddr(i.getDst()) + "(%rbp)");
-        }else if(i.getOperator().getClass() == BinaryOperator.Op.Sub.getClass()){
-            out.bufferCode("\tmovq " + convLocAddr(((LocalVar)i.getLeftOperand())) + "%, %r10");
-            out.bufferCode("\tsubq " + convLocAddr(((LocalVar)i.getRightOperand())) + "%, %r10");
-            out.bufferCode("\tmoveq " + "%r10, "+ convLocAddr(i.getDst()) + "(%rbp)");
-            out.printCode("\tmovq " + convLocAddr(((LocalVar)i.getLeftOperand())) + "%, %r10");
-            out.printCode("\tsubq " + convLocAddr(((LocalVar)i.getRightOperand())) + ", %r10");
-            out.printCode("\tmoveq " + "%r10, "+ convLocAddr(i.getDst()) + "(%rbp)");
-        }else if(i.getOperator().getClass() == BinaryOperator.Op.Mul.getClass()){
-            out.bufferCode("\tmovq " + convLocAddr(((LocalVar)i.getLeftOperand())) + ", %rax");
-            out.bufferCode("\timulq " + convLocAddr(((LocalVar)i.getRightOperand())));
-            out.bufferCode("\tmoveq " + "%rax, "+ convLocAddr(i.getDst()) + "(%rbp)");
-            out.printCode("\tmovq " + convLocAddr(((LocalVar)i.getLeftOperand())) + ", %rax");
-            out.printCode("\timulq " + convLocAddr(((LocalVar)i.getRightOperand())));
-            out.printCode("\tmoveq " + "%rax, "+ convLocAddr(i.getDst()) + "(%rbp)");
-        }else if(i.getOperator().getClass() == BinaryOperator.Op.Div.getClass()){
-            out.bufferCode("\tmovq " + convLocAddr(((LocalVar)i.getLeftOperand())) + ", %rax");
-            out.bufferCode("\taddq " + convLocAddr(((LocalVar)i.getRightOperand())));
-            out.bufferCode("\tmoveq " + "%rax, "+ convLocAddr(i.getDst()) + "(%rbp)");
-            out.printCode("\tmovq " + convLocAddr(((LocalVar)i.getLeftOperand())) + "%rax");
-            out.printCode("\taddq " + convLocAddr(((LocalVar)i.getRightOperand())));
-            out.printCode("\tmoveq " + "%rax, "+ convLocAddr(i.getDst()) + "(%rbp)");
+//        System.out.println(convLocAddr(i.getLeftOperand()));
+//        System.out.println(convLocAddr(i.getRightOperand()));
+//        System.out.println(i.getOperator());
+        if(i.getOperator() == BinaryOperator.Op.Add){
+            out.bufferCode("\tmovq " + convLocAddr(((LocalVar)i.getLeftOperand())) + " , %r10");
+            out.bufferCode("\tmovq " + convLocAddr(((LocalVar)i.getRightOperand())) + " , %r11");
+            out.bufferCode("\taddq %r11 , %r10");
+            out.bufferCode("\tmovq " + "%r10, "+ convLocAddr(i.getDst()) + " " );
+
+        }else if(i.getOperator() == BinaryOperator.Op.Sub){
+            out.bufferCode("\tmovq " + convLocAddr(((LocalVar)i.getLeftOperand())) + " , %r10");
+            out.bufferCode("\tmovq " + convLocAddr(((LocalVar)i.getRightOperand())) + " , %r11");
+            out.bufferCode("\tsubq %r11 , %r10");
+            out.bufferCode("\tmovq " + "%r10, "+ convLocAddr(i.getDst()) + " " );
+        }else if(i.getOperator() == BinaryOperator.Op.Mul){
+            out.bufferCode("\tmovq " + convLocAddr(((LocalVar)i.getLeftOperand())) + " , %rax");
+            out.bufferCode("\tmovq " + convLocAddr(((LocalVar)i.getRightOperand())) + " , %r11");
+            out.bufferCode("\tsubq %r11 , %r10");
+            out.bufferCode("\tmovq " + "%rax, "+ convLocAddr(i.getDst()) + " " );
+        }else if(i.getOperator() == BinaryOperator.Op.Div){
+            out.bufferCode("\tmovq " + convLocAddr(((LocalVar)i.getLeftOperand())) + ",  %rax");
+            out.bufferCode("\tmovq " + convLocAddr(((LocalVar)i.getRightOperand())) + " , %r11");
+            out.bufferCode("\tsubq %r11 , %r10");
+            out.bufferCode("\tmoveq " + "%rax, "+ convLocAddr(i.getDst()) + " " );
         }
 
     }
 
     public void visit(CompareInst i) {
-        out.bufferCode("\tmovq " + convLocAddr(((LocalVar)i.getLeftOperand())) + "%r10");
-        out.bufferCode("\tcmp " + " %r10, " + convLocAddr(((LocalVar)i.getRightOperand())));
-
-        out.printCode("\tmovq " + convLocAddr(((LocalVar)i.getLeftOperand())) + "%r10");
-        out.printCode("\tcmp " + " %r10, " + convLocAddr(((LocalVar)i.getRightOperand())));
-//        if(i.getPredicate() == CompareInst.Predicate.EQ) {
-//
-//        }else if(i.getPredicate() == CompareInst.Predicate.GE) {
-//
-//        }else if(i.getPredicate() == CompareInst.Predicate.GT) {
-//
-//        }else if(i.getPredicate() == CompareInst.Predicate.LE) {
-//
-//        }else if(i.getPredicate() == CompareInst.Predicate.LT) {
-//
-//        }else if(i.getPredicate() == CompareInst.Predicate.NE) {
-//
-//        }
+//        System.out.println("hello" + i.getPredicate().name());
+        out.bufferCode("\tmovq " + convLocAddr(((LocalVar)i.getLeftOperand())) + ", %r10");
+        out.bufferCode("\tmovq " + convLocAddr(((LocalVar)i.getRightOperand())) + ", %r11");
+        out.bufferCode("\tcmp " + " %r11, %r10 " );
+        out.bufferCode("\tmovq $0, %r10 " );
+        out.bufferCode("\tmovq $1, %r11 " );
+        if(i.getPredicate() == CompareInst.Predicate.EQ) {
+            out.bufferCode("\tcmove %r11,  %r10 " );
+        }else if(i.getPredicate() == CompareInst.Predicate.GE) {
+            out.bufferCode("\tcmovge %r11, %r10 " );
+        }else if(i.getPredicate() == CompareInst.Predicate.GT) {
+            out.bufferCode("\tcmovg %r11, %r10 " );
+        }else if(i.getPredicate() == CompareInst.Predicate.LE) {
+            out.bufferCode("\tcmove %r11, %r10 " );
+        }else if(i.getPredicate() == CompareInst.Predicate.LT) {
+            out.bufferCode("\tcmovl %r11, %r10 " );
+        }else if(i.getPredicate() == CompareInst.Predicate.NE) {
+            out.bufferCode("\tcmovne %r11, %r10 " );
+        }
+        out.bufferCode("\tmovq " + " %r10, " + convLocAddr(i.getDst()) + " " );
     }
 
     public void visit(CopyInst i) {
-        out.bufferCode("\tmovq " + irFormat.apply(i.getSrcValue()) + ", %r10");
-        out.bufferCode("\tcmp " + " %r10, " + convLocAddr(((LocalVar)i.getDstVar())) + "(%rbp)");
 
-        out.printCode("\tmovq " + irFormat.apply(i.getSrcValue()) + ", %r10");
-        out.printCode("\tcmp " + " %r10, " + convLocAddr(((LocalVar)i.getDstVar())) + "(%rbp)");
+        if(irFormat.apply(i.getSrcValue()).equals("true")) {
+            out.bufferCode("\tmovq $1," + " %r10");
+            out.bufferCode("\tmovq " + " %r10, " + convLocAddr(((LocalVar) i.getDstVar()))+ " " );
+
+        }else if(irFormat.apply(i.getSrcValue()).equals("false")){
+            out.bufferCode("\tmovq $0, " + " %r10");
+            out.bufferCode("\tmovq " + " %r10, " + convLocAddr(((LocalVar) i.getDstVar()))+ " " );
+
+        }else if (i.getSrcValue().getClass() == LocalVar.class){
+            out.bufferCode("\tmovq " + convLocAddr(((LocalVar)i.getSrcValue())) + " , %r10");
+            out.bufferCode("\tmovq " + " %r10, " + convLocAddr(((LocalVar) i.getDstVar()))+ " " );
+
+        }else if (i.getSrcValue().getClass() == AddressVar.class){
+            out.bufferCode("\tmovq " + convAddr(((AddressVar)i.getSrcValue())) + " , %r10");
+            out.bufferCode("\tmovq " + " %r10, " + convLocAddr(((LocalVar) i.getDstVar()))+ " " );
+
+        }else{
+            out.bufferCode("\tmovq $" + irFormat.apply(i.getSrcValue())+ " , %r10");
+            out.bufferCode("\tmovq " + " %r10, " + convLocAddr(((LocalVar) i.getDstVar()))+ " " );
+
+        }
+
     }
 
     public void visit(JumpInst i) {
-        out.bufferCode("\tmoveq " + convLocAddr(i.getPredicate()) + ", %r10");
-        out.bufferCode("\tcmp 1,"  + "%r10");
-        out.bufferCode("\tjmp ");
+//        System.out.println("Jump :" + i.getNext(0) + i.getNext(1));
+        out.bufferCode("\tmovq " + convLocAddr(i.getPredicate()) + " , %r10");
 
-        out.printCode("\tmoveq " + convLocAddr(i.getPredicate()) + ", %r10");
-        out.printCode("\tcmp 1,"  + "%r10");
-        out.printCode("\tjmp ");
-
-        System.out.println(convLocAddr(i.getPredicate()));
+//        if(i.getPredicate().toString())
+        if(jumpMap.containsKey(i.getNext(0))) {
+            out.bufferCode("\tcmp $0,"  + "%r10");
+            out.bufferCode("\tje " + jumpMap.get(i.getNext(0)));
+        }else if(jumpMap.containsKey(i.getNext(1))){
+            out.bufferCode("\tcmp $1,"  + "%r10");
+            out.bufferCode("\tje " + jumpMap.get(i.getNext(1)));
+        }
     }
 
     public void visit(LoadInst i) {
-        out.bufferCode("\tmoveq " + convAddr(i.getSrcAddress()) + ", %r10" );
-        out.bufferCode("\tmoveq %r10, " + convLocAddr(i.getDst()));
+        out.bufferCode("\tmovq " + convAddr(i.getSrcAddress()) + " , %r10" );
+        out.bufferCode("\tmovq (%r10), %r11" );
+        out.bufferCode("\tmovq %r11, " + convLocAddr(i.getDst())+ " " );
 
-        out.printCode("\tmoveq " + convAddr(i.getSrcAddress()) + ", %r10" );
-        out.printCode("\tmoveq %r10, " + convLocAddr(i.getDst()));
     }
 
     public void visit(NopInst i) {
     }
 
     public void visit(StoreInst i) {
-        out.bufferCode("\tmoveq " + convLocAddr(i.getSrcValue()) + "%r10");
-        out.bufferCode("\tmoveq %r10, " + convAddr(i.getDestAddress()));
+//        System.out.println("Store: " + i.getDestAddress());
+        out.bufferCode("\tmovq " + convLocAddr(i.getSrcValue()) + " , %r10");
+        out.bufferCode("\tmovq " + convAddr(i.getDestAddress()) + " , %r11");
+        out.bufferCode("\tmovq %r10, (%r11)");
 
-        out.printCode("\tmoveq " + convLocAddr(i.getSrcValue()) + "%r10");
-        out.printCode("\tmoveq %r10, " + convAddr(i.getDestAddress()));
     }
 
     public void visit(ReturnInst i) {
-        out.bufferCode("\tmoveq " + convLocAddr(i.getReturnValue()) + ", %r10");
-        out.bufferCode("\tmoveq %r10, %rax" );
+        out.bufferCode("\tmovq " + convLocAddr(i.getReturnValue()) + " , %r10");
+        out.bufferCode("\tmovq %r10, %rax" );
         out.bufferCode("\tleave");
         out.bufferCode("\tret");
 
-        out.printCode("\tmoveq " + convLocAddr(i.getReturnValue()) + ", %r10");
-        out.printCode("\tmoveq %r10, %rax" );
-        out.printCode("\tleave");
-        out.printCode("\tret");
     }
 
     public void visit(CallInst i) {
-        out.bufferCode("\tmoveq " + convLocAddr(i.getDst())+   "(%rdp), " + "%rdi");
-        out.bufferCode("\tcall " + (i.getCallee()) );
-
-        out.printCode("\tmoveq " + convLocAddr(i.getDst())+   "(%rdp), " + "%rdi");
-        out.printCode("\tcall " + (i.getCallee()) );
+        if(i.getParams().size() > 6) {
+            for (int j = 5; j < i.getParams().size(); j++) {
+                out.bufferCode("\tmovq " + convLocAddr((LocalVar) i.getParams().get(j))+ " , " + (-8*(j+1)) + "(%rbp)");
+            }
+        }
+        for(int j = 0; j < i.getParams().size(); j++){
+            if(i.getParams().size() <= 5) {
+                out.bufferCode("\tmovq " + convLocAddr((LocalVar)i.getParams().get(j)) + " , " + InitArgs[j]);
+            }
+        }
+        out.bufferCode("\tcall " + (i.getCallee().toString().replace("%","")) );
+        out.bufferCode("\tmovq %rax, " + convLocAddr(i.getDst()) + " ");
     }
 
     public void visit(UnaryNotInst i) {

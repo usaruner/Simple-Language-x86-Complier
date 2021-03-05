@@ -1,0 +1,30 @@
+// test arithmetic
+
+func test(a:int, b:int) : void {
+  ::printInt(a + b);
+  ::println();
+  ::printInt(a - b);
+  ::println();
+  ::printInt(a * b);
+  ::println();
+  if (b != 0) {
+    ::printInt(a / b);
+    ::println();
+  } else {
+    ::println();
+  }
+}
+
+func main() : void {
+  var i:int;
+  var j:int;
+  let i = 0;
+  while(i <= 10) {
+    let j = 0;
+    while(j <= 10) {
+       ::test(i, j);
+       let j = j + 1;
+    }
+    let i = i + 1;
+  }
+}

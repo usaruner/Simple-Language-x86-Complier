@@ -1,0 +1,19 @@
+// non-recursive fib
+
+func main() : void {
+  var i:int;
+  let i = 0;
+  var a:int;
+  var b:int;
+  let a = 0;
+  let b = 1;
+  while (i < 10) {
+    ::printInt(b);
+    ::println();
+    var c:int;
+    let c = a + b;
+    let a = b;
+    let b = c;
+    let i = i + 1;
+  }
+}

@@ -1,0 +1,13 @@
+// test recusion
+
+func rec(a:int) : void {
+  if (a > 0) {
+    ::rec(a-1);
+  }
+  ::printInt(a);
+  ::println();
+}
+
+func main() : void {
+  ::rec(5);
+}

@@ -1,0 +1,11 @@
+// test while loop
+
+func main() : void {
+  var a:int;
+  let a = 0;
+  while (a < 3) {
+    ::printInt(a);
+    ::println();
+    let a = a + 1;
+  }
+}
