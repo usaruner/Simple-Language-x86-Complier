@@ -36,14 +36,14 @@ public final class CodeGen extends InstVisitor {
         Iterator globF = p.getFunctions();
         GlobalDecl temp;
         String name;
-        Value size;
+        int size;
         Function func;
         int tep = 0;
         while(globV.hasNext()&& tep  < 500){
             temp = (GlobalDecl)globV.next();
             name = temp.getAllocatedAddress().getName().replace("%","");
-            size = temp.getNumElement();
-            out.bufferCode(".comm " + name + ", " + irFormat.apply(size) + ", " + codeSize);
+            size = 8*Integer.parseInt(irFormat.apply(temp.getNumElement()));
+            out.bufferCode(".comm " + name + ", " + size + ", " + codeSize);
 
             //System.out.println("SIZE: " + ".comm " + name + ", " + irFormat.apply(size) + ", " + codeSize);
             tep++;
@@ -268,22 +268,28 @@ public final class CodeGen extends InstVisitor {
 //            out.bufferCode("\tmovq " + convLocAddr(i.getOffset()) + ", %rip");
 //            out.printCode("\tmovq " + convLocAddr(i.getOffset()) + ", %rip");
 //        }
-        out.bufferCode("\tmovq " + i.getBase().toString().replace("%","") + "@GOTPCREL(%rip)" +  ", %r10");
-        out.bufferCode("\tmovq %r10, " + convAddr(i.getDst()) + " ");
-//        out.bufferCode("\tmovq "  + "%r11" + ", " + );
-//        out.printCode("\tmovq "  + "%r11" + ", " + );
-//        out.bufferCode("movq " + (i.getBase().getName()) + " %r11");
-//        out.bufferCode("movq $" + (i.getOffset().toString()) + "%r10");
-//        out.bufferCode("imul %r10, %r11");                 // Multiply offset by 8
-//        out.bufferCode("movq " + (i.getBase().getName()) + "e@GOTPCREL(%rip) , %r10");  // Load array address
-//        out.bufferCode(addq %r10, %r11);                 // Add array base address with offset
-//        out.bufferCode(movq %r11, -368(%rbp));
+        System.out.println("ADDR");
+        out.bufferCode("/* AddressAt: */");
+        if(i.getOffset() == null) {
+            System.out.println("ADDR1");
+            out.bufferCode("\tmovq " + i.getBase().toString().replace("%", "") + "@GOTPCREL(%rip)" + ", %r10");
+            out.bufferCode("\tmovq %r10, " + convAddr(i.getDst()) + " ");
+        }else{
+            System.out.println("ADDR2");
+            out.bufferCode("\tmovq " + convLocAddr((LocalVar) i.getOffset())+ " , %r11 ");
+            out.bufferCode("\tmovq $8 , %r10 ");
+            out.bufferCode("\timul %r10, %r11");
+            out.bufferCode("\tmovq " + i.getBase().toString().replace("%", "") + "@GOTPCREL(%rip)" + ", %r10");
+            out.bufferCode("\taddq %r10, %r11");
+            out.bufferCode("\tmovq %r11, " + convAddr(i.getDst()) + " ");
+        }
     }
 
     public void visit(BinaryOperator i) {
 //        System.out.println(convLocAddr(i.getLeftOperand()));
 //        System.out.println(convLocAddr(i.getRightOperand()));
 //        System.out.println(i.getOperator());
+        out.bufferCode("/* binaryOp: */");
         if(i.getOperator() == BinaryOperator.Op.Add){
             out.bufferCode("\tmovq " + convLocAddr(((LocalVar)i.getLeftOperand())) + " , %r10");
             out.bufferCode("\tmovq " + convLocAddr(((LocalVar)i.getRightOperand())) + " , %r11");
@@ -311,6 +317,7 @@ public final class CodeGen extends InstVisitor {
 
     public void visit(CompareInst i) {
 //        System.out.println("hello" + i.getPredicate().name());
+        out.bufferCode("/* CompareInst: */");
         out.bufferCode("\tmovq " + convLocAddr(((LocalVar)i.getLeftOperand())) + ", %r10");
         out.bufferCode("\tmovq " + convLocAddr(((LocalVar)i.getRightOperand())) + ", %r11");
         out.bufferCode("\tcmp " + " %r11, %r10 " );
@@ -333,7 +340,7 @@ public final class CodeGen extends InstVisitor {
     }
 
     public void visit(CopyInst i) {
-
+        out.bufferCode("/* CopyInst */");
         if(irFormat.apply(i.getSrcValue()).equals("true")) {
             out.bufferCode("\tmovq $1," + " %r10");
             out.bufferCode("\tmovq " + " %r10, " + convLocAddr(((LocalVar) i.getDstVar()))+ " " );
@@ -342,12 +349,12 @@ public final class CodeGen extends InstVisitor {
             out.bufferCode("\tmovq $0, " + " %r10");
             out.bufferCode("\tmovq " + " %r10, " + convLocAddr(((LocalVar) i.getDstVar()))+ " " );
 
-        }else if (i.getSrcValue().getClass() == LocalVar.class){
-            out.bufferCode("\tmovq " + convLocAddr(((LocalVar)i.getSrcValue())) + " , %r10");
-            out.bufferCode("\tmovq " + " %r10, " + convLocAddr(((LocalVar) i.getDstVar()))+ " " );
-
         }else if (i.getSrcValue().getClass() == AddressVar.class){
             out.bufferCode("\tmovq " + convAddr(((AddressVar)i.getSrcValue())) + " , %r10");
+            out.bufferCode("\tmovq " + " %r10, " + convLocAddr(((LocalVar) i.getDstVar()))+ " " );
+
+        }else if (i.getSrcValue().getClass() == LocalVar.class){
+            out.bufferCode("\tmovq " + convLocAddr(((LocalVar)i.getSrcValue())) + " , %r10");
             out.bufferCode("\tmovq " + " %r10, " + convLocAddr(((LocalVar) i.getDstVar()))+ " " );
 
         }else{
@@ -359,6 +366,7 @@ public final class CodeGen extends InstVisitor {
     }
 
     public void visit(JumpInst i) {
+        out.bufferCode("/* JumpInst */");
 //        System.out.println("Jump :" + i.getNext(0) + i.getNext(1));
         out.bufferCode("\tmovq " + convLocAddr(i.getPredicate()) + " , %r10");
 
@@ -373,6 +381,7 @@ public final class CodeGen extends InstVisitor {
     }
 
     public void visit(LoadInst i) {
+        out.bufferCode("/* LoadInst */");
         out.bufferCode("\tmovq " + convAddr(i.getSrcAddress()) + " , %r10" );
         out.bufferCode("\tmovq (%r10), %r11" );
         out.bufferCode("\tmovq %r11, " + convLocAddr(i.getDst())+ " " );
@@ -383,6 +392,7 @@ public final class CodeGen extends InstVisitor {
     }
 
     public void visit(StoreInst i) {
+        out.bufferCode("/* StoreInst */");
 //        System.out.println("Store: " + i.getDestAddress());
         out.bufferCode("\tmovq " + convLocAddr(i.getSrcValue()) + " , %r10");
         out.bufferCode("\tmovq " + convAddr(i.getDestAddress()) + " , %r11");
@@ -391,6 +401,7 @@ public final class CodeGen extends InstVisitor {
     }
 
     public void visit(ReturnInst i) {
+        out.bufferCode("/* ReturnInst */");
         out.bufferCode("\tmovq " + convLocAddr(i.getReturnValue()) + " , %r10");
         out.bufferCode("\tmovq %r10, %rax" );
         out.bufferCode("\tleave");
@@ -399,6 +410,7 @@ public final class CodeGen extends InstVisitor {
     }
 
     public void visit(CallInst i) {
+        out.bufferCode("/* CallInst */");
         if(i.getParams().size() > 6) {
             for (int j = 5; j < i.getParams().size(); j++) {
                 out.bufferCode("\tmovq " + convLocAddr((LocalVar) i.getParams().get(j))+ " , " + (-8*(j+1)) + "(%rbp)");
