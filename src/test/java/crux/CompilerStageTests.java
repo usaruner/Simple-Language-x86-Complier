@@ -126,7 +126,7 @@ final class CompilerStageTests {
 
     @TestFactory
     Stream<DynamicTest> codegen() throws IOException {
-        if(skipStage("stage4")){
+        if(skipStage("stage5")){
             return Stream.empty();
         }
         var tests = getTests("codegen");
@@ -162,8 +162,8 @@ final class CompilerStageTests {
             while((val = inputStream.read()) != -1)
                 sb.append((char)val);
 
-            var actualOutput = sb.toString();
-            var expectedOutput = readResourceToString(test.out);
+            String actualOutput = sb.toString();
+            String expectedOutput = readResourceToString(test.out).toString();
             Assertions.assertEquals(expectedOutput.trim(), actualOutput.trim());
         }));
     }
@@ -194,7 +194,7 @@ final class CompilerStageTests {
             while ((length = inputStream.read(buffer)) != -1) {
                 result.write(buffer, 0, length);
             }
-            return result.toString();
+            return result.toString(StandardCharsets.UTF_8);
         }
     }
 

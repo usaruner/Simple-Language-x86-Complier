@@ -318,6 +318,8 @@ public final class CodeGen extends InstVisitor {
             out.bufferCode("\tmulq %r11 ");
             out.bufferCode("\tmovq " + "%rax, "+ convLocAddr(i.getDst()) + " " );
         }else if(i.getOperator() == BinaryOperator.Op.Div){
+            out.bufferCode("\tmovq $0 , %r10 ");
+            out.bufferCode("\tmovq %r10 , %rdx ");
             out.bufferCode("\tmovq " + convLocAddr(((LocalVar)i.getLeftOperand())) + " , %r10");
             out.bufferCode("\tmovq %r10, %rax");
             out.bufferCode("\tmovq " + convLocAddr(((LocalVar)i.getRightOperand())) + " , %r11");
@@ -329,7 +331,7 @@ public final class CodeGen extends InstVisitor {
     }
 
     public void visit(CompareInst i) {
-//        System.out.println("hello" + i.getPredicate().name());
+        System.out.println("hello" + i.getPredicate().name());
         out.bufferCode("/* CompareInst: */");
         out.bufferCode("\tmovq " + convLocAddr(((LocalVar)i.getLeftOperand())) + ", %r10");
         out.bufferCode("\tmovq " + convLocAddr(((LocalVar)i.getRightOperand())) + ", %r11");
@@ -343,7 +345,7 @@ public final class CodeGen extends InstVisitor {
         }else if(i.getPredicate() == CompareInst.Predicate.GT) {
             out.bufferCode("\tcmovg %r11, %r10 " );
         }else if(i.getPredicate() == CompareInst.Predicate.LE) {
-            out.bufferCode("\tcmove %r11, %r10 " );
+            out.bufferCode("\tcmovle %r11, %r10 " );
         }else if(i.getPredicate() == CompareInst.Predicate.LT) {
             out.bufferCode("\tcmovl %r11, %r10 " );
         }else if(i.getPredicate() == CompareInst.Predicate.NE) {
