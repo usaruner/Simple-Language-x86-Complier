@@ -40,13 +40,11 @@ public final class CodeGen extends InstVisitor {
         int size;
         Function func;
         int tep = 0;
-        while(globV.hasNext()&& tep  < 500){
+        while(globV.hasNext() && tep  < 500){
             temp = (GlobalDecl)globV.next();
             name = temp.getAllocatedAddress().getName().replace("%","");
             size = 16*Integer.parseInt(irFormat.apply(temp.getNumElement()));
             out.bufferCode(".comm " + name + ", " + size + ", " + 16);
-
-            //System.out.println("SIZE: " + ".comm " + name + ", " + irFormat.apply(size) + ", " + codeSize);
             tep++;
         }
         tep = 0;
@@ -78,7 +76,8 @@ public final class CodeGen extends InstVisitor {
             int num = (StackAlign * (1 + Integer.parseInt(t.toString().replace("$t", ""))));
             return ("-" + num + "(%rbp) ");
         }
-        return("var:" + t.toString().substring(1,t.toString().length()));
+
+        return("var:" + t.toString().substring(1,t.toString().length()) + t.toString() + t.hashCode());
     }
     private String convAddr(AddressVar t) {
         int num = Integer.parseInt(t.toString().replace("%t",""));
@@ -112,7 +111,6 @@ public final class CodeGen extends InstVisitor {
             visit((UnaryNotInst) inst);
         }
         String temp = out.sb.toString();
-        temp = temp.replace("$t","");
         if(temp.contains("var:")) {
             temp = temp.substring(temp.indexOf("var:"), temp.length());
             //System.out.println("five" + temp);
@@ -150,8 +148,9 @@ public final class CodeGen extends InstVisitor {
         //For functions Arguments
         if(f.getArguments().size() > 6) {
             for (int i = 6; i < f.getArguments().size(); i++) {
-                out.bufferCode("\tmovq " + (StackAlign*(f.getArguments().size()-i + 1)) + "(%rbp)" + ", %r10" );
-                out.bufferCode("\tmovq %r10, "  + convLocAddr((LocalVar) f.getArguments().get(i)) + " " );
+                out.bufferCode("\tpop %r10" );
+                out.bufferCode("\tpop %r10" );
+                out.bufferCode("\tmovq %r10, "  + convLocAddr((LocalVar) f.getArguments().get(f.getArguments().size()- i)) + " " );
                 output.append(out.sb);
                 out.sb.delete(0,out.sb.length());
             }
@@ -182,7 +181,6 @@ public final class CodeGen extends InstVisitor {
         }
         Instruction key;
         String lab;
-//        System.out.println(jumpMap);
         for (Map.Entry< Instruction, String> entry : jumpMap.entrySet()) {
             key = entry.getKey();
             lab = entry.getValue();
@@ -210,7 +208,7 @@ public final class CodeGen extends InstVisitor {
             }
         }
 
-        output = output.insert(output.indexOf("(UNKNOWN)"), "("+ StackAlign + "*" + (numOftemp+numOfGlob+numOfVar+2) + "), $0");
+        output = output.insert(output.indexOf("(UNKNOWN)"), "("+ StackAlign + "*" + (numOftemp+numOfGlob+numOfVar+2) + "), $0\n\t");
         output = output.replace(output.indexOf("(UNKNOWN)"),output.indexOf("(UNKNOWN)") + StackAlign,"");
         String variable;
         String repl;
@@ -225,8 +223,10 @@ public final class CodeGen extends InstVisitor {
         output.append(buf);
 
 
+
+
 //        System.out.println(numOfVar);
-//        System.out.println(var);
+        System.out.println(var);
         out.sb = output;
 
         System.out.println("Glob = " + numOfGlob);
@@ -356,6 +356,7 @@ public final class CodeGen extends InstVisitor {
 
     public void visit(CopyInst i) {
         out.bufferCode("/* CopyInst */");
+
         if(irFormat.apply(i.getSrcValue()).equals("true")) {
             out.bufferCode("\tmovq $1," + " %r10");
             out.bufferCode("\tmovq " + " %r10, " + convLocAddr(((LocalVar) i.getDstVar()))+ " " );
@@ -377,6 +378,7 @@ public final class CodeGen extends InstVisitor {
             out.bufferCode("\tmovq " + " %r10, " + convLocAddr(((LocalVar) i.getDstVar()))+ " " );
 
         }
+        //out.bufferCode("/* CHECK: " + irFormat.apply(i.getSrcValue()) + i.getDstVar() + convLocAddr(((LocalVar) i.getDstVar())));
 
     }
 
@@ -428,7 +430,7 @@ public final class CodeGen extends InstVisitor {
     public void visit(CallInst i) {
         out.bufferCode("/* CallInst */");
         if(i.getParams().size() > 6) {
-            for (int j = 6; j < i.getParams().size()-1; j++) {
+            for (int j = 6; j < i.getParams().size(); j++) {
                 out.bufferCode("\tpush " + convLocAddr((LocalVar) i.getParams().get(j)));
             }
         }

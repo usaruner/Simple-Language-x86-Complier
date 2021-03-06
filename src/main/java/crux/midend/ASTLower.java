@@ -171,6 +171,7 @@ public final class ASTLower implements NodeVisitor {
     public void visit(VariableDeclaration variableDeclaration) {
         //System.out.println("VARDEC");
         mCurrentLocalVarMap.put(variableDeclaration.getSymbol(),new LocalVar(variableDeclaration.getSymbol().getType(),variableDeclaration.getSymbol().getName()));
+
     }
   
     @Override
