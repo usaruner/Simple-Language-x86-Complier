@@ -8,16 +8,16 @@
 #### AND	and; OR	or; NOT	not
 
 ### Assignment
-#### LET	let; VAR	var; ARRAY	array; FUNCUNTION	func; ASSIGN	=
+#### LET	let ; VAR	var ; ARRAY	array ; FUNCUNTION	func ; ASSIGN	=
 
 ### Conditionals
-#### IF	if; ELSE	else; WHILE	while; TRUE	true; FALSE	false; RETURN	return
+#### IF	if ; ELSE	else ; WHILE	while ; TRUE	true ; FALSE	false ; RETURN	return
 
 ### Seperators
-#### OPEN/CLOSE PAREN (); OPEN/CLOSE BRACE {}; OPEN/CLOSE BRACKET	[]
+#### OPEN/CLOSE PAREN () ; OPEN/CLOSE BRACE {} ; OPEN/CLOSE BRACKET	[]
 
 ### Operations
-#### ADD	+; SUB	-; MULTIPLCATION	*; DIVISION	/; GREATER EQUAL	>=; LESSER EQUAL	<=; NOT EQUAL	!=; EQUAL	==; GREATER THAN	>; LESS THAN	<
+#### ADD	+ ; SUB	- ; MULTIPLCATION	* ; DIVISION	/ ; GREATER EQUAL	>= ; LESSER EQUAL	<= ; NOT EQUAL	!= ; EQUAL	== ; GREATER THAN	> ; LESS THAN	<
 
 ### Syntax
 #### COMMA	',' ; SEMICOLON	';' ; COLON	':' ; CALL	'::'
