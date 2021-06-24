@@ -3,28 +3,36 @@
 #### The language created is simple that accomadates only 3 types and basic single else statements. The language can handle recursion and multi-layered looping.
 ### Types
 #### Integer, Boolean, Arrays
-### Operator
-#### +,-,*,/,<,<=,>,>=,==,!=,=m,
-### Syntax
+
+### Logical
 #### AND	and
 #### OR	or
 #### NOT	not
+
+### Assignment
 #### LET	let
 #### VAR	var
 #### ARRAY	array
 #### FUNCUNTION	func
+#### ASSIGN	=
+
+### Conditionals
 #### IF	if
 #### ELSE	else
 #### WHILE	while
 #### TRUE	true
 #### FALSE	false
 #### RETURN	return
+
+### Seperators
 #### OPEN PAREN	(
 #### CLOSE PAREN	)
 #### OPEN BRACE	{
 #### CLOSE BRACE	}
 #### OPEN BRACKET	[
 #### CLOSE BRACKET	]
+
+### Operations
 #### ADD	+
 #### SUB	-
 #### MULTIPLCATION	*
@@ -35,13 +43,16 @@
 #### EQUAL	==
 #### GREATER THAN	>
 #### LESS THAN	<
-#### ASSIGN	=
+
+### Syntax
 #### COMMA	,
 #### SEMICOLON	;
 #### COLON	:
 #### CALL	::
+
 ## ANTLR
 ### Grammar
+#### 
 ## Abstract Syntax Tree
 ### Creating Objects
 ## Type Checker
