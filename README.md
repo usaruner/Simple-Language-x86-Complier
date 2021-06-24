@@ -44,13 +44,17 @@
 #### Expressions must check each linking operation and types to resolve its check. For example:  True == 3 > 1+1, must check 1+1 for int + int operations; 3 > int for int > int operations; True == bool for a bool == bool operation. The check must go through order of operations to check for correct value which is dictated by the AST.
 
 ### Variables
-#### When a variable is hit it must be deferenced to check for type, in this case the value is still not deferenced and only the type will be revealed in the deference from the AST
+#### When a variable is hit it must be deferenced to check for type, in this case the value is still not deferenced and only the type will be revealed in the deference from the AST.
 
 ## Intermediate Representation 
+#### Converts the AST to a directed graph implementation that represent general instructions to the program.
 ### Node Path Structure
-
+#### Below is an example of a very simple representation.
+![Node](IR_Nodes.JPG)
 ## Assembly Code
-### Assembly
+#### Converts the directed graph implementation to actual x86 code. The code is then written on to a seperate file to be interpreted.
 
-# Ethical Code:
-#### I, Henry Feng, hereby certify that the files I submitted represent my own work, that I did not copy any code from any other person orsource, and that I did not share our code with any other students.
+# Credits:
+#### A great portion of the testing and code organization is pulled from Professor Demsky, but anything underlining logical explained above is coded solely by me.
+
+
