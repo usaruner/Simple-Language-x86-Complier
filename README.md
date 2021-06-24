@@ -24,7 +24,7 @@
 
 ## ANTLR
 ### Grammar
-#### 
+#### Coded the ANTLR to recognize syntax such as: Literals, Operations, Experssions, Call-Expression, Experssion-list, parameter-list, declarations(variable|array|functions), statements(assignment|call|if|while|return),statment-list, and statement-block.
 ## Abstract Syntax Tree
 ### Creating Objects
 ## Type Checker
